@@ -7,6 +7,7 @@ public class StateManager : MonoBehaviour
     {
         DefaultMode,
         CreateMode,
+        CreateItemMode,
         EditMode,
         EditMatMode,
         EditMatImportMode,
@@ -24,7 +25,12 @@ public class StateManager : MonoBehaviour
 
     public void ChangeState(GameState newState)
     {
+        // 同じステートを弾く
+        ////////////////
         _currentState = newState;
         OnStateChanged?.Invoke(_currentState);
     }
+    
+    //Updata周り
+    //////////
 }

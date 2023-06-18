@@ -10,16 +10,14 @@ public class UIManager : MonoBehaviour
     private GameObject _defaultPanel;
     [SerializeField] 
     private GameObject _createPanel;
+    [SerializeField]
+    private GameObject _createItemPanel;
     [SerializeField] 
     private GameObject _editPanel;
     [SerializeField] 
     private GameObject _editMatPanel;
     [SerializeField] 
     private GameObject _editCropPanel;
-    [SerializeField] 
-    private GameObject _predictInsCube;
-    [SerializeField] 
-    private GameObject _predictMatCube;
 
     private void Start()
     {
@@ -41,6 +39,9 @@ public class UIManager : MonoBehaviour
                 break;
             case StateManager.GameState.CreateMode:
                 OnCreateUI();
+                break;
+            case StateManager.GameState.CreateItemMode:
+                OnCreateItemUI();
                 break;
             case StateManager.GameState.EditMode:
                 OnEditUI();
@@ -71,7 +72,12 @@ public class UIManager : MonoBehaviour
         AllInactiveUI();
         _movePads.SetActive(true);
         _createPanel.SetActive(true);
-        _predictInsCube.SetActive(true);
+    }
+
+    void OnCreateItemUI()
+    {
+        AllInactiveUI();
+        _createItemPanel.SetActive(true);
     }
 
     void OnEditUI()
@@ -79,7 +85,6 @@ public class UIManager : MonoBehaviour
         AllInactiveUI();
         _movePads.SetActive(true);
         _editPanel.SetActive(true);
-        _predictMatCube.SetActive(true);
     }
 
     void OnEditMatUI()
@@ -105,11 +110,11 @@ public class UIManager : MonoBehaviour
         _movePads.SetActive(false);
         _defaultPanel.SetActive(false);
         _createPanel.SetActive(false);
+        _createItemPanel.SetActive(false);
         _editPanel.SetActive(false);
         _editMatPanel.SetActive(false);
         _editCropPanel.SetActive(false);
-        _predictInsCube.SetActive(false);
-        _predictMatCube.SetActive(false);
+
     }
 
 

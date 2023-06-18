@@ -13,13 +13,14 @@ public class MaterialBunker : MonoBehaviour
     public int MatCount = 0;
     public const int MATERIAL_AMOUNT = 500;
     public Material[] Materials = new Material[MATERIAL_AMOUNT];
-    // 手持ちのSprite保持
-    public Sprite NowHaveSprite;
-    public Material NowHaveMaterial;
     // のちのちセーブと紐付け
     public Dictionary<string, Sprite> CroppedImages = new Dictionary<string, Sprite>();
     public Dictionary<string, Material> ImageMaterials = new Dictionary<string, Material>();
 
+    // 今所有しているもの
+    public string NowHavePhoto = "MaterialNo.1";
+    public Sprite NowHavePhotoSprite => CroppedImages[NowHavePhoto];
+    public Material NowHavePhotoMaterial => ImageMaterials[NowHavePhoto];
 
     void Awake()
     {

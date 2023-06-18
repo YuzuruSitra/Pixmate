@@ -3,19 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GalleryShow : MonoBehaviour
+public class ShowItemList : MonoBehaviour
 {
-    private Queue<GameObject> imagePool = new Queue<GameObject>();
+    private Queue<GameObject> itemPool = new Queue<GameObject>();
 
-    public void ShowSprits(GameObject[] poolObj )
+    public void ShowSprits(GameObject[] poolObj)
     {
-        MaterialBunker materialBunker = MaterialBunker.InstanceMatBunker;
-        for(int i = 0;  i < materialBunker.MatCount; i++)
+        ItemBunker itemBunker = ItemBunker.InstanceItemBunker;
+        for(int i = 0;  i < itemBunker.HavingItemCount; i++)
         {
             // キーの設定
-            int nameCount = i + 1;
-            string tmpKey = materialBunker.KeyName;
-            tmpKey += nameCount;
+            string tmpKey = itemBunker.ItemName[i];
 
             // プールから出力されたオブジェクトの取得
             poolObj[i] = GetPooledImage();
@@ -26,8 +24,8 @@ public class GalleryShow : MonoBehaviour
             poolObj[i].name = tmpKey;
 
             // 表示画像の制御
-            Image outPooldImage = poolObj[i].GetComponent<Image>();
-            if (materialBunker.CroppedImages.TryGetValue(tmpKey, out Sprite tmpSprite))outPooldImage.sprite = tmpSprite;
+            Image outPooldImage = poolObj[i].transform.GetChild(0).GetComponent<Image>();
+            if (itemBunker.ItemSpriteDictionary.TryGetValue(tmpKey, out Sprite tmpSprite))outPooldImage.sprite = tmpSprite;
         }
     }
 
@@ -41,15 +39,15 @@ public class GalleryShow : MonoBehaviour
         // オブジェクト座標周りの初期設定
         newImage.SetActive(false);
         newImage.transform.SetParent(poolParentObj);
-        imagePool.Enqueue(newImage);
+        itemPool.Enqueue(newImage);
         return newImage;
     }
 
     // プールの呼び出し
     GameObject GetPooledImage()
     {
-        if (imagePool.Count <= 0)return null;
-        GameObject pooledImage = imagePool.Dequeue();
+        if (itemPool.Count <= 0)return null;
+        GameObject pooledImage = itemPool.Dequeue();
         pooledImage.SetActive(true);
         return pooledImage;
     }
@@ -61,7 +59,7 @@ public class GalleryShow : MonoBehaviour
         {
             bool activeObj = poolObj[i].activeInHierarchy;
             if(activeObj)poolObj[i].SetActive(false);
-            imagePool.Enqueue(poolObj[i]);
+            itemPool.Enqueue(poolObj[i]);
         }
     }
 

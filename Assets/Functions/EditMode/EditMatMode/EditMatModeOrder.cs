@@ -25,9 +25,6 @@ public class EditMatModeOrder : MonoBehaviour
     [SerializeField]
     private Transform _PoolParentObj;
 
-    [SerializeField]
-    private Image _assignMatImage;
-
     // ボタン類
     [SerializeField]
     private Button _importButton;
@@ -71,7 +68,6 @@ public class EditMatModeOrder : MonoBehaviour
 
     void ReturnEditMode()
     {
-        _assignMatImage.sprite = MaterialBunker.InstanceMatBunker.NowHaveSprite;
         _stateManager.ChangeState(StateManager.GameState.EditMode);
     }
 
@@ -102,13 +98,8 @@ public class EditMatModeOrder : MonoBehaviour
     void SelectFlame()
     {
         MaterialBunker materialBunker = MaterialBunker.InstanceMatBunker;
-        string getKey = PushFlame();
-        Sprite selectSprite = materialBunker.CroppedImages[getKey];
-        materialBunker.NowHaveSprite = selectSprite;
-        _galleryShow.ShowSelectItem(_setItemFlame, selectSprite);
-        Material selectMaterial = materialBunker.ImageMaterials[getKey];
-        
-       materialBunker.NowHaveMaterial = selectMaterial;
+        materialBunker.NowHavePhoto = PushFlame();
+        _galleryShow.ShowSelectItem(_setItemFlame, materialBunker.NowHavePhotoSprite);
     }
 
     public string PushFlame()

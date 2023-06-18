@@ -8,10 +8,12 @@ public class EditModeOrder : MonoBehaviour
     [SerializeField] 
     private StateManager _stateManager;
 
-    [SerializeField] 
-    private  AssignMaterial _assignMaterial;
+    private AssignMaterial _assignMaterial = new AssignMaterial();
 
     
+    [SerializeField]
+    private Image _assignMatImage;
+
     // EditModeのボタン
     [SerializeField]
     private Button _settingsButton;
@@ -41,6 +43,18 @@ public class EditModeOrder : MonoBehaviour
         //_rotLeftButton.onClick.AddListener(PutCube);
         //_rotRightButton.onClick.AddListener(PutCube);
         _assignMatButton.onClick.AddListener(_assignMaterial.DoAssignMat);
+        _stateManager.OnStateChanged += OpenEdit;
+    }
+
+    void OnDestroy()
+    {
+        _stateManager.OnStateChanged -= OpenEdit;
+    }
+
+    void OpenEdit(StateManager.GameState newState)
+    {
+        if(newState != StateManager.GameState.EditMode) return;
+        _assignMatImage.sprite = MaterialBunker.InstanceMatBunker.NowHavePhotoSprite;
     }
 
     void GoSettingsMode()
