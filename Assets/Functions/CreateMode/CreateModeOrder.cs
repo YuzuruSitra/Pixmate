@@ -79,7 +79,7 @@ public class CreateModeOrder : MonoBehaviour
 
     void DoGenerate()
     {
-        _objInstantiater.GenerateCube();
+        _objInstantiater.GenerateDone();
     }
 
     

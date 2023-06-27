@@ -62,7 +62,6 @@ public class SaveManager : MonoBehaviour
         QuickSaveReader reader = QuickSaveReader.Create("Player", settings);
         
         MaterialBunker.InstanceMatBunker.MatCount = reader.Read<int>("matCount");
-
         for(int i = 0; i < MaterialBunker.InstanceMatBunker.MatCount; i++)
         {
             int nameCount = i + 1;

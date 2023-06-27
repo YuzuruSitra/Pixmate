@@ -90,8 +90,10 @@ public class PredictManager : MonoBehaviour
         RaycastHit hit;
 
         _inLange = false;
+        // 対象レイヤーの指定
+        int targetLayerMask = LayerMask.GetMask("TouchLayer");
         // Physics.Raycast() でレイを飛ばす
-        if (Physics.Raycast(ray, out hit, 3f)) 
+        if (Physics.Raycast(ray, out hit, 3f, targetLayerMask)) 
         {   
             _nowHaveCube = hit.collider.gameObject;
             // 生成位置の変数の値を「ブロックの向き + ブロックの位置」
@@ -125,8 +127,3 @@ public class PredictManager : MonoBehaviour
 
 }
 
-// 左クリック
-            // if (Input.GetKeyDown("c")) {
-            //     // ↓ レイが当たっているオブジェクトを削除
-            //     Destroy(hit.collider.gameObject);
-            // }
