@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -10,6 +11,12 @@ public class UIManager : MonoBehaviour
     private GameObject _defaultPanel;
     [SerializeField] 
     private GameObject _createPanel;
+    [SerializeField]
+    private GameObject[] _createPanelButton = new GameObject[2];
+    [SerializeField]
+    private Sprite[] _button1Sprites = new Sprite[2];
+    [SerializeField]
+    private Sprite[] _button2Sprites = new Sprite[1];
     [SerializeField]
     private GameObject _createItemPanel;
     [SerializeField] 
@@ -72,6 +79,27 @@ public class UIManager : MonoBehaviour
         AllInactiveUI();
         _movePads.SetActive(true);
         _createPanel.SetActive(true);
+        string setItem = ItemBunker.InstanceItemBunker.NowHaveItem;
+        Image[] buttonImage = new Image[2];
+        for(int i = 0; i < _createPanelButton.Length; i++)
+        {
+            buttonImage[i] = _createPanelButton[i].GetComponent<Image>();
+        }
+
+        // アイテムによてボタンの切り替え
+        switch(setItem)
+        {
+            case "Cube":
+                _createPanelButton[0].SetActive(true);
+                _createPanelButton[1].SetActive(true);
+                buttonImage[0].sprite = _button1Sprites[0];
+                buttonImage[1].sprite = _button2Sprites[0];
+                break;
+            case "Gene":
+                _createPanelButton[0].SetActive(true);
+                buttonImage[0].sprite = _button1Sprites[1];
+                break;
+        }
     }
 
     void OnCreateItemUI()
@@ -114,7 +142,10 @@ public class UIManager : MonoBehaviour
         _editPanel.SetActive(false);
         _editMatPanel.SetActive(false);
         _editCropPanel.SetActive(false);
-
+        for(int i=0; i < _createPanelButton.Length; i++)
+        {
+            _createPanelButton[i].SetActive(false);
+        }
     }
 
 

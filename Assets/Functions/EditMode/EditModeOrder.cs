@@ -9,6 +9,8 @@ public class EditModeOrder : MonoBehaviour
     private StateManager _stateManager;
 
     private AssignMaterial _assignMaterial = new AssignMaterial();
+    [SerializeField] 
+    private RotateObject _rotateObject;
 
     
     [SerializeField]
@@ -28,7 +30,7 @@ public class EditModeOrder : MonoBehaviour
     private Button _rotLeftButton;
 
     [SerializeField]
-    private Button _rotRightButton;
+    private Button _rotUpwardsButton;
 
     [SerializeField]
     private Button _assignMatButton;
@@ -40,8 +42,8 @@ public class EditModeOrder : MonoBehaviour
         _settingsButton.onClick.AddListener(GoSettingsMode);
         _homeButton.onClick.AddListener(GoDefaultMode);
         _setMatButton.onClick.AddListener(GoSetMatMode);
-        //_rotLeftButton.onClick.AddListener(PutCube);
-        //_rotRightButton.onClick.AddListener(PutCube);
+        _rotLeftButton.onClick.AddListener(_rotateObject.SpinningLeft);
+        _rotUpwardsButton.onClick.AddListener(_rotateObject.SpinningUpwards);
         _assignMatButton.onClick.AddListener(_assignMaterial.DoAssignMat);
         _stateManager.OnStateChanged += OpenEdit;
     }

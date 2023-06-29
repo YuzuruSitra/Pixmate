@@ -9,7 +9,6 @@ public class ObjInstantiater : MonoBehaviour
     {
         PredictManager _predictManager = PredictManager.InstancePredictManager;
         ItemBunker _itemBunker = ItemBunker.InstanceItemBunker;
-        Vector3 rootPos;
         
         if(_itemBunker.NowHaveItemObject == null || _predictManager.AdjCubePos == null || !_predictManager.InLange)return;
         Instantiate(_itemBunker.NowHaveItemObject, _predictManager.AdjCubePos, Quaternion.identity);
