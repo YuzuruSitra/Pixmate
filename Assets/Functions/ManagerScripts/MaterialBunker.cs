@@ -5,7 +5,7 @@ using UnityEngine;
 // テクスチャとマテリアルの管理
 public class MaterialBunker : MonoBehaviour
 {
-    // 他スクリプトでも呼べるようにインスタンス化
+   // 他スクリプトでも呼べるようにインスタンス化
     public static MaterialBunker InstanceMatBunker;
 
     private const string KEY_NAME = "MaterialNo.";
@@ -19,8 +19,15 @@ public class MaterialBunker : MonoBehaviour
 
     // 今所有しているもの
     public string NowHavePhoto = "MaterialNo.1";
-    public Sprite NowHavePhotoSprite => CroppedImages[NowHavePhoto];
-    public Material NowHavePhotoMaterial => ImageMaterials[NowHavePhoto];
+    public Sprite NowHavePhotoSprite
+    {
+        get { return MatCount != 0 ? CroppedImages[NowHavePhoto] : null; }
+    }
+    public Material NowHavePhotoMaterial
+    {
+        get { return MatCount != 0 ? ImageMaterials[NowHavePhoto] : null; }
+    }
+
 
     void Awake()
     {
@@ -32,12 +39,12 @@ public class MaterialBunker : MonoBehaviour
 
     void Start()
     {
-        setMaterials();
+        SetMaterials();
         SpritesAssignMat();
     }
 
     // マテリアルを辞書にセット
-    void setMaterials()
+    void SetMaterials()
     {
         for(int i=0; i < MATERIAL_AMOUNT; i++)
         {
@@ -55,6 +62,8 @@ public class MaterialBunker : MonoBehaviour
         MatCount += 1;
         string tmp = tmpKey + MatCount;
         CroppedImages.Add(tmp, setSprite);
+        SaveManager saveManager = SaveManager._saveManager;
+        saveManager.DoSaveSprite(MatCount,setSprite,tmp);
         SpritesAssignMat();
     }
 

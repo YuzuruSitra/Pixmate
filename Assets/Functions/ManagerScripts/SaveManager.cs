@@ -6,7 +6,17 @@ using CI.QuickSave;
 // ゲームデータのセーブ管理
 public class SaveManager : MonoBehaviour
 {
-    
+    // 他スクリプトでも呼べるようにインスタンス化
+    public static SaveManager _saveManager;
+
+    void Awake()
+    {
+        if (_saveManager == null)
+        {
+            _saveManager = this;
+        }
+    }
+
     void Start()
     {
         // データの保存先をApplication.dataPathに変更
@@ -35,12 +45,13 @@ public class SaveManager : MonoBehaviour
         QuickSaveSettings settings = new QuickSaveSettings();
         // QuickSaveWriterのインスタンスを作成
         QuickSaveWriter writer = QuickSaveWriter.Create("Player",settings);
+        MaterialBunker instanceMatBunker = MaterialBunker.InstanceMatBunker;
 
         // データを書き込む
-        writer.Write("matCount", MaterialBunker.InstanceMatBunker.MatCount);
+        writer.Write("matCount", instanceMatBunker.MatCount);
 
         //スプライトのセーブ処理
-        foreach (KeyValuePair<string, Sprite> entry in MaterialBunker.InstanceMatBunker.CroppedImages)
+        foreach (KeyValuePair<string, Sprite> entry in instanceMatBunker.CroppedImages)
         {
             string key = entry.Key;
             Sprite value = entry.Value;
@@ -53,6 +64,24 @@ public class SaveManager : MonoBehaviour
         writer.Commit();
     }
 
+    //Spriteセーブ処理
+    public void DoSaveSprite(int matCount, Sprite sprite,string key)
+    {
+        // QuickSaveSettingsのインスタンスを作成
+        QuickSaveSettings settings = new QuickSaveSettings();
+        // QuickSaveWriterのインスタンスを作成
+        QuickSaveWriter writer = QuickSaveWriter.Create("Player",settings);
+        MaterialBunker instanceMatBunker = MaterialBunker.InstanceMatBunker;
+
+        // データを書き込む
+        writer.Write("matCount", matCount);
+        writer.Write(key, sprite);
+        
+
+        // 変更を反映
+        writer.Commit();
+    }
+
     // データを読み込む
     public void Doload()
     {        
@@ -60,15 +89,16 @@ public class SaveManager : MonoBehaviour
         QuickSaveSettings settings = new QuickSaveSettings();
         // QuickSaveReaderのインスタンスを作成
         QuickSaveReader reader = QuickSaveReader.Create("Player", settings);
+        MaterialBunker instanceMatBunker = MaterialBunker.InstanceMatBunker;
         
-        MaterialBunker.InstanceMatBunker.MatCount = reader.Read<int>("matCount");
-        for(int i = 0; i < MaterialBunker.InstanceMatBunker.MatCount; i++)
+        instanceMatBunker.MatCount = reader.Read<int>("matCount");
+        for(int i = 0; i < instanceMatBunker.MatCount; i++)
         {
             int nameCount = i + 1;
-            string tmpKey = MaterialBunker.InstanceMatBunker.KeyName;
+            string tmpKey = instanceMatBunker.KeyName;
             tmpKey += nameCount;
             Sprite tmpValue = reader.Read<Sprite>(tmpKey);
-            MaterialBunker.InstanceMatBunker.CroppedImages.Add(tmpKey, tmpValue);
+            instanceMatBunker.CroppedImages.Add(tmpKey, tmpValue);
         }
         
     }

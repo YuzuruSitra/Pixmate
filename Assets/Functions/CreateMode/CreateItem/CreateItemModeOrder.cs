@@ -23,15 +23,10 @@ public class CreateItemModeOrder : MonoBehaviour
     // アクティブなプールオブジェクトを保持
     private int _havingItemCount => ItemBunker.InstanceItemBunker.HavingItemCount;
     private GameObject[] _poolObj;
-
-    [SerializeField]
-    private Button _returnButton;
     
     // Start is called before the first frame update
     void Start()
     {
-        //ボタンのリスナー登録
-        _returnButton.onClick.AddListener(ReturnCreateMode);
 
         // プールオブジェクトの配列を初期化
         _poolObj = new GameObject[_havingItemCount];
@@ -95,7 +90,7 @@ public class CreateItemModeOrder : MonoBehaviour
         return tmpKey;
     }
 
-    void ReturnCreateMode()
+    public void ReturnCreateMode()
     {
         //_assignMatImage.sprite = MaterialBunker.InstanceMatBunker.NowHaveSprite;
         _stateManager.ChangeState(StateManager.GameState.CreateMode);

@@ -8,9 +8,6 @@ public class CreateModeOrder : MonoBehaviour
 {
     [SerializeField] 
     private StateManager _stateManager;
-    [SerializeField]
-    private ObjInstantiater _objInstantiater;
-
 
     [SerializeField]
     private Image _havingItemImage;
@@ -18,34 +15,9 @@ public class CreateModeOrder : MonoBehaviour
     // ブロック生成用
     [SerializeField]
     private GameObject _blockPrefab;
-    // [SerializeField]
-    // private GameObject _predictInsCube;
-    // [SerializeField]
-    // private GameObject _predictMatCube;
-    
-    [SerializeField]
-    private Button _settingsButton;
-
-    [SerializeField]
-    private Button _homeButton;
-
-    [SerializeField]
-    private Button _ItemButton;
-
-    [SerializeField]
-    private Button _putCubeButton;
-
 
     void Start()
     {
-
-        // ボタンのリスナー登録
-        _settingsButton.onClick.AddListener(GoSettingsMode);
-        _homeButton.onClick.AddListener(GoDefaultMode);
-        _ItemButton.onClick.AddListener(GoItemMode);
-
-        // キューブの生成
-        _putCubeButton.onClick.AddListener(DoGenerate);
         _stateManager.OnStateChanged += OpenCreate;
     }
 
@@ -62,25 +34,19 @@ public class CreateModeOrder : MonoBehaviour
         _havingItemImage.sprite = itemBunker.NowHaveItemSprite;
     }
 
-    void GoSettingsMode()
+    public void GoSettingsMode()
     {
         _stateManager.ChangeState(StateManager.GameState.SettingsMode);
     }
 
-    void GoDefaultMode()
+    public void GoDefaultMode()
     {
         _stateManager.ChangeState(StateManager.GameState.DefaultMode);
     }
 
-    void GoItemMode()
+    public void GoItemMode()
     {
         _stateManager.ChangeState(StateManager.GameState.CreateItemMode);
     }
-
-    void DoGenerate()
-    {
-        _objInstantiater.GenerateDone();
-    }
-
     
 }

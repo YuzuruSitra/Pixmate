@@ -4,8 +4,14 @@ using UnityEngine;
 
 public class ObjInstantiater : MonoBehaviour
 {   
-    // オブジェクトの生成
-    public void GenerateDone()
+    // 各種アイテムのクラス
+    [SerializeField]
+    private ItemCube _itemCube;
+    [SerializeField]
+    private ItemGene _itemGene;
+
+    // オブジェクトの生成-ボタン1
+    public void Generate1()
     {
         // 必要なデータのインスタンス化
         PredictManager _predictManager = PredictManager.InstancePredictManager;
@@ -23,28 +29,43 @@ public class ObjInstantiater : MonoBehaviour
         {
             case "Cube":
                 rootPos = _predictManager.AdjCubePos;
-                GenerateCube(rootPos,targetObj);
+                _itemCube.GenerateCube(rootPos,targetObj);
                 break;
             case "Gene":
                 rootPos = _predictManager.SameCubePos;
-                GenerateMate(rootPos,targetObj,rayHitObj);
+                _itemGene.GenerateMate(rootPos,targetObj,rayHitObj);
                 break;
             default:
                 break;
         }
     }
 
-    void GenerateCube(Vector3 createPos, GameObject createObj)
+     // オブジェクトの生成-ボタン2
+    public void Generate2()
     {
-        if(createPos == null)return;
-        Instantiate(createObj, createPos, Quaternion.identity);
-    }
+        // 必要なデータのインスタンス化
+        PredictManager _predictManager = PredictManager.InstancePredictManager;
+        ItemBunker _itemBunker = ItemBunker.InstanceItemBunker;
+        GameObject targetObj = _itemBunker.NowHaveItemObject;
+        GameObject rayHitObj = _predictManager.NowHaveCube;
+        bool targetInLange = _predictManager.InLange;
+        Vector3 rootPos;
 
-    void GenerateMate(Vector3 createPos, GameObject createObj, GameObject convertObj)
-    {
-        if(createPos == null || convertObj == null)return;
-        Destroy(convertObj);
-        Quaternion rotationQuaternion = Quaternion.Euler(0f, 180f, 0f);
-        Instantiate(createObj, createPos, rotationQuaternion);
+        // アイテムが指定されていない且つ対象が射程外なら処理を終了
+        if(targetObj == null || !targetInLange)return;
+
+        string currentItem = _itemBunker.NowHaveItem;
+        switch(currentItem)
+        {
+            case "Cube":
+                rootPos = _predictManager.AdjCubePos;
+                _itemCube.InventCube(rayHitObj);
+                break;
+            case "Gene":
+
+                break;
+            default:
+                break;
+        }
     }
 }

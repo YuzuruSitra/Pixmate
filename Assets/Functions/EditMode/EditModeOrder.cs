@@ -56,7 +56,10 @@ public class EditModeOrder : MonoBehaviour
     void OpenEdit(StateManager.GameState newState)
     {
         if(newState != StateManager.GameState.EditMode) return;
-        _assignMatImage.sprite = MaterialBunker.InstanceMatBunker.NowHavePhotoSprite;
+        
+        MaterialBunker instanceMatBunker = MaterialBunker.InstanceMatBunker;
+        if(instanceMatBunker.NowHavePhotoSprite == null) return;
+        _assignMatImage.sprite = instanceMatBunker.NowHavePhotoSprite;
     }
 
     void GoSettingsMode()

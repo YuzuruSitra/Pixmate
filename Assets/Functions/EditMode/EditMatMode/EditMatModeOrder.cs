@@ -30,6 +30,8 @@ public class EditMatModeOrder : MonoBehaviour
     private Button _importButton;
     [SerializeField]
     private Button _returnButton;
+    [SerializeField]
+    private Button _deleteButton;
 
     // アクティブなプールオブジェクトを保持
     private int _materialAmount => MaterialBunker.MATERIAL_AMOUNT;
@@ -46,6 +48,7 @@ public class EditMatModeOrder : MonoBehaviour
         // ボタンのリスナーに登録
         _importButton.onClick.AddListener(GoImportMode);
         _returnButton.onClick.AddListener(ReturnEditMode);
+        _deleteButton.onClick.AddListener(DeleteSprite);
 
         // プールの生成とリスナー登録
         SetPoolListener();
@@ -109,5 +112,18 @@ public class EditMatModeOrder : MonoBehaviour
         string tmpKey = clickedButton.gameObject.name;
 
         return tmpKey;
+    }
+
+    // 特定スプライトの削除
+    void DeleteSprite()
+    {
+        MaterialBunker materialBunker = MaterialBunker.InstanceMatBunker;
+        materialBunker.MatCount -= 1;
+        materialBunker.CroppedImages.Remove(materialBunker.NowHavePhoto);
+        materialBunker.ImageMaterials.Remove(materialBunker.NowHavePhoto);
+
+        string tmp = System.Text.RegularExpressions.Regex.Replace(materialBunker.NowHavePhoto, @"[^0-9]", "");
+        int tmpInt = int.Parse(tmp);
+        Debug.Log(tmpInt);
     }
 }

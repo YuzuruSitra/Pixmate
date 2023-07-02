@@ -23,15 +23,12 @@ public class SaveCroppedImage : MonoBehaviour
         }
 
         // 保存するマテリアルのパスを設定
-        int imageIndex = materialBunker.CroppedImages.Count + 1;
+        int imageIndex = materialBunker.MatCount + 1;
         string fileName = $"CroppedImage_{imageIndex}.png";
         string filePath = Path.Combine(path, fileName);
 
-
         byte[] pngData = _cropImage.CroppedTexture.EncodeToPNG();
         File.WriteAllBytes(filePath, pngData);
-
-        // Debug.Log($"Cropped image saved at: {filePath}");
 
         Sprite newSprite = Sprite.Create(_cropImage.CroppedTexture, new Rect(0f, 0f, _cropImage.CroppedTexture.width, _cropImage.CroppedTexture.height), new Vector2(0.5f, 0.5f));
         //スプライトを保存

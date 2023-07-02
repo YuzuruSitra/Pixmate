@@ -12,6 +12,10 @@ public class PredictManager : MonoBehaviour
 
     private bool _inLange;
     public bool InLange => _inLange;
+
+    // オブジェクト回転中
+    public bool IsRotate = false;
+    private bool _isRotate => IsRotate;
     
     [SerializeField]
     private GameObject _predictAdjCube;
@@ -22,7 +26,6 @@ public class PredictManager : MonoBehaviour
     private bool _isSameVisible;
     public Vector3 SameCubePos => _predictSameCube.transform.position;
     
-
     private GameObject _nowHaveCube;
     public GameObject NowHaveCube => _nowHaveCube;
 
@@ -75,8 +78,8 @@ public class PredictManager : MonoBehaviour
         // 予測オブジェクトの座標切り替え
         MovePredictCube(_predictAdjCube, _predictSameCube);
         // 表示切り替え
-        _predictAdjCube.SetActive(_inLange && _isAdjVisible);
-        _predictSameCube.SetActive(_inLange && _isSameVisible);
+        _predictAdjCube.SetActive(_inLange && _isAdjVisible && !_isRotate);
+        _predictSameCube.SetActive(_inLange && _isSameVisible && !_isRotate);
     }
 
     // 隣接オブジェクトへのRay

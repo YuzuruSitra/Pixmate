@@ -16,38 +16,6 @@ public class RotateObject : MonoBehaviour
 
     private float _rotationDuration = 1f;
 
-    void Update()
-    {
-        // PredictManager _predictManager = PredictManager.InstancePredictManager;
-        // GameObject targetObj = _predictManager.NowHaveCube;
-        // if(targetObj == null)return;
-        // // オブジェクトAの位置からオブジェクトBの位置を引いて、ローカル座標を取得
-        // Vector3 relativePosition = _camPos.position - targetObj.transform.position;
-
-        // // X軸方向の距離（相対座標のX成分）を取得
-        // float distanceX = relativePosition.x;
-
-        // // Z軸方向の距離（相対座標のZ成分）を取得
-        // float distanceZ = relativePosition.z;
-
-        // // X軸方向とZ軸方向の距離を比較してオブジェクトAがどのエリアに属するか判定
-        // if (distanceX >= 0 && distanceZ >= 0)
-        // {
-        //     Debug.Log("ObjectAはエリア1に属しています");
-        // }
-        // else if (distanceX < 0 && distanceZ >= 0)
-        // {
-        //     Debug.Log("ObjectAはエリア2に属しています");
-        // }
-        // else if (distanceX < 0 && distanceZ < 0)
-        // {
-        //     Debug.Log("ObjectAはエリア3に属しています");
-        // }
-        // else if (distanceX >= 0 && distanceZ < 0)
-        // {
-        //     Debug.Log("ObjectAはエリア4に属しています");
-        // }
-    }
 
     public void SpinningLeft()
     {
@@ -69,12 +37,16 @@ public class RotateObject : MonoBehaviour
 
     IEnumerator DoRotation(_spinState state, GameObject targetObj)
     {   
+        // 予測線の非表示
+        PredictManager _predictManager = PredictManager.InstancePredictManager;
+        _predictManager.IsRotate = true;
+        Transform targetTransform = targetObj.transform;
+
         // オイラー角を正規化して格納
-        float normalizedAngleX = Mathf.Repeat(targetObj.transform.eulerAngles.x + 180, 360) - 180;
-        float normalizedAngleY = Mathf.Repeat(targetObj.transform.eulerAngles.y + 180, 360) - 180;
-        float normalizedAngleZ = Mathf.Repeat(targetObj.transform.eulerAngles.z + 180, 360) - 180;
+        float normalizedAngleX = Mathf.Repeat(targetTransform.eulerAngles.x + 180, 360) - 180;
+        float normalizedAngleY = Mathf.Repeat(targetTransform.eulerAngles.y + 180, 360) - 180;
+        float normalizedAngleZ = Mathf.Repeat(targetTransform.eulerAngles.z + 180, 360) - 180;
         Vector3 targetObjRot = new Vector3(normalizedAngleX,normalizedAngleY,normalizedAngleZ);
-        //targetObj.transform.Rotate(targetObjRot);
 
         Quaternion startRotation = Quaternion.Euler(targetObjRot);
         Quaternion targetRotation = Quaternion.identity;
@@ -86,7 +58,7 @@ public class RotateObject : MonoBehaviour
                 break;
 
             case _spinState.UPWARDS:
-                Vector3 convertUpwards = ConvertUpwards(targetObj.transform);
+                Vector3 convertUpwards = ConvertUpwards(targetTransform);
                 targetRotation = Quaternion.Euler(convertUpwards) * startRotation;
                 break;
         }
@@ -96,14 +68,16 @@ public class RotateObject : MonoBehaviour
         while (elapsedTime < _rotationDuration)
         {
             // 回転処理
-            targetObj.transform.rotation = Quaternion.Slerp(startRotation, targetRotation, elapsedTime / _rotationDuration);
+            targetTransform.rotation = Quaternion.Slerp(startRotation, targetRotation, elapsedTime / _rotationDuration);
             elapsedTime += Time.deltaTime;
 
             yield return null;
         }
 
         // 正確な目標角度に設定する（誤差修正）
-        targetObj.transform.rotation = targetRotation;
+        targetTransform.rotation = targetRotation;
+        // 予測線の表示
+        _predictManager.IsRotate = false;
         _spinCoroutine = null;
     }
 
