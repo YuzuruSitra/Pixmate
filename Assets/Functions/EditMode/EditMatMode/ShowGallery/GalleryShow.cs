@@ -64,10 +64,13 @@ public class GalleryShow : MonoBehaviour
             imagePool.Enqueue(poolObj[i]);
         }
     }
-
-    public void ShowSelectItem(GameObject setItemFlame, Sprite tmpItem)
+    
+    // アイテムの選択処理
+    public void ShowSelectItem(GameObject setItemFlame,InputField setItemName, Sprite tmpItem, string tmpName)
     {
         Image setItemImage = setItemFlame.GetComponent<Image>();
         setItemImage.sprite = tmpItem;
+        setItemName.text = tmpName;
     }
+
 }

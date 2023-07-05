@@ -16,6 +16,7 @@ public class MaterialBunker : MonoBehaviour
     // のちのちセーブと紐付け
     public Dictionary<string, Sprite> CroppedImages = new Dictionary<string, Sprite>();
     public Dictionary<string, Material> ImageMaterials = new Dictionary<string, Material>();
+    public Dictionary<string, string> ImageNames = new Dictionary<string, string>();
 
     // 今所有しているもの
     public string NowHavePhoto = "MaterialNo.1";
@@ -26,6 +27,10 @@ public class MaterialBunker : MonoBehaviour
     public Material NowHavePhotoMaterial
     {
         get { return MatCount != 0 && NowHavePhoto != null ? ImageMaterials[NowHavePhoto] : null; }
+    }
+    public string NowHavePhotoNames
+    {
+        get { return MatCount != 0 && NowHavePhoto != null ? ImageNames[NowHavePhoto] : null; }
     }
 
 
@@ -43,18 +48,6 @@ public class MaterialBunker : MonoBehaviour
         SpritesAssignMat();
     }
 
-    // マテリアルを辞書にセット
-    void SetMaterials()
-    {
-        for(int i=0; i < MATERIAL_AMOUNT; i++)
-        {
-            int nameCount = i + 1;
-            string tmpKey = KeyName;
-            tmpKey += nameCount;
-            ImageMaterials.Add(tmpKey, Materials[i]);
-        }
-    }
-
     // スプライトの追加
     public void AddSprites(Sprite setSprite)
     {
@@ -62,9 +55,18 @@ public class MaterialBunker : MonoBehaviour
         MatCount += 1;
         string tmp = tmpKey + MatCount;
         CroppedImages.Add(tmp, setSprite);
+        ImageNames.Add(tmp, tmp);
         SaveManager instanceSaveManager = SaveManager.InstanceSaveManager;
-        instanceSaveManager.DoSaveSprite(MatCount,setSprite,tmp);
+        instanceSaveManager.DoSaveSprite(MatCount,setSprite,tmp,tmp);
         SpritesAssignMat();
+    }
+
+    // 写真の名前を変更
+    public void ChangePhotoName(string tmpName)
+    {
+        ImageNames[NowHavePhoto] = tmpName;
+        SaveManager instanceSaveManager = SaveManager.InstanceSaveManager;
+        instanceSaveManager.DoSaveSprite(MatCount,CroppedImages[NowHavePhoto],ImageNames[NowHavePhoto],NowHavePhoto);
     }
 
     // マテリアルにスプライトをセット
@@ -85,6 +87,20 @@ public class MaterialBunker : MonoBehaviour
             ImageMaterials[tmpKey].SetTexture("_MainTex", matTexture);
                         
             i++; 
+        }
+    }
+
+    /*--------------------------------*/
+
+    // マテリアルを辞書にセット
+    void SetMaterials()
+    {
+        for(int i=0; i < MATERIAL_AMOUNT; i++)
+        {
+            int nameCount = i + 1;
+            string tmpKey = KeyName;
+            tmpKey += nameCount;
+            ImageMaterials.Add(tmpKey, Materials[i]);
         }
     }
 

@@ -6,7 +6,6 @@ using UnityEngine.EventSystems;
 
 public class EditMatModeOrder : MonoBehaviour
 {
-    [SerializeField]
     MaterialBunker _materialBunker;
 
     [SerializeField] 
@@ -24,6 +23,8 @@ public class EditMatModeOrder : MonoBehaviour
 
     [SerializeField] 
     private GameObject _setItemFlame;
+    [SerializeField] 
+    private InputField _itemNameText;
 
     [SerializeField]
     private Transform _PoolParentObj;
@@ -54,6 +55,7 @@ public class EditMatModeOrder : MonoBehaviour
         _importButton.onClick.AddListener(GoImportMode);
         _returnButton.onClick.AddListener(ReturnEditMode);
         _deleteButton.onClick.AddListener(DeleteSprite);
+        _itemNameText.onEndEdit.AddListener(ChangePhotoNames);
 
         // プールの生成とリスナー登録
         SetPoolListener();
@@ -73,7 +75,7 @@ public class EditMatModeOrder : MonoBehaviour
         // 描画処理
         _galleryShow.ShowSprits(_poolObj);
         // 選択フレームに画像をセット
-        _galleryShow.ShowSelectItem(_setItemFlame, _materialBunker.NowHavePhotoSprite);
+        _galleryShow.ShowSelectItem(_setItemFlame, _itemNameText, _materialBunker.NowHavePhotoSprite, _materialBunker.NowHavePhotoNames);
     }
 
     void ReturnEditMode()
@@ -108,7 +110,7 @@ public class EditMatModeOrder : MonoBehaviour
     void SelectFlame()
     {
         _materialBunker.NowHavePhoto = PushFlame();
-        _galleryShow.ShowSelectItem(_setItemFlame, _materialBunker.NowHavePhotoSprite);
+        _galleryShow.ShowSelectItem(_setItemFlame, _itemNameText, _materialBunker.NowHavePhotoSprite, _materialBunker.NowHavePhotoNames);
     }
 
     public string PushFlame()
@@ -118,6 +120,12 @@ public class EditMatModeOrder : MonoBehaviour
         string tmpKey = clickedButton.gameObject.name;
 
         return tmpKey;
+    }
+
+    // InputFieldにて写真の名前を変更時の処理
+    void ChangePhotoNames(string receiveName) 
+    {
+        _materialBunker.ChangePhotoName(receiveName);
     }
 
     // 特定スプライトの削除

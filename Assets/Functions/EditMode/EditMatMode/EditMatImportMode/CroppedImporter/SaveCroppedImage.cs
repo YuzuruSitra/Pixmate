@@ -35,7 +35,6 @@ public class SaveCroppedImage : MonoBehaviour
         Sprite newSprite = Sprite.Create(saveTexture, new Rect(0f, 0f, saveTexture.width, saveTexture.height), new Vector2(0.5f, 0.5f));
         //スプライトを保存
         materialBunker.AddSprites(newSprite);
-        
     }
 
     Texture2D ResizeTexture(Texture2D originalTexture, int width, int height)
