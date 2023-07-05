@@ -39,8 +39,8 @@ public class ImportModeOrder : MonoBehaviour
         // リスナー登録
         _cancelButton.onClick.AddListener(CancelImport);
         _importButton.onClick.AddListener(DoneImport);
-        //_reverseButton.onClick.AddListener(ReturnEditMode);
-        //_rotateButton.onClick.AddListener(ReturnEditMode);
+        _reverseButton.onClick.AddListener(_cropImage.ReverseTexture2D);
+        _rotateButton.onClick.AddListener(_cropImage.RotateTexture2D);
     }
 
     void Update()

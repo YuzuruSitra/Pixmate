@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class CropImage : MonoBehaviour
 {
-
     private Image _imageToCrop;
     private Vector2 _cropOffset = Vector2.zero;
     private Vector2 _croppedSize;
@@ -151,6 +150,70 @@ public class CropImage : MonoBehaviour
 
         // クロップされたテクスチャを表示する
         _imageToCrop.sprite = Sprite.Create(_croppedTexture, new Rect(0f, 0f, _croppedTexture.width, _croppedTexture.height), new Vector2(0.5f, 0.5f));
+    }
+
+    // 左右反転処理
+    public void ReverseTexture2D()
+    {
+        // 元のテクスチャのピクセルデータを取得
+        Color32[] pixels = _originalTexture.GetPixels32();
+        int width = _originalTexture.width;
+        int height = _originalTexture.height;
+
+        // 反転後のピクセルデータを格納する配列
+        Color32[] flippedPixels = new Color32[pixels.Length];
+
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                // 元の位置のインデックス
+                int index = y * width + x;
+                // 反転後の位置のインデックス
+                int flippedIndex = y * width + (width - 1 - x);
+                // ピクセルデータを反転後の位置に格納
+                flippedPixels[flippedIndex] = pixels[index];
+            }
+        }
+        // 反転後のピクセルデータをテクスチャに設定
+        _originalTexture.SetPixels32(flippedPixels);
+        // テクスチャの変更を適用
+        _originalTexture.Apply();
+
+        DoCrop(_originalTexture, _cropOffset, _croppedSize);
+    }
+
+    // 反時計回り90度回転
+    public void RotateTexture2D()
+    {
+        // 元のテクスチャのピクセルデータを取得
+        Color32[] pixels = _originalTexture.GetPixels32();
+        int width = _originalTexture.width;  
+        int height = _originalTexture.height;
+
+        // 回転後のピクセルデータを格納する配列
+        Color32[] rotatedPixels = new Color32[pixels.Length]; 
+
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                // 元の位置のインデックス
+                int index = y * width + x;  
+                // 回転後の位置のインデックス
+                int rotatedIndex = x * height + (height - 1 - y);
+                // ピクセルデータを回転後の位置に格納
+                rotatedPixels[rotatedIndex] = pixels[index];
+            }
+        }
+        // テクスチャのサイズを回転後のサイズに変更
+        _originalTexture.Reinitialize(height, width);
+        // 回転後のピクセルデータをテクスチャに設定
+        _originalTexture.SetPixels32(rotatedPixels); 
+        // テクスチャの変更を適用
+        _originalTexture.Apply();
+
+        DoCrop(_originalTexture, _cropOffset, _croppedSize);
     }
 
 
