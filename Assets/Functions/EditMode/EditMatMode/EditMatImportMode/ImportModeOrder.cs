@@ -78,7 +78,7 @@ public class ImportModeOrder : MonoBehaviour
     private void DoneImport()
     {
         // クロップのSpriteを保存
-        _saveCroppedImage.AddCroppedSprite();
+        _saveCroppedImage.AddCroppedSprite(_cropImage.CroppedTexture);
         _stateManager.ChangeState(StateManager.GameState.EditMatMode);
     }
 

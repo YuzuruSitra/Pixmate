@@ -7,13 +7,13 @@ using CI.QuickSave;
 public class SaveManager : MonoBehaviour
 {
     // 他スクリプトでも呼べるようにインスタンス化
-    public static SaveManager _saveManager;
+    public static SaveManager InstanceSaveManager;
 
     void Awake()
     {
-        if (_saveManager == null)
+        if (InstanceSaveManager == null)
         {
-            _saveManager = this;
+            InstanceSaveManager= this;
         }
     }
 

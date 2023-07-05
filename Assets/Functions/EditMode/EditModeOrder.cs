@@ -58,7 +58,6 @@ public class EditModeOrder : MonoBehaviour
         if(newState != StateManager.GameState.EditMode) return;
         
         MaterialBunker instanceMatBunker = MaterialBunker.InstanceMatBunker;
-        if(instanceMatBunker.NowHavePhotoSprite == null) return;
         _assignMatImage.sprite = instanceMatBunker.NowHavePhotoSprite;
     }
 

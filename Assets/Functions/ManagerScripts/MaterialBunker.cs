@@ -8,7 +8,7 @@ public class MaterialBunker : MonoBehaviour
    // 他スクリプトでも呼べるようにインスタンス化
     public static MaterialBunker InstanceMatBunker;
 
-    private const string KEY_NAME = "MaterialNo.";
+    public const string KEY_NAME = "MaterialNo.";
     public string KeyName => KEY_NAME;
     public int MatCount = 0;
     public const int MATERIAL_AMOUNT = 500;
@@ -21,11 +21,11 @@ public class MaterialBunker : MonoBehaviour
     public string NowHavePhoto = "MaterialNo.1";
     public Sprite NowHavePhotoSprite
     {
-        get { return MatCount != 0 ? CroppedImages[NowHavePhoto] : null; }
+        get { return MatCount != 0 && NowHavePhoto != null ? CroppedImages[NowHavePhoto] : null; }
     }
     public Material NowHavePhotoMaterial
     {
-        get { return MatCount != 0 ? ImageMaterials[NowHavePhoto] : null; }
+        get { return MatCount != 0 && NowHavePhoto != null ? ImageMaterials[NowHavePhoto] : null; }
     }
 
 
@@ -62,8 +62,8 @@ public class MaterialBunker : MonoBehaviour
         MatCount += 1;
         string tmp = tmpKey + MatCount;
         CroppedImages.Add(tmp, setSprite);
-        SaveManager saveManager = SaveManager._saveManager;
-        saveManager.DoSaveSprite(MatCount,setSprite,tmp);
+        SaveManager instanceSaveManager = SaveManager.InstanceSaveManager;
+        instanceSaveManager.DoSaveSprite(MatCount,setSprite,tmp);
         SpritesAssignMat();
     }
 

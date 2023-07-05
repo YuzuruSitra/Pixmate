@@ -6,6 +6,9 @@ using UnityEngine.EventSystems;
 
 public class EditMatModeOrder : MonoBehaviour
 {
+    [SerializeField]
+    MaterialBunker _materialBunker;
+
     [SerializeField] 
     private StateManager _stateManager;
 
@@ -37,9 +40,11 @@ public class EditMatModeOrder : MonoBehaviour
     private int _materialAmount => MaterialBunker.MATERIAL_AMOUNT;
     private GameObject[] _poolObj;
 
-
     void Start()
     {
+        // マテリアル管理のインスタンス
+        _materialBunker = MaterialBunker.InstanceMatBunker;
+
         // プールオブジェクトの配列を初期化
         _poolObj = new GameObject[_materialAmount];
 
@@ -67,6 +72,8 @@ public class EditMatModeOrder : MonoBehaviour
         _galleryShow.AllReturnPooled(_poolObj);
         // 描画処理
         _galleryShow.ShowSprits(_poolObj);
+        // 選択フレームに画像をセット
+        _galleryShow.ShowSelectItem(_setItemFlame, _materialBunker.NowHavePhotoSprite);
     }
 
     void ReturnEditMode()
@@ -100,9 +107,8 @@ public class EditMatModeOrder : MonoBehaviour
     // 特定のスプライトをピック
     void SelectFlame()
     {
-        MaterialBunker materialBunker = MaterialBunker.InstanceMatBunker;
-        materialBunker.NowHavePhoto = PushFlame();
-        _galleryShow.ShowSelectItem(_setItemFlame, materialBunker.NowHavePhotoSprite);
+        _materialBunker.NowHavePhoto = PushFlame();
+        _galleryShow.ShowSelectItem(_setItemFlame, _materialBunker.NowHavePhotoSprite);
     }
 
     public string PushFlame()
@@ -117,13 +123,45 @@ public class EditMatModeOrder : MonoBehaviour
     // 特定スプライトの削除
     void DeleteSprite()
     {
-        MaterialBunker materialBunker = MaterialBunker.InstanceMatBunker;
-        materialBunker.MatCount -= 1;
-        materialBunker.CroppedImages.Remove(materialBunker.NowHavePhoto);
-        materialBunker.ImageMaterials.Remove(materialBunker.NowHavePhoto);
-
-        string tmp = System.Text.RegularExpressions.Regex.Replace(materialBunker.NowHavePhoto, @"[^0-9]", "");
+        if(_materialBunker.NowHavePhoto == null) return;
+        // 削除したい画像のKeyを取得
+        string tmp = System.Text.RegularExpressions.Regex.Replace(_materialBunker.NowHavePhoto, @"[^0-9]", "");
         int tmpInt = int.Parse(tmp);
-        Debug.Log(tmpInt);
+        string baseKeyName = MaterialBunker.KEY_NAME;
+
+        // 画像を格納している辞書を削除したい画像から繰り上げる。
+        while (tmpInt <= _materialBunker.MatCount)
+        {
+            string addNewKey = baseKeyName + tmpInt;
+            string nextKey = baseKeyName + (tmpInt + 1);
+
+            if(tmpInt < _materialBunker.MatCount)
+            {
+                // 辞書から現在のキーの要素を取得
+                Sprite currentSprite = _materialBunker.CroppedImages[nextKey];
+                Material currentMaterial = _materialBunker.ImageMaterials[nextKey];
+
+                // 辞書に新しいキーで要素を追加
+                _materialBunker.CroppedImages[addNewKey] = currentSprite;
+                _materialBunker.ImageMaterials[addNewKey] = currentMaterial;
+            }
+            else
+            {
+                // 辞書の最後の要素を削除
+                _materialBunker.CroppedImages.Remove(addNewKey);
+                _materialBunker.ImageMaterials.Remove(addNewKey);
+                _materialBunker.MatCount -= 1;
+            }
+            tmpInt++;
+        }
+        // 選択中の画像をnullにし再描画
+        _materialBunker.NowHavePhoto = null;
+        _stateManager.ChangeState(StateManager.GameState.EditMatMode);
+        //オブジェクトの再描画
+
+
+        // 保存する処理
+        SaveManager instanceSaveManager = SaveManager.InstanceSaveManager;
+        instanceSaveManager.Dosave();
     }
 }
