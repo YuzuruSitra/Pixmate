@@ -158,6 +158,7 @@ public class EditMatModeOrder : MonoBehaviour
                 // 辞書の最後の要素を削除
                 _materialBunker.CroppedImages.Remove(addNewKey);
                 _materialBunker.ImageMaterials.Remove(addNewKey);
+                _materialBunker.ImageNames.Remove(addNewKey);
                 _materialBunker.MatCount -= 1;
             }
             tmpInt++;
