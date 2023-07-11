@@ -95,6 +95,24 @@ public class UIManager : MonoBehaviour
                 buttonImage[0].sprite = _button1Sprites[0];
                 buttonImage[1].sprite = _button2Sprites[0];
                 break;
+            case "HalfCube":
+                _createPanelButton[0].SetActive(true);
+                _createPanelButton[1].SetActive(true);
+                buttonImage[0].sprite = _button1Sprites[0];
+                buttonImage[1].sprite = _button2Sprites[0];
+                break;
+            case "Step":
+                _createPanelButton[0].SetActive(true);
+                _createPanelButton[1].SetActive(true);
+                buttonImage[0].sprite = _button1Sprites[0];
+                buttonImage[1].sprite = _button2Sprites[0];
+                break;
+            case "SmallCube":
+                _createPanelButton[0].SetActive(true);
+                _createPanelButton[1].SetActive(true);
+                buttonImage[0].sprite = _button1Sprites[0];
+                buttonImage[1].sprite = _button2Sprites[0];
+                break;
             case "Gene":
                 _createPanelButton[0].SetActive(true);
                 buttonImage[0].sprite = _button1Sprites[1];

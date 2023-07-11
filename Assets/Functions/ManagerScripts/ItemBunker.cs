@@ -7,17 +7,22 @@ public class ItemBunker : MonoBehaviour
     // 他スクリプトでも呼べるようにインスタンス化
     public static ItemBunker InstanceItemBunker;
     // 今保有しているアイテムの数
-    public int HavingItemCount = 2;
+    public int HavingItemCount = 5;
     private string[] _itemName = new string[]
     {
         "Cube",
+        "HalfCube",
+        "Step",
+        "SmallCube",
         "Gene"
     };
     public string[] ItemName => _itemName;
     [SerializeField]
-    private Sprite[] _itemSprite = new Sprite[2];
+    private Sprite[] _itemSprite = new Sprite[5];
     [SerializeField]
-    private GameObject[] _itemObject = new GameObject[2];        
+    private GameObject[] _itemObject = new GameObject[5];  
+    // アイテムの保持数
+    //private int NowHaveItemCount;  
 
     Dictionary<string, Sprite> _itemSpriteDictionary = new Dictionary<string, Sprite>();
     public Dictionary<string, Sprite> ItemSpriteDictionary => _itemSpriteDictionary;
@@ -27,8 +32,6 @@ public class ItemBunker : MonoBehaviour
     public string NowHaveItem = "Cube";
     public Sprite NowHaveItemSprite => _itemSpriteDictionary[NowHaveItem];
     public GameObject NowHaveItemObject => _itemObjectDictionary[NowHaveItem];
-
-
 
     void Awake()
     {

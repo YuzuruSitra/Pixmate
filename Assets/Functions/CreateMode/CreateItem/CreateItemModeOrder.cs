@@ -17,6 +17,8 @@ public class CreateItemModeOrder : MonoBehaviour
 
     [SerializeField] 
     private Image _setItemFlame;
+    // アイテムのカウント数描画
+    // [SerializeField] private Text _setItemCount;
 
     [SerializeField]
     private Transform _PoolParentObj;

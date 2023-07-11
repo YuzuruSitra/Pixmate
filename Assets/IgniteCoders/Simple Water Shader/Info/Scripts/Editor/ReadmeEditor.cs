@@ -40,7 +40,17 @@ public class ReadmeEditor : Editor {
 		Type windowLayoutType = assembly.GetType("UnityEditor.WindowLayout");
 		if (windowLayoutType != null)
 		{
-			MethodInfo method = windowLayoutType.GetMethod("LoadWindowLayout", BindingFlags.Public | BindingFlags.Static);
+			MethodInfo[] methods = windowLayoutType.GetMethods(BindingFlags.Public | BindingFlags.Static);
+			MethodInfo method = null;
+			foreach (MethodInfo m in methods)
+			{
+				if (m.Name == "LoadWindowLayout" && m.GetParameters().Length == 2)
+				{
+					method = m;
+					break;
+				}
+			}
+			
 			if (method != null)
 			{
 				string layoutPath = Path.Combine(Application.dataPath, "IgniteCoders/Simple Water Shader/Info/Layout.wlt");
@@ -55,7 +65,9 @@ public class ReadmeEditor : Editor {
 		{
 			Debug.LogError("WindowLayout type not found");
 		}
+		
 	}
+
 	
 	[MenuItem("Documentation/Simple Water Shader")]
 	static Readme SelectReadme() 
