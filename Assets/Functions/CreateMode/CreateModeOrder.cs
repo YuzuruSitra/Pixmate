@@ -12,10 +12,6 @@ public class CreateModeOrder : MonoBehaviour
     [SerializeField]
     private Image _havingItemImage;
 
-    // ブロック生成用
-    [SerializeField]
-    private GameObject _blockPrefab;
-
     void Start()
     {
         _stateManager.OnStateChanged += OpenCreate;

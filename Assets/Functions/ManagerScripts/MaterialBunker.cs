@@ -5,7 +5,7 @@ using UnityEngine;
 // テクスチャとマテリアルの管理
 public class MaterialBunker : MonoBehaviour
 {
-   // 他スクリプトでも呼べるようにインスタンス化
+    // 他スクリプトでも呼べるようにインスタンス化
     public static MaterialBunker InstanceMatBunker;
 
     public const string KEY_NAME = "MaterialNo.";
@@ -71,9 +71,9 @@ public class MaterialBunker : MonoBehaviour
 
     // マテリアルにスプライトをセット
     void SpritesAssignMat()
-    {   
+    {
         int i = 0;
-        while(i < MatCount)
+        while (i < MatCount)
         {
             int nameCount = i + 1;
             string tmpKey = KeyName;
@@ -83,10 +83,11 @@ public class MaterialBunker : MonoBehaviour
             Texture2D matTexture = new Texture2D(CroppedImages[tmpKey].texture.width, CroppedImages[tmpKey].texture.height, TextureFormat.RGBA32, false);
             matTexture.SetPixels(CroppedImages[tmpKey].texture.GetPixels());
             matTexture.Apply();
+
             // マテリアルにテクスチャを割り当てる
-            ImageMaterials[tmpKey].SetTexture("_MainTex", matTexture);
-                        
-            i++; 
+            ImageMaterials[tmpKey].SetTexture("_BaseMap", matTexture);
+
+            i++;
         }
     }
 
@@ -95,7 +96,7 @@ public class MaterialBunker : MonoBehaviour
     // マテリアルを辞書にセット
     void SetMaterials()
     {
-        for(int i=0; i < MATERIAL_AMOUNT; i++)
+        for(int i = 0; i < MATERIAL_AMOUNT; i++)
         {
             int nameCount = i + 1;
             string tmpKey = KeyName;

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +16,7 @@ public class CreateItemModeOrder : MonoBehaviour
     [SerializeField] 
     private GameObject _flamePrefab;
 
+    // CreateModeUIs
     [SerializeField] 
     private Image _setItemFlame;
     // アイテムのカウント数描画
@@ -26,6 +28,19 @@ public class CreateItemModeOrder : MonoBehaviour
     private int _havingItemCount => ItemBunker.InstanceItemBunker.HavingItemCount;
     private GameObject[] _poolObj;
     
+    // ItemListでの説明用UI
+    [SerializeField]
+    private Text _itemName;
+    //[SerializeField]
+    //private Text ItemCount;
+    [SerializeField]
+    private Text _itemExp;
+
+    // 名前と説明のScriptableObject。
+    [SerializeField]
+    private ItemInformation _itemInformation;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -55,6 +70,7 @@ public class CreateItemModeOrder : MonoBehaviour
         // 線tなくオブジェクトの描画
         ItemBunker itemBunker = ItemBunker.InstanceItemBunker;
         _setItemFlame.sprite = itemBunker.NowHaveItemSprite;
+        UpdateItemUIs();
     }
 
     // プールオブジェクトを生成格納しリスナー登録
@@ -81,6 +97,7 @@ public class CreateItemModeOrder : MonoBehaviour
         itemBunker.NowHaveItem = getKey;
         // 選択中の画像表示
         _setItemFlame.sprite = itemBunker.NowHaveItemSprite;
+        UpdateItemUIs();
     }
 
     public string PushFlame()
@@ -97,5 +114,48 @@ public class CreateItemModeOrder : MonoBehaviour
         //_assignMatImage.sprite = MaterialBunker.InstanceMatBunker.NowHaveSprite;
         _stateManager.ChangeState(StateManager.GameState.CreateMode);
     }
+
+    // アイテムの名前と説明の更新
+    private void UpdateItemUIs()
+    {
+        ItemBunker itemBunker = ItemBunker.InstanceItemBunker;
+        string nowHaveItem = itemBunker.NowHaveItem;
+        string itemName = "";
+        string itemExp = "";
+
+        // 名前と説明の変更処理
+        switch (nowHaveItem)
+        {
+            case "Cube":
+                itemName = _itemInformation.CubeName;
+                itemExp = _itemInformation.CubeExp;
+                break;
+            case "HalfCube":
+                itemName = _itemInformation.HalfCubeName;
+                itemExp = _itemInformation.HalfCubeExp;
+                break;
+            case "Step":
+                itemName = _itemInformation.StepCubeName;
+                itemExp = _itemInformation.StepCubeExp;
+                break;
+            case "SmallCube":
+                itemName = _itemInformation.SmallCubeName;
+                itemExp = _itemInformation.SmallCubeExp;
+                break;
+            case "Gene":
+                itemName = _itemInformation.PixGenName;
+                itemExp = _itemInformation.PixGenExp;
+                break;
+        }
+
+        //改行コード変換
+        if (itemName.Contains("\\n")) itemName = itemName.Replace(@"\n", Environment.NewLine);
+        //改行コード変換
+        if (itemExp.Contains("\\n")) itemExp = itemExp.Replace(@"\n", Environment.NewLine);
+
+        _itemName.text = itemName;
+        _itemExp.text = itemExp;
+    }
+
 
 }

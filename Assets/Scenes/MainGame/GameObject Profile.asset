@@ -55,7 +55,7 @@ MonoBehaviour:
     m_Value: 0.75
   scatter:
     m_OverrideState: 1
-    m_Value: 0.7
+    m_Value: 0.9
   clamp:
     m_OverrideState: 0
     m_Value: 65472
@@ -96,12 +96,12 @@ MonoBehaviour:
     m_Value: {x: 0.5, y: 0.5}
   intensity:
     m_OverrideState: 1
-    m_Value: 0.416
+    m_Value: 0.36
   smoothness:
     m_OverrideState: 1
-    m_Value: 0.256
+    m_Value: 0.17
   rounded:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0
 --- !u!114 &11400000
 MonoBehaviour:
@@ -118,9 +118,9 @@ MonoBehaviour:
   components:
   - {fileID: -5169468003946134183}
   - {fileID: 4292040713131324154}
-  - {fileID: 4564079084512895501}
   - {fileID: -6795740561671040298}
   - {fileID: -1118396858415801288}
+  - {fileID: 7017225478796302521}
 --- !u!114 &4292040713131324154
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -149,7 +149,7 @@ MonoBehaviour:
   saturation:
     m_OverrideState: 1
     m_Value: 10
---- !u!114 &4564079084512895501
+--- !u!114 &7017225478796302521
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
@@ -158,40 +158,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c01700fd266d6914ababb731e09af2eb, type: 3}
-  m_Name: DepthOfField
+  m_Script: {fileID: 11500000, guid: 5485954d14dfb9a4c8ead8edb0ded5b1, type: 3}
+  m_Name: LiftGammaGain
   m_EditorClassIdentifier: 
   active: 1
-  mode:
+  lift:
     m_OverrideState: 1
-    m_Value: 2
-  gaussianStart:
-    m_OverrideState: 0
-    m_Value: 8.02
-  gaussianEnd:
-    m_OverrideState: 0
-    m_Value: 10
-  gaussianMaxRadius:
-    m_OverrideState: 0
-    m_Value: 1
-  highQualitySampling:
-    m_OverrideState: 0
-    m_Value: 0
-  focusDistance:
+    m_Value: {x: 1, y: 0.92825884, z: 0.98206484, w: -0.030911902}
+  gamma:
     m_OverrideState: 1
-    m_Value: 10
-  aperture:
+    m_Value: {x: 1, y: 0.9170581, z: 0.9109977, w: 0.077279635}
+  gain:
     m_OverrideState: 0
-    m_Value: 5
-  focalLength:
-    m_OverrideState: 0
-    m_Value: 90
-  bladeCount:
-    m_OverrideState: 0
-    m_Value: 5
-  bladeCurvature:
-    m_OverrideState: 0
-    m_Value: 1
-  bladeRotation:
-    m_OverrideState: 0
-    m_Value: 0
+    m_Value: {x: 1, y: 1, z: 1, w: 0.015455949}
