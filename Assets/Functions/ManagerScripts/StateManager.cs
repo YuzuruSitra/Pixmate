@@ -27,6 +27,7 @@ public class StateManager : MonoBehaviour
     {
         // 同じステートを弾く
         ////////////////
+        if(_currentState == newState) return;
         _currentState = newState;
         OnStateChanged?.Invoke(_currentState);
     }
