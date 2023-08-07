@@ -7,49 +7,57 @@ namespace Pixmates
 {
     public class PixmateHandler : MonoBehaviour
     {
-        public enum PixmateAiState
-        {
-            WAIT,
-            MOVE,
-            Jump,
-            Avoid
-        }
+        // public enum PixmateAiState
+        // {
+        //     WAIT,
+        //     MOVE,
+        //     Jump,
+        //     Avoid
+        // }
 
-        private PixmateAiState _currentState;
+        // private PixmateAiState _currentState;
 
-        public event Action<PixmateAiState> OnAIStateChanged;
+        // public event Action<PixmateAiState> OnAIStateChanged;
 
-        public void ChangeAIState(PixmateAiState newState)
-        {
-            // 同じステートを弾く
-            if(_currentState == newState) return;
-            _currentState = newState;
-            OnAIStateChanged?.Invoke(_currentState);
-        }
+        // public void ChangeAIState(PixmateAiState newState)
+        // {
+        //     // 同じステートを弾く
+        //     if(_currentState == newState) return;
+        //     _currentState = newState;
+        //     OnAIStateChanged?.Invoke(_currentState);
+        // }
 
-        // 目の前にオブジェクトがある時の処理
-        public void HitRayActiion(GameObject hitObj)
-        {
-            string hitObjTag = hitObj.tag;
-            switch (hitObjTag)
-            {   
-                case "Player":
-                    break;
-                default:
-                    Vector3 hitObjOrigin = hitObj.transform.position;
-                    Vector3 hitObjDirection = new Vector3(0.0f, 1.0f, 0.0f);
-                    float rayLength = 1.0f;
-                    Ray hitObjRay = new Ray(hitObjOrigin, hitObjDirection * rayLength);
-                    // 前に障害物があり縦1マスならジャンプ、違う場合避ける
-                    Pixmates.PixmateHandler.PixmateAiState state = Pixmates.PixmateHandler.PixmateAiState.Jump;
-                    if (Physics.Raycast(hitObjRay, out RaycastHit hitObjHit)) state = Pixmates.PixmateHandler.PixmateAiState.Avoid;
+        // // 次の行動の選択
+        // public void SelectNextAction()
+        // {
+        //     int nextAction = UnityEngine.Random.Range(1, 2);
+        //     PixmateAiState nextState = (PixmateAiState)nextAction;
+        //     // ChangeAIState();
+        // }
 
-                    ChangeAIState(state);
+        // // 目の前にオブジェクトがある時の処理
+        // public void HitRayActiion(GameObject hitObj)
+        // {
+        //     string hitObjTag = hitObj.tag;
+        //     switch (hitObjTag)
+        //     {   
+        //         case "Player":
+        //             break;
+        //         default:
+        //             Vector3 hitObjOrigin = hitObj.transform.position;
+        //             Vector3 hitObjDirection = new Vector3(0, 1.0f, 0);
+        //             float rayLength = 1.0f;
+        //             Ray hitObjRay = new Ray(hitObjOrigin, hitObjDirection * rayLength);
+        //             // 前に障害物があり縦1マスならジャンプ、違う場合避ける
+        //             PixmateAiState state = PixmateAiState.Jump;
+        //             if (Physics.Raycast(hitObjRay, out RaycastHit hitObjHit)) state = PixmateAiState.Avoid;
 
-                    Debug.DrawRay(hitObjRay.origin, hitObjRay.direction * 1, Color.blue);
-                    break;
-            }
-        }
+        //             ChangeAIState(state);
+
+        //             Debug.DrawRay(hitObjRay.origin, hitObjRay.direction * 1, Color.blue);
+        //             break;
+        //     }
+        // }
 
     }
 }

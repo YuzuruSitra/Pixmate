@@ -1,20 +1,17 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Pixmates;
-
 public class PixmateEcology : MonoBehaviour
 {
     
     [SerializeField]
     private WorldManager _worldManager;
-    [SerializeField]
-    private PixmateHandler _pixmateHandler;
 
     [SerializeField]
-    private Vector3 _rayOffset = new Vector3(0, 0.5f, -0.5f);
+    private Vector3 _rayOffset = new Vector3(0, 0.6f, 0.5f);
     [SerializeField]
-    float _rayLength = 1.0f;
+    float _rayLength = 1.5f;
 
     [SerializeField]
     private Transform target;
@@ -22,88 +19,122 @@ public class PixmateEcology : MonoBehaviour
     private float _rotationSpeed = 2.0f;
     [SerializeField]
     private float _moveSpeed = 1.0f;
-    [SerializeField] 
-    private float _arrivalThreshold = 0.1f; // 到達閾値
     [SerializeField]
     private Vector3 _targetPos = Vector3.zero;
 
+    public enum PixmateAiState
+    {
+        WAIT,
+        MOVE,
+        Jump,
+        Avoid
+    }
+
+    private PixmateAiState _currentState;
+
+    public event Action<PixmateAiState> OnAIStateChanged;
+
     void Start()
     {
-        _pixmateHandler.OnAIStateChanged += UpdateAI;
+        OnAIStateChanged += UpdateAI;
         _worldManager = WorldManager.InstanceWorldManager;
         StartCoroutine("DoMove");
+    }
+
+    void ChangeAIState(PixmateAiState newState)
+    {
+        // 同じステートを弾く
+        //if(_currentState == newState) return;
+        _currentState = newState;
+        OnAIStateChanged?.Invoke(_currentState);
     }
     
     void Update()
     {
         // 原点と方向を設定しrayを生成
-        Vector3 origin = _rayOffset + this.transform.position;
-        Vector3 direction = transform.forward;
-        Ray ray = new Ray(origin, direction * _rayLength);
-        RaycastHit hit;
+        Vector3 dynamicOffset = transform.forward * _rayOffset.z + transform.up * _rayOffset.y + transform.right * _rayOffset.x;
+        Vector3 origin = dynamicOffset + transform.position;
+        Vector3 direction = transform.forward * _rayLength;
+        Ray ray = new Ray(origin, direction);
 
-        if (Physics.Raycast(ray, out hit))
-        {
-            _pixmateHandler.HitRayActiion(hit.collider.gameObject);
-        }
-        Debug.DrawRay(ray.origin, ray.direction * 1, Color.red);
-        
+        if (Physics.Raycast(ray, out RaycastHit hit)) HitRayActiion(hit.collider.gameObject);
+    
+        Debug.DrawRay(ray.origin, ray.direction * _rayLength, Color.red);
+
+
+        // 目の前に地面があるか判定
+        Vector3 dropOffset = new Vector3(0, 0.5f, 1.0f);
+        Vector3 dropRayOffset = transform.forward * dropOffset.z + transform.up * dropOffset.y + transform.right * dropOffset.x;
+        Vector3 dropOrigin = dropRayOffset + transform.position;
+        Vector3 dropDirection = -transform.up * _rayLength;
+        Ray dropRay = new Ray(dropOrigin, dropDirection);
+        if (!Physics.Raycast(dropRay, out RaycastHit dropHit)) ChangeAIState(PixmateAiState.Avoid);
+    
+        Debug.DrawRay(dropRay.origin, dropRay.direction * _rayLength, Color.red);
     }
 
-    void UpdateAI(Pixmates.PixmateHandler.PixmateAiState state)
+    public void HitRayActiion(GameObject hitObj)
+    {
+        string hitObjTag = hitObj.tag;
+        switch (hitObjTag)
+        {   
+            case "Player":
+                break;
+            default:
+                Vector3 hitObjOrigin = hitObj.transform.position;
+                Vector3 hitObjDirection = new Vector3(0, 1.0f, 0);
+                float rayLength = 1.0f;
+                Ray hitObjRay = new Ray(hitObjOrigin, hitObjDirection * rayLength);
+                // 前に障害物があり縦1マスならジャンプ、違う場合避ける
+                PixmateAiState state = PixmateAiState.Jump;
+                if (Physics.Raycast(hitObjRay, out RaycastHit hitObjHit)) state = PixmateAiState.Avoid;
+
+                ChangeAIState(state);
+
+                Debug.DrawRay(hitObjRay.origin, hitObjRay.direction * 1, Color.blue);
+                break;
+        }
+    }
+
+    void UpdateAI(PixmateAiState state)
     {
         switch(state)
         {
-            case Pixmates.PixmateHandler.PixmateAiState.WAIT:
-                DoWait();
+            case PixmateAiState.WAIT:
+                StartCoroutine("DoWait");
                 break;
-            case Pixmates.PixmateHandler.PixmateAiState.MOVE:
+            case PixmateAiState.MOVE:
                 StartCoroutine("DoMove");
                 break;
-            case Pixmates.PixmateHandler.PixmateAiState.Jump:
+            case PixmateAiState.Jump:
                 DoJump();
                 break;
-            case Pixmates.PixmateHandler.PixmateAiState.Avoid:
+            case PixmateAiState.Avoid:
                 DoAvoid();
                 break;
         }
     }
 
-    void DoWait()
+    IEnumerator DoWait()
     {
-        
+        // Idole
+        // 再抽選
+        yield return new WaitForSeconds(2.0f);
+        SelectNextAction();
     }
 
     IEnumerator DoMove()
     {
         // 目標座標の選定
-        int targetPosX;
-        int edgeXMax = _worldManager.WorldEdgeXMax;
-        int edgeXMin = _worldManager.WorldEdgeXMin;
+        float targetPosX = UnityEngine.Random.Range(-1.0f, 1.0f);
+        float targetPosZ = UnityEngine.Random.Range(-1.0f, 1.0f);
 
-        int targetPosZ;
-        int edgeZMax = _worldManager.WorldEdgeZMax;
-        int edgeZMin = _worldManager.WorldEdgeZMin;
-        while(true)
-        {   
-            targetPosX = (int) transform.position.x + Random.Range(-3, 4);
-            targetPosX = 4;
-            if(targetPosX >= edgeXMin && targetPosX <= edgeXMax) break;
-        }
-        while(true)
-        {   
-            targetPosZ = (int) transform.position.z + Random.Range(-3, 4);
-            targetPosZ = 4;
-            if(targetPosZ >= edgeZMin && targetPosZ <= edgeZMax) break;
-        }
         Vector3 targetPos = new Vector3(targetPosX, 0.0f, targetPosZ);
-        Vector3 targetDir = targetPos - transform.position;
-        targetDir.y = 0.0f;
-        
-        Quaternion rotation = Quaternion.LookRotation(targetDir, Vector3.up);
+        Quaternion rotation = Quaternion.LookRotation(targetPos, Vector3.up);
         
         float elapsedTime = 0.0f;
 
+        // 回転処理
         while (elapsedTime < 3.0f)
         {
             elapsedTime += Time.deltaTime * _rotationSpeed;
@@ -111,31 +142,37 @@ public class PixmateEcology : MonoBehaviour
             yield return null;
         }
 
-        while (Vector3.Distance(transform.position, targetPos) > _arrivalThreshold)
+        // 移動時間の選定
+        float continueTime = UnityEngine.Random.Range(0f, 3.0f);
+        elapsedTime = 0.0f;
+        // 移動処理
+        while (elapsedTime < continueTime)
         {
+            elapsedTime += Time.deltaTime;
             transform.position += transform.forward * _moveSpeed * Time.deltaTime;
             yield return null;
         }
-
-        // 移動方向と時間をランダムに設定
-        // 移動処理に変更
-
-        Debug.Log("aaaaaa");
-        // 現在の位置
-        //float present_Location = (Time.time * speed) / distance_two;
-
-        // オブジェクトの移動
-        //transform.position = Vector3.Lerp(startMarker.position, endMarker.position, present_Location);
-        
+        SelectNextAction();
     }
 
     void DoJump()
     {
-
+        // 1マス分ジャンプ
     }
 
     void DoAvoid()
     {
+        // 問題ない方向へかわす
 
+        // ステート再抽選
+    }
+
+    // 次の行動の選択
+    public void SelectNextAction()
+    {
+        int nextAction = UnityEngine.Random.Range(1, 2);
+        PixmateAiState nextState = (PixmateAiState)nextAction;
+        ChangeAIState(nextState);
+        Debug.Log("aaaaaa");
     }
 }

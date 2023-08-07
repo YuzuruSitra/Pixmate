@@ -21228,13 +21228,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _worldManager: {fileID: 0}
-  _pixmateHandler: {fileID: 1728686406}
-  _rayOffset: {x: 0, y: 0.5, z: -0.5}
+  _rayOffset: {x: 0, y: 0.6, z: 0.5}
   _rayLength: 1
   target: {fileID: 3319730}
-  _rotationSpeed: 2
+  _rotationSpeed: 1
   _moveSpeed: 1
-  _arrivalThreshold: 0.5
   _targetPos: {x: 0, y: 0, z: 0}
 --- !u!1 &1735011548
 GameObject:
