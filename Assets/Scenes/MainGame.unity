@@ -21234,6 +21234,7 @@ MonoBehaviour:
   _rotationSpeed: 1
   _moveSpeed: 1
   _targetPos: {x: 0, y: 0, z: 0}
+  _jumpPower: 250
 --- !u!1 &1735011548
 GameObject:
   m_ObjectHideFlags: 0
@@ -25593,7 +25594,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6909543809018979368, guid: b6b40119dcff17c4487b2e31bbf05a72, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.66
       objectReference: {fileID: 0}
     - target: {fileID: 6909543809018979368, guid: b6b40119dcff17c4487b2e31bbf05a72, type: 3}
       propertyPath: m_LocalRotation.w

@@ -21,6 +21,10 @@ public class PixmateEcology : MonoBehaviour
     private float _moveSpeed = 1.0f;
     [SerializeField]
     private Vector3 _targetPos = Vector3.zero;
+    private Rigidbody rb;
+    [SerializeField]
+    private float _jumpPower = 250;
+    private bool _isGround = true;
 
     public enum PixmateAiState
     {
@@ -36,9 +40,11 @@ public class PixmateEcology : MonoBehaviour
 
     void Start()
     {
+        rb = GetComponent<Rigidbody>();
         OnAIStateChanged += UpdateAI;
         _worldManager = WorldManager.InstanceWorldManager;
         StartCoroutine("DoMove");
+        
     }
 
     void ChangeAIState(PixmateAiState newState)
@@ -51,6 +57,8 @@ public class PixmateEcology : MonoBehaviour
     
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Space)) DoJump();
+
         // 原点と方向を設定しrayを生成
         Vector3 dynamicOffset = transform.forward * _rayOffset.z + transform.up * _rayOffset.y + transform.right * _rayOffset.x;
         Vector3 origin = dynamicOffset + transform.position;
@@ -71,6 +79,22 @@ public class PixmateEcology : MonoBehaviour
         if (!Physics.Raycast(dropRay, out RaycastHit dropHit)) ChangeAIState(PixmateAiState.Avoid);
     
         Debug.DrawRay(dropRay.origin, dropRay.direction * _rayLength, Color.red);
+    
+        // 接地判定
+        float _groundRayLength = 0.1f;
+        Vector3 groundOffset = new Vector3(0, 0.0f, 0);
+        Vector3 groundRayOffset = transform.forward * groundOffset.z + transform.up * groundOffset.y + transform.right * groundOffset.x;
+        Vector3 groundOrigin = groundRayOffset + transform.position;
+        Vector3 groundDirection = -transform.up;
+        Ray groundRay = new Ray(groundOrigin, groundDirection);
+        bool isGroundHit = Physics.Raycast(groundRay, out RaycastHit groundHit, _groundRayLength);
+
+        // ヒットしている場合、地面のオブジェクトとの距離をチェックして接地判定を行う
+        _isGround = isGroundHit && groundHit.distance <= _groundRayLength;
+
+        Debug.DrawRay(groundRay.origin, groundRay.direction * _groundRayLength, _isGround ? Color.green : Color.red);
+
+        Debug.Log(_isGround);
     }
 
     public void HitRayActiion(GameObject hitObj)
@@ -157,7 +181,12 @@ public class PixmateEcology : MonoBehaviour
 
     void DoJump()
     {
-        // 1マス分ジャンプ
+        if(!_isGround) return;
+        // 前方向と上方向を足して斜め前方向を作成
+        Vector3 jumpDirection = (transform.forward * 0.35f) + transform.up;
+        Vector3 jumpForce = jumpDirection.normalized * _jumpPower * Time.fixedDeltaTime;
+        rb.AddForce(jumpForce, ForceMode.Impulse);
+        SelectNextAction();
     }
 
     void DoAvoid()
@@ -175,4 +204,5 @@ public class PixmateEcology : MonoBehaviour
         ChangeAIState(nextState);
         Debug.Log("aaaaaa");
     }
+
 }
