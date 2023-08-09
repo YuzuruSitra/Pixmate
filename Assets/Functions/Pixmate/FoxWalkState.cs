@@ -4,30 +4,27 @@ using UnityEngine;
 
 public class FoxWalkState : IAIState
 {
-    Vector3 _targetPos = Vector3.zero;
-    [SerializeField]
-    private float _thresholdAngle = 5f;
-    [SerializeField] 
-    private float _rotationSpeed = 2.0f;
+    Vector3 _targetRotation = Vector3.zero;
+    private float _thresholdAngle = 5.0f;
+    private float _rotationSpeed = 1.0f;
 
     public void EnterState(FoxEcology fe)
     {
-        Debug.Log("Entering Walk State");
+        //Debug.Log("Entering Walk State");
         // 目標座標の選定
-        float targetPosX = UnityEngine.Random.Range(-1.0f, 1.0f);
-        float targetPosZ = UnityEngine.Random.Range(-1.0f, 1.0f);
-
-        _targetPos = new Vector3(targetPosX, 0.0f, targetPosZ);
+        _targetRotation = new Vector3(UnityEngine.Random.Range(-1.0f, 1.0f), 0.0f, UnityEngine.Random.Range(-1.0f, 1.0f));
+        _targetRotation.Normalize();
+        
     }
 
     public void UpdateState(FoxEcology fe)
     {
-        // オブジェクトが _targetPos の方向を向いていないなら徐々に向ける
-        Quaternion rotation = Quaternion.LookRotation(_targetPos - fe.transform.position, Vector3.up);
-        
-        if (!IsFacingTarget(fe, rotation)) // IsFacingTarget メソッドは回転を行う必要があるかどうかを判定する
+        Quaternion targetQuaternion = Quaternion.LookRotation(_targetRotation, Vector3.up);
+
+        // 回転がほぼ完了したら直進する
+        if (Quaternion.Angle(fe.transform.rotation, targetQuaternion) > _thresholdAngle)
         {
-            fe.transform.rotation = Quaternion.Slerp(fe.transform.rotation, rotation, _rotationSpeed * Time.deltaTime);
+            fe.transform.rotation = Quaternion.Slerp(fe.transform.rotation, targetQuaternion, _rotationSpeed * Time.deltaTime);
             return;
         }
         
@@ -38,17 +35,8 @@ public class FoxWalkState : IAIState
 
     public void ExitState(FoxEcology fe)
     {
-        Debug.Log("Exiting Walk State");
-        _targetPos = Vector3.zero;
-    }
-
-
-    /***************************************************************************/
-    bool IsFacingTarget(FoxEcology fe, Quaternion targetRotation)
-    {
-        float angle = Quaternion.Angle(fe.transform.rotation, targetRotation);
-        // thresholdAngle度のずれまで許容
-        return angle < _thresholdAngle;
+        //Debug.Log("Exiting Walk State");
+        _targetRotation = Vector3.zero;
     }
 
 }

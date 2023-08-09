@@ -15,15 +15,12 @@ public class tmpEco : MonoBehaviour
 
     [SerializeField]
     private Transform target;
-    [SerializeField] 
-    private float _rotationSpeed = 2.0f;
-    [SerializeField]
-    private float _moveSpeed = 1.0f;
+    // [SerializeField] private float _rotationSpeed = 2.0f;
+    // [SerializeField] private float _moveSpeed = 1.0f;
     [SerializeField]
     private Vector3 _targetPos = Vector3.zero;
     private Rigidbody rb;
-    [SerializeField]
-    private float _jumpPower = 250;
+    // [SerializeField] private float _jumpPower = 250;
     private bool _isGround = true;
 
     public enum PixmateAiState
@@ -40,10 +37,10 @@ public class tmpEco : MonoBehaviour
 
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
-        OnAIStateChanged += UpdateAI;
-        _worldManager = WorldManager.InstanceWorldManager;
-        StartCoroutine("DoMove");
+        // rb = GetComponent<Rigidbody>();
+        // OnAIStateChanged += UpdateAI;
+        // _worldManager = WorldManager.InstanceWorldManager;
+        // StartCoroutine("DoMove");
     }
 
     void ChangeAIState(PixmateAiState newState)
@@ -56,7 +53,7 @@ public class tmpEco : MonoBehaviour
     
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space)) DoJump();
+        //if(Input.GetKeyDown(KeyCode.Space)) DoJump();
 
         // 原点と方向を設定しrayを生成
         Vector3 dynamicOffset = transform.forward * _rayOffset.z + transform.up * _rayOffset.y + transform.right * _rayOffset.x;
@@ -79,19 +76,6 @@ public class tmpEco : MonoBehaviour
     
         Debug.DrawRay(dropRay.origin, dropRay.direction * _rayLength, Color.red);
     
-        // 接地判定
-        float _groundRayLength = 0.1f;
-        Vector3 groundOffset = new Vector3(0, 0.0f, 0);
-        Vector3 groundRayOffset = transform.forward * groundOffset.z + transform.up * groundOffset.y + transform.right * groundOffset.x;
-        Vector3 groundOrigin = groundRayOffset + transform.position;
-        Vector3 groundDirection = -transform.up;
-        Ray groundRay = new Ray(groundOrigin, groundDirection);
-        bool isGroundHit = Physics.Raycast(groundRay, out RaycastHit groundHit, _groundRayLength);
-
-        // ヒットしている場合、地面のオブジェクトとの距離をチェックして接地判定を行う
-        _isGround = isGroundHit && groundHit.distance <= _groundRayLength;
-
-        Debug.DrawRay(groundRay.origin, groundRay.direction * _groundRayLength, _isGround ? Color.green : Color.red);
 
         Debug.Log(_isGround);
     }
@@ -119,74 +103,74 @@ public class tmpEco : MonoBehaviour
         }
     }
 
-    void UpdateAI(PixmateAiState state)
-    {
-        switch(state)
-        {
-            case PixmateAiState.WAIT:
-                StartCoroutine("DoWait");
-                break;
-            case PixmateAiState.MOVE:
-                StartCoroutine("DoMove");
-                break;
-            case PixmateAiState.Jump:
-                DoJump();
-                break;
-            case PixmateAiState.Avoid:
-                DoAvoid();
-                break;
-        }
-    }
+    // void UpdateAI(PixmateAiState state)
+    // {
+    //     switch(state)
+    //     {
+    //         case PixmateAiState.WAIT:
+    //             StartCoroutine("DoWait");
+    //             break;
+    //         case PixmateAiState.MOVE:
+    //             StartCoroutine("DoMove");
+    //             break;
+    //         case PixmateAiState.Jump:
+    //             //DoJump();
+    //             break;
+    //         case PixmateAiState.Avoid:
+    //             DoAvoid();
+    //             break;
+    //     }
+    // }
 
-    IEnumerator DoWait()
-    {
-        // Idole
-        // 再抽選
-        yield return new WaitForSeconds(2.0f);
-        SelectNextAction();
-    }
+    // IEnumerator DoWait()
+    // {
+    //     // Idole
+    //     // 再抽選
+    //     yield return new WaitForSeconds(2.0f);
+    //     SelectNextAction();
+    // }
 
-    IEnumerator DoMove()
-    {
-        // 目標座標の選定
-        float targetPosX = UnityEngine.Random.Range(-1.0f, 1.0f);
-        float targetPosZ = UnityEngine.Random.Range(-1.0f, 1.0f);
+    // IEnumerator DoMove()
+    // {
+    //     // 目標座標の選定
+    //     float targetPosX = UnityEngine.Random.Range(-1.0f, 1.0f);
+    //     float targetPosZ = UnityEngine.Random.Range(-1.0f, 1.0f);
 
-        Vector3 targetPos = new Vector3(targetPosX, 0.0f, targetPosZ);
-        Quaternion rotation = Quaternion.LookRotation(targetPos, Vector3.up);
+    //     Vector3 targetPos = new Vector3(targetPosX, 0.0f, targetPosZ);
+    //     Quaternion rotation = Quaternion.LookRotation(targetPos, Vector3.up);
         
-        float elapsedTime = 0.0f;
+    //     float elapsedTime = 0.0f;
 
-        // 回転処理
-        while (elapsedTime < 3.0f)
-        {
-            elapsedTime += Time.deltaTime * _rotationSpeed;
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, elapsedTime);
-            yield return null;
-        }
+    //     // 回転処理
+    //     while (elapsedTime < 3.0f)
+    //     {
+    //         elapsedTime += Time.deltaTime * _rotationSpeed;
+    //         transform.rotation = Quaternion.Slerp(transform.rotation, rotation, elapsedTime);
+    //         yield return null;
+    //     }
 
-        // 移動時間の選定
-        float continueTime = UnityEngine.Random.Range(0f, 3.0f);
-        elapsedTime = 0.0f;
-        // 移動処理
-        while (elapsedTime < continueTime)
-        {
-            elapsedTime += Time.deltaTime;
-            transform.position += transform.forward * _moveSpeed * Time.deltaTime;
-            yield return null;
-        }
-        SelectNextAction();
-    }
+    //     // 移動時間の選定
+    //     float continueTime = UnityEngine.Random.Range(0f, 3.0f);
+    //     elapsedTime = 0.0f;
+    //     // 移動処理
+    //     while (elapsedTime < continueTime)
+    //     {
+    //         elapsedTime += Time.deltaTime;
+    //         transform.position += transform.forward * _moveSpeed * Time.deltaTime;
+    //         yield return null;
+    //     }
+    //     SelectNextAction();
+    // }
 
-    void DoJump()
-    {
-        if(!_isGround) return;
-        // 前方向と上方向を足して斜め前方向を作成
-        Vector3 jumpDirection = (transform.forward * 0.35f) + transform.up;
-        Vector3 jumpForce = jumpDirection.normalized * _jumpPower * Time.fixedDeltaTime;
-        rb.AddForce(jumpForce, ForceMode.Impulse);
-        SelectNextAction();
-    }
+    // void DoJump()
+    // {
+    //     if(!_isGround) return;
+    //     // 前方向と上方向を足して斜め前方向を作成
+    //     Vector3 jumpDirection = (transform.forward * 0.35f) + transform.up;
+    //     Vector3 jumpForce = jumpDirection.normalized * _jumpPower * Time.fixedDeltaTime;
+    //     rb.AddForce(jumpForce, ForceMode.Impulse);
+    //     SelectNextAction();
+    // }
 
     void DoAvoid()
     {
@@ -196,11 +180,11 @@ public class tmpEco : MonoBehaviour
     }
 
     // 次の行動の選択
-    public void SelectNextAction()
-    {
-        int nextAction = UnityEngine.Random.Range(1, 2);
-        PixmateAiState nextState = (PixmateAiState)nextAction;
-        ChangeAIState(nextState);
-        Debug.Log("aaaaaa");
-    }
+    // public void SelectNextAction()
+    // {
+    //     int nextAction = UnityEngine.Random.Range(1, 2);
+    //     PixmateAiState nextState = (PixmateAiState)nextAction;
+    //     ChangeAIState(nextState);
+    //     Debug.Log("aaaaaa");
+    // }
 }

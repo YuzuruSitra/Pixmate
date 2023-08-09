@@ -21203,18 +21203,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6100250837502869138, guid: b6b40119dcff17c4487b2e31bbf05a72, type: 3}
   m_PrefabInstance: {fileID: 6370649542407804108}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1728686406
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1728686405}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9fd7d3e67f0c24afb833b9762880d49c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1728686412
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21227,14 +21215,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24568223b19de44cc8e6e8faa28dca0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _worldManager: {fileID: 0}
-  _rayOffset: {x: 0, y: 0.6, z: 0.5}
-  _rayLength: 1
-  target: {fileID: 3319730}
-  _rotationSpeed: 1
   _moveSpeed: 1
-  _targetPos: {x: 0, y: 0, z: 0}
-  _jumpPower: 250
 --- !u!1 &1735011548
 GameObject:
   m_ObjectHideFlags: 0

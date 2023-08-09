@@ -6,7 +6,7 @@ public class FoxAvoidState : IAIState
 {
     public void EnterState(FoxEcology fe)
     {
-        Debug.Log("Entering Wait State");
+        //Debug.Log("Entering Wait State");
     }
 
     public void UpdateState(FoxEcology fe)
@@ -16,6 +16,6 @@ public class FoxAvoidState : IAIState
 
     public void ExitState(FoxEcology fe)
     {
-        Debug.Log("Exiting Wait State");
+        //Debug.Log("Exiting Wait State");
     }
 }
