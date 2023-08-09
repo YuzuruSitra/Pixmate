@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class PixmateEcology : MonoBehaviour
+
+public class tmpEco : MonoBehaviour
 {
-    
     [SerializeField]
     private WorldManager _worldManager;
 
@@ -44,7 +44,6 @@ public class PixmateEcology : MonoBehaviour
         OnAIStateChanged += UpdateAI;
         _worldManager = WorldManager.InstanceWorldManager;
         StartCoroutine("DoMove");
-        
     }
 
     void ChangeAIState(PixmateAiState newState)
@@ -204,5 +203,4 @@ public class PixmateEcology : MonoBehaviour
         ChangeAIState(nextState);
         Debug.Log("aaaaaa");
     }
-
 }
