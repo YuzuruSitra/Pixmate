@@ -4,24 +4,36 @@ using UnityEngine;
 
 public class FoxJumpState : IAIState
 {
-    float _forwardPower = 0.25f;
-    private float _jumpPower = 250;
+    private bool _oneTime;
+    private const float DELAY_TIME = 0.3f;
+    private float _progressTime;
+    float _forwardPower = 0.4f;
+    private float _jumpPower = 280;
     public void EnterState(FoxEcology fe)
     {
-        Rigidbody rb = fe.GetComponent<Rigidbody>();
-        Vector3 jumpDirection = (fe.transform.forward * _forwardPower) + fe.transform.up;
-        Vector3 jumpForce = jumpDirection.normalized * _jumpPower * Time.fixedDeltaTime;
-        rb.AddForce(jumpForce, ForceMode.Impulse);
+        _oneTime = true;
+        _progressTime = 0f;
     }
 
     public void UpdateState(FoxEcology fe)
     {
-        // 待機中の振る舞いを実装
+        _progressTime += Time.deltaTime;
+        if(_progressTime < DELAY_TIME || !_oneTime) return;
         
+        Rigidbody rb = fe.GetComponent<Rigidbody>();
+        Vector3 jumpDirection = (fe.transform.forward * _forwardPower) + fe.transform.up;
+        Vector3 jumpForce = jumpDirection.normalized * _jumpPower * Time.fixedDeltaTime;
+        rb.AddForce(jumpForce, ForceMode.Impulse);
+        _oneTime = false;
     }
 
     public void ExitState(FoxEcology fe)
     {
-        //Debug.Log("Exiting Wait State");
+
+    }
+
+    private void DoJump()
+    {
+
     }
 }

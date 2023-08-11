@@ -56,14 +56,14 @@ public class tmpEco : MonoBehaviour
         //if(Input.GetKeyDown(KeyCode.Space)) DoJump();
 
         // 原点と方向を設定しrayを生成
-        Vector3 dynamicOffset = transform.forward * _rayOffset.z + transform.up * _rayOffset.y + transform.right * _rayOffset.x;
-        Vector3 origin = dynamicOffset + transform.position;
-        Vector3 direction = transform.forward * _rayLength;
-        Ray ray = new Ray(origin, direction);
+        // Vector3 dynamicOffset = transform.forward * _rayOffset.z + transform.up * _rayOffset.y + transform.right * _rayOffset.x;
+        // Vector3 origin = dynamicOffset + transform.position;
+        // Vector3 direction = transform.forward * _rayLength;
+        // Ray ray = new Ray(origin, direction);
 
-        if (Physics.Raycast(ray, out RaycastHit hit)) HitRayActiion(hit.collider.gameObject);
+        // if (Physics.Raycast(ray, out RaycastHit hit)) HitRayActiion(hit.collider.gameObject);
     
-        Debug.DrawRay(ray.origin, ray.direction * _rayLength, Color.red);
+        // Debug.DrawRay(ray.origin, ray.direction * _rayLength, Color.red);
 
 
         // 目の前に地面があるか判定
@@ -80,28 +80,28 @@ public class tmpEco : MonoBehaviour
         Debug.Log(_isGround);
     }
 
-    public void HitRayActiion(GameObject hitObj)
-    {
-        string hitObjTag = hitObj.tag;
-        switch (hitObjTag)
-        {   
-            case "Player":
-                break;
-            default:
-                Vector3 hitObjOrigin = hitObj.transform.position;
-                Vector3 hitObjDirection = new Vector3(0, 1.0f, 0);
-                float rayLength = 1.0f;
-                Ray hitObjRay = new Ray(hitObjOrigin, hitObjDirection * rayLength);
-                // 前に障害物があり縦1マスならジャンプ、違う場合避ける
-                PixmateAiState state = PixmateAiState.Jump;
-                if (Physics.Raycast(hitObjRay, out RaycastHit hitObjHit)) state = PixmateAiState.Avoid;
+    // public void HitRayActiion(GameObject hitObj)
+    // {
+    //     string hitObjTag = hitObj.tag;
+    //     switch (hitObjTag)
+    //     {   
+    //         case "Player":
+    //             break;
+    //         default:
+    //             Vector3 hitObjOrigin = hitObj.transform.position;
+    //             Vector3 hitObjDirection = new Vector3(0, 1.0f, 0);
+    //             float rayLength = 1.0f;
+    //             Ray hitObjRay = new Ray(hitObjOrigin, hitObjDirection * rayLength);
+    //             // 前に障害物があり縦1マスならジャンプ、違う場合避ける
+    //             PixmateAiState state = PixmateAiState.Jump;
+    //             if (Physics.Raycast(hitObjRay, out RaycastHit hitObjHit)) state = PixmateAiState.Avoid;
 
-                ChangeAIState(state);
+    //             ChangeAIState(state);
 
-                Debug.DrawRay(hitObjRay.origin, hitObjRay.direction * 1, Color.blue);
-                break;
-        }
-    }
+    //             Debug.DrawRay(hitObjRay.origin, hitObjRay.direction * 1, Color.blue);
+    //             break;
+    //     }
+    // }
 
     // void UpdateAI(PixmateAiState state)
     // {
