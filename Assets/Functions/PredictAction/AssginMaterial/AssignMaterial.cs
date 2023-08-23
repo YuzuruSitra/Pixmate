@@ -9,7 +9,7 @@ public class AssignMaterial
     {
         PredictManager _predictManager = PredictManager.InstancePredictManager;
         MaterialBunker _materialBunker = MaterialBunker.InstanceMatBunker;
-        if(_materialBunker.NowHavePhotoMaterial == null || _predictManager.NowHaveCube == null || !_predictManager.InLange)return;
-        _predictManager.NowHaveCube.GetComponent<MeshRenderer>().material = _materialBunker.NowHavePhotoMaterial;
+        if(_materialBunker.NowHavePhotoMaterial == null || _predictManager.NowHaveCube == null || !_predictManager.InLange) return;
+        _predictManager.AssignMaterial(_materialBunker.NowHavePhotoMaterial);
     }
 }

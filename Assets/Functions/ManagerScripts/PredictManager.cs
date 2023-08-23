@@ -37,9 +37,14 @@ public class PredictManager : MonoBehaviour
 
     private string _currentObj;
     private string _nowHaveCubeTag;
+    // 対象のゲームオブジェクト
     private GameObject _nowHaveCube;
     public  GameObject NowHaveCube => _nowHaveCube;
-    private string _targetObjTag;
+    // 対象のマテリアルの名前
+    public string HaveCubeMatKey
+    {
+        get { return _nowHaveCube != null ? _nowHaveCube.GetComponent<MeshRenderer>().material.name : null; }
+    }
 
     void Awake()
     {
@@ -213,4 +218,9 @@ public class PredictManager : MonoBehaviour
         receiveMesh.RecalculateNormals();
     }
 
+    // 対象のマテリアルを変更
+    public void AssignMaterial(Material mat)
+    {
+        NowHaveCube.GetComponent<MeshRenderer>().material = mat;
+    }
 }
