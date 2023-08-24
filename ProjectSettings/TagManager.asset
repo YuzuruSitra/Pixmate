@@ -9,6 +9,7 @@ TagManager:
   - HalfCube
   - Step
   - SmallCube
+  - PixmateFox
   layers:
   - Default
   - TransparentFX

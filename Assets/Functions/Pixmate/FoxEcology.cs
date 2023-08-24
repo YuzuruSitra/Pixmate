@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 public class FoxEcology : MonoBehaviour
 {
+    // 活動状態を管理
+    private bool _isAllive = false;
     [SerializeField]
     private FoxAnimCtrl _foxAnimCtrl;
     public Dictionary<string, IAIState> _states;
@@ -25,9 +27,7 @@ public class FoxEcology : MonoBehaviour
     private bool _isFrontFloorDecision = true;
     public bool IsFrontFloorDecision => _isFrontFloorDecision;
 
-    
-
-    private void Start()
+    private void Awake()
     {
         // Stateを辞書に格納
         _states = new Dictionary<string, IAIState>
@@ -40,13 +40,21 @@ public class FoxEcology : MonoBehaviour
         _currentState = _states["Idole"]; // 初期状態を待機状態に設定
         _beforeSpecialState = _currentState;
         _currentState.EnterState(this);
+    }
+
+    // 他の管理クラスから呼びだすとPixmateが動き出す
+    public void ComeAlive()
+    {
         // 最初のState遷移インターバル
-        nextActionTime = Random.Range(2, 8);
-        SetNextAction();
+        _isAllive = true;
+        nextActionTime = Random.Range(5, 10);
+        ChangeState(_states["Idole"]);
     }
 
     private void Update()
     {
+        if(!_isAllive) return;
+
         // 障害物判定
         _isNoObstacle = IsObstacleDecision();
 
@@ -62,9 +70,9 @@ public class FoxEcology : MonoBehaviour
         // 特殊行動をとっていない時のみ抽選時間を加算
         if(!_doSpecialAction && _isGround) 
         {
-            _elapsedTime += Time.deltaTime;
-            
+            _elapsedTime += Time.deltaTime;    
         }
+
         SetNextAction();
     }
 
