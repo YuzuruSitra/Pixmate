@@ -40,11 +40,6 @@ public class PredictManager : MonoBehaviour
     // 対象のゲームオブジェクト
     private GameObject _nowHaveCube;
     public  GameObject NowHaveCube => _nowHaveCube;
-    // 対象のマテリアルの名前
-    public string HaveCubeMatKey
-    {
-        get { return _nowHaveCube != null ? _nowHaveCube.GetComponent<MeshRenderer>().material.name : null; }
-    }
 
     void Awake()
     {

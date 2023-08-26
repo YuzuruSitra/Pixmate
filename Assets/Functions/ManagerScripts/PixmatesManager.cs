@@ -41,4 +41,12 @@ public class PixmatesManager : MonoBehaviour
     {
         pixmateEcology.ComeAlive();
     }
+
+    // Pixmateへのマテリアル割り当て
+    // ※管理周りの処理を追加予定
+    public void AssignMaterial(GameObject pixmate, Texture2D texture)
+    {
+        GameObject childObj = pixmate.transform.GetChild(0).gameObject;
+        childObj.GetComponent<SkinnedMeshRenderer>().material.SetTexture("_BaseMap", texture);
+    }
 }

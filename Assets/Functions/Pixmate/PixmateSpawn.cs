@@ -8,7 +8,7 @@ public class PixmateSpawn : MonoBehaviour
     private PixmatesManager _pixmateManager;
     private PredictManager _predictManager;
     private MaterialBunker _materialBunker;
-    private SkinnedMeshRenderer[] _skinnedMeshRenderer = new SkinnedMeshRenderer[2];
+    private SkinnedMeshRenderer _skinnedMeshRenderer;
     [SerializeField]
     private Material _material;
 
@@ -30,17 +30,16 @@ public class PixmateSpawn : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameObject.SetActive(false);
+
         _pixmateManager = PixmatesManager.InstancePixmatesManager;
         _predictManager = PredictManager.InstancePredictManager;
         _materialBunker = MaterialBunker.InstanceMatBunker;
-        _skinnedMeshRenderer[0] = GetComponent<SkinnedMeshRenderer>();
-        _skinnedMeshRenderer[1] = transform.GetChild(0).gameObject.GetComponent<SkinnedMeshRenderer>();
-        // 仮置き
-        Invoke("DoAppear",5.0f);
+        _skinnedMeshRenderer = GetComponent<SkinnedMeshRenderer>();
     }
 
     // Pixmateを生成時に呼ぶ
-    void DoAppear()
+    public void LaunchSpawn(GameObject catalystObj)
     {
         // 初期化
         _doProcess = true;
@@ -49,16 +48,17 @@ public class PixmateSpawn : MonoBehaviour
         gameObject.SetActive(true);
 
         // 対象のマテリアルからキーを抽出
-        string targetName = _predictManager.HaveCubeMatKey;
+        string targetName = catalystObj.GetComponent<MeshRenderer>().material.name;
         TryGetKey tryGetKey = new TryGetKey();
         string targetKey = tryGetKey.GetKey(targetName);
         if(targetKey == null) return;
 
+        Texture2D matTexture = Texture2D.whiteTexture;
         // スプライトからテクスチャを作成
         Dictionary<string, Sprite> croppedImages = _materialBunker.CroppedImages;
         if (croppedImages.TryGetValue(targetKey, out Sprite targetSprite))
         {
-            Texture2D matTexture = new Texture2D(targetSprite.texture.width, targetSprite.texture.height, TextureFormat.RGBA32, false);
+            matTexture = new Texture2D(targetSprite.texture.width, targetSprite.texture.height, TextureFormat.RGBA32, false);
             matTexture.SetPixels(targetSprite.texture.GetPixels());
             matTexture.Apply();
 
@@ -71,9 +71,11 @@ public class PixmateSpawn : MonoBehaviour
     
         // Pixmateの生成処理
         Vector3 insPos = new Vector3(transform.position.x, transform.position.y - 0.1f, transform.position.z);
-        Quaternion insRot = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + 90f, transform.rotation.eulerAngles.z);
+        Quaternion insRot = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + 180f, transform.rotation.eulerAngles.z);
         _insPixmate = Instantiate(_pixmatePrefab, insPos, insRot);
         _insPixmate.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
+        // マテリアルの割り当て
+        _pixmateManager.AssignMaterial(_insPixmate, matTexture);
     }
 
     // Update is called once per frame
@@ -114,6 +116,6 @@ public class PixmateSpawn : MonoBehaviour
 
     void UpdateBlendShapes(float weight)
     {
-        for (int i = 0; i < _skinnedMeshRenderer.Length; i++) _skinnedMeshRenderer[i].SetBlendShapeWeight(0, weight);
+        _skinnedMeshRenderer.SetBlendShapeWeight(0, weight);
     }
 }

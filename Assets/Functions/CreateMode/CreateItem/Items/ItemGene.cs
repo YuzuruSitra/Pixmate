@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class ItemGene : MonoBehaviour
 {
-    public void GenerateMate(Vector3 createPos, GameObject createObj, GameObject convertObj)
+    // SpawnObjを対象位置に移動させ起動する処理
+    public void GenerateMate(Vector3 targetPos, GameObject spawnObj, GameObject convertObj)
     {
-        if(createPos == null || convertObj == null)return;
+        if(targetPos == null || convertObj == null)return;
+    
+        spawnObj.transform.position = new Vector3(targetPos.x , targetPos.y - 0.5f, targetPos.z);
+        PixmateSpawn pixmateSpawn = spawnObj.GetComponent<PixmateSpawn>();
+        pixmateSpawn.LaunchSpawn(convertObj);
         Destroy(convertObj);
-        Quaternion rotationQuaternion = Quaternion.Euler(0f, 180f, 0f);
-        Instantiate(createObj, createPos, rotationQuaternion);
     }
 }
