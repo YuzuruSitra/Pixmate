@@ -7200,7 +7200,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 6644d76086998d14a854566287e8f27f, type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6644d76086998d14a854566287e8f27f, type: 3}
       propertyPath: m_LocalScale.x
@@ -14475,6 +14475,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5858ff60451ce144917540dd95c4353, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _prefabFox: {fileID: 6100250837502869138, guid: b6b40119dcff17c4487b2e31bbf05a72, type: 3}
 --- !u!1 &1264387210
 GameObject:
   m_ObjectHideFlags: 0
@@ -16290,7 +16291,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10a4b4cb9445048e282856d40a2322dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cropImage: {fileID: 1843624441}
 --- !u!1 &1388306893
 GameObject:
   m_ObjectHideFlags: 0
@@ -21105,7 +21105,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _material: {fileID: 2100000, guid: 47b3af7be15d9ba45a1ad9dccbc077bc, type: 2}
-  _pixmatePrefab: {fileID: 6100250837502869138, guid: b6b40119dcff17c4487b2e31bbf05a72, type: 3}
 --- !u!1 &1723495922
 GameObject:
   m_ObjectHideFlags: 0
@@ -24825,7 +24824,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2035489286
 PrefabInstance:
@@ -25527,9 +25526,25 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1728686412, guid: b6b40119dcff17c4487b2e31bbf05a72, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1728686421, guid: b6b40119dcff17c4487b2e31bbf05a72, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132147503852127, guid: b6b40119dcff17c4487b2e31bbf05a72, type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 9000000, guid: 20a3065d4d204514088e1dc15383cf1d, type: 3}
     - target: {fileID: 6100250837502869138, guid: b6b40119dcff17c4487b2e31bbf05a72, type: 3}
       propertyPath: m_Name
       value: Pixmate_Fox
+      objectReference: {fileID: 0}
+    - target: {fileID: 6100250837502869138, guid: b6b40119dcff17c4487b2e31bbf05a72, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6909543809018979368, guid: b6b40119dcff17c4487b2e31bbf05a72, type: 3}
       propertyPath: m_RootOrder

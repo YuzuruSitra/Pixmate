@@ -6,15 +6,11 @@ using System.Text.RegularExpressions;
 public class PixmateSpawn : MonoBehaviour
 {
     private PixmatesManager _pixmateManager;
-    private PredictManager _predictManager;
     private MaterialBunker _materialBunker;
     private SkinnedMeshRenderer _skinnedMeshRenderer;
     [SerializeField]
     private Material _material;
 
-    // 生成するPixmate
-    [SerializeField]
-    private GameObject _pixmatePrefab;
     // 生成したprefab
     private GameObject _insPixmate;
     // 生成に必要な時間
@@ -33,7 +29,6 @@ public class PixmateSpawn : MonoBehaviour
         gameObject.SetActive(false);
 
         _pixmateManager = PixmatesManager.InstancePixmatesManager;
-        _predictManager = PredictManager.InstancePredictManager;
         _materialBunker = MaterialBunker.InstanceMatBunker;
         _skinnedMeshRenderer = GetComponent<SkinnedMeshRenderer>();
     }
@@ -72,10 +67,10 @@ public class PixmateSpawn : MonoBehaviour
         // Pixmateの生成処理
         Vector3 insPos = new Vector3(transform.position.x, transform.position.y - 0.1f, transform.position.z);
         Quaternion insRot = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + 180f, transform.rotation.eulerAngles.z);
-        _insPixmate = Instantiate(_pixmatePrefab, insPos, insRot);
-        _insPixmate.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
-        // マテリアルの割り当て
-        _pixmateManager.AssignMaterial(_insPixmate, matTexture);
+        Vector3 insScale = new Vector3(0.15f, 0.15f, 0.15f);
+        _insPixmate = _pixmateManager.InstantiatePixmate(insPos, insRot, insScale, matTexture);
+        // マテリアルの生成手続き
+        _pixmateManager.SpawnPixmate(matTexture);
     }
 
     // Update is called once per frame

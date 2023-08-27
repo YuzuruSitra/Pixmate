@@ -32,6 +32,4 @@ public class StateManager : MonoBehaviour
         OnStateChanged?.Invoke(_currentState);
     }
     
-    //Updata周り
-    //////////
 }

@@ -128,7 +128,7 @@ public class EditMatModeOrder : MonoBehaviour
         _materialBunker.ChangePhotoName(receiveName);
     }
 
-    // 特定スプライトの削除
+    // 特定スプライトの削除 ※MaterialBunkerクラスに移行予定
     void DeleteSprite()
     {
         if(_materialBunker.NowHavePhoto == null) return;
@@ -164,13 +164,15 @@ public class EditMatModeOrder : MonoBehaviour
             tmpInt++;
         }
         // 選択中の画像をnullにし再描画
-        _materialBunker.NowHavePhoto = null;
-        _stateManager.ChangeState(StateManager.GameState.EditMatMode);
-        //オブジェクトの再描画
-
+        _materialBunker.NowHavePhoto = "MaterialNo.1";
+        // 重複ケア
+        _galleryShow.AllReturnPooled(_poolObj);
+        // 描画処理
+        _galleryShow.ShowSprits(_poolObj);
+        // 選択フレームに画像をセット
+        _galleryShow.ShowSelectItem(_setItemFlame, _itemNameText, _materialBunker.NowHavePhotoSprite, _materialBunker.NowHavePhotoNames);
 
         // 保存する処理
-        SaveManager instanceSaveManager = SaveManager.InstanceSaveManager;
-        instanceSaveManager.Dosave();
+        _materialBunker.SaveMat();
     }
 }

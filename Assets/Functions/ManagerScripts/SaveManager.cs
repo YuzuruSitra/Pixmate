@@ -8,8 +8,11 @@ public class SaveManager : MonoBehaviour
 {
     // 他スクリプトでも呼べるようにインスタンス化
     public static SaveManager InstanceSaveManager;
+    // MaterialBunker
     private const string PHOTO_SPRITE_KEY = "_Sprite";
     private const string PHOTO_NAME_KEY = "_Name";
+    // PixmateManager
+    private const string PIXMATE_TEXTURE_KEY = "_Texture";
 
     void Awake()
     {
@@ -25,7 +28,6 @@ public class SaveManager : MonoBehaviour
         QuickSaveGlobalSettings.StorageLocation = Application.dataPath;
 
         DoEncryption();
-        Doload();
     }
 
     private void DoEncryption()//暗号化処理
@@ -40,23 +42,23 @@ public class SaveManager : MonoBehaviour
         settings.CompressionMode = CompressionMode.Gzip;
     }
 
-    //基本セーブ処理
-    public void Dosave()
+    // マテリアルのセーブ処理
+    public void DoSaveMaterial()
     {
         // QuickSaveSettingsのインスタンスを作成
         QuickSaveSettings settings = new QuickSaveSettings();
         // QuickSaveWriterのインスタンスを作成
         QuickSaveWriter writer = QuickSaveWriter.Create("Player",settings);
-        MaterialBunker instanceMatBunker = MaterialBunker.InstanceMatBunker;
 
+        MaterialBunker materialBunker = MaterialBunker.InstanceMatBunker;   
         // データを書き込む
-        writer.Write("matCount", instanceMatBunker.MatCount);
+        writer.Write("matCount", materialBunker.MatCount);
 
         // MaterialBunkerのセーブ処理        
-        string keyTemplate = instanceMatBunker.KeyName;
-        Dictionary<string, Sprite> tmpPhotoSprites = instanceMatBunker.CroppedImages;
-        Dictionary<string, string> tmpPhotoNames = instanceMatBunker.ImageNames;
-        for(int i = 0; i < instanceMatBunker.MatCount; i++)
+        string keyTemplate = materialBunker.KeyName;
+        Dictionary<string, Sprite> tmpPhotoSprites = materialBunker.CroppedImages;
+        Dictionary<string, string> tmpPhotoNames = materialBunker.ImageNames;
+        for(int i = 0; i < materialBunker.MatCount; i++)
         {
             int nameCount = i + 1;
             string pullTmpKey = keyTemplate + nameCount;
@@ -76,14 +78,13 @@ public class SaveManager : MonoBehaviour
         writer.Commit();
     }
 
-    //Spriteセーブ処理
+    //Spriteのセーブ処理
     public void DoSaveSprite(int matCount, Sprite sprite,string name,string key)
     {
         // QuickSaveSettingsのインスタンスを作成
         QuickSaveSettings settings = new QuickSaveSettings();
         // QuickSaveWriterのインスタンスを作成
         QuickSaveWriter writer = QuickSaveWriter.Create("Player",settings);
-        MaterialBunker instanceMatBunker = MaterialBunker.InstanceMatBunker;
 
         // データを書き込む
         writer.Write("matCount", matCount);
@@ -94,35 +95,79 @@ public class SaveManager : MonoBehaviour
         writer.Commit();
     }
 
-    // データを読み込む
-    public void Doload()
-    {        
+    // Pixmateのセーブ処理
+    public void DoSavePixmates(int count, Sprite sprite,string key)
+    {
+        // QuickSaveSettingsのインスタンスを作成
+        QuickSaveSettings settings = new QuickSaveSettings();
+        // QuickSaveWriterのインスタンスを作成
+        QuickSaveWriter writer = QuickSaveWriter.Create("Player",settings);
+
+        // データを書き込む
+        writer.Write("pixmateCount", count);
+        writer.Write(key + PIXMATE_TEXTURE_KEY, sprite);
+        
+        // 変更を反映
+        writer.Commit();
+    }
+
+    // データの読み込み
+
+    // MaterialBunker
+    public int LoadCountMat()
+    {
         // QuickSaveSettingsのインスタンスを作成
         QuickSaveSettings settings = new QuickSaveSettings();
         // QuickSaveReaderのインスタンスを作成
         QuickSaveReader reader = QuickSaveReader.Create("Player", settings);
-        MaterialBunker instanceMatBunker = MaterialBunker.InstanceMatBunker;
-        
-        // MaterialBunkerのセーブ処理        
-        string keyTemplate = instanceMatBunker.KeyName;
-        instanceMatBunker.MatCount = reader.Read<int>("matCount");
 
-        for(int i = 0; i < instanceMatBunker.MatCount; i++)
-        {
-            int nameCount = i + 1;
-            string addTmpKey = keyTemplate + nameCount;
+        return reader.Read<int>("matCount");
+    }
 
-            // CroppedImagesに追加。
-            string loadPhotoSpritesKey = addTmpKey + PHOTO_SPRITE_KEY;
-            Sprite tmpPhotoSpriteValue = reader.Read<Sprite>(loadPhotoSpritesKey);
-            instanceMatBunker.CroppedImages.Add(addTmpKey, tmpPhotoSpriteValue);
+    public Sprite LoadMaterialSprite(string key)
+    {
+        // QuickSaveSettingsのインスタンスを作成
+        QuickSaveSettings settings = new QuickSaveSettings();
+        // QuickSaveReaderのインスタンスを作成
+        QuickSaveReader reader = QuickSaveReader.Create("Player", settings);
 
-            // ImageNamesに追加。
-            string loadPhotoNamesKey = addTmpKey + PHOTO_NAME_KEY;
-            string tmpPhotoNamesValue = reader.Read<string>(loadPhotoNamesKey);
-            instanceMatBunker.ImageNames.Add(addTmpKey, tmpPhotoNamesValue);
-        }
+        string loadTextureKey = key + PHOTO_SPRITE_KEY;
+        return reader.Read<Sprite>(loadTextureKey);
+    }
 
+    public string LoadMaterialSpriteName(string key)
+    {
+        // QuickSaveSettingsのインスタンスを作成
+        QuickSaveSettings settings = new QuickSaveSettings();
+        // QuickSaveReaderのインスタンスを作成
+        QuickSaveReader reader = QuickSaveReader.Create("Player", settings);
+
+        string loadPhotoNamesKey = key + PHOTO_NAME_KEY;
+        return reader.Read<string>(loadPhotoNamesKey);
+    }
+
+    // PixmatesManager
+    public int LoadPixmateCount()
+    {
+        // QuickSaveSettingsのインスタンスを作成
+        QuickSaveSettings settings = new QuickSaveSettings();
+        // QuickSaveReaderのインスタンスを作成
+        QuickSaveReader reader = QuickSaveReader.Create("Player", settings);
+
+        return reader.Read<int>("pixmateCount");
+        // デバッグ用
+        //return 0;
+    }
+
+    public Sprite LoadPixmateSprite(string key)
+    {
+        // QuickSaveSettingsのインスタンスを作成
+        QuickSaveSettings settings = new QuickSaveSettings();
+        // QuickSaveReaderのインスタンスを作成
+        QuickSaveReader reader = QuickSaveReader.Create("Player", settings);
+
+        string loadTextureKey = key + PIXMATE_TEXTURE_KEY;
+        return reader.Read<Sprite>(loadTextureKey);
     }
 
     //データ削除
@@ -135,9 +180,12 @@ public class SaveManager : MonoBehaviour
 
         // 初期データ
         writer.Write("matCount", 0);
-        MaterialBunker.InstanceMatBunker.CroppedImages.Clear();
+        MaterialBunker materialBunker = MaterialBunker.InstanceMatBunker;
+        materialBunker.CroppedImages.Clear();
 
         // データを書き込む
         writer.Commit();
     }
 }
+
+// セーブクラスとマネージャークラスが相互に参照を持っているのでマネージャークラス > セーブクラスのみへ修正予定

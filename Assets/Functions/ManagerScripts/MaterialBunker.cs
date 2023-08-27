@@ -7,13 +7,14 @@ public class MaterialBunker : MonoBehaviour
 {
     // 他スクリプトでも呼べるようにインスタンス化
     public static MaterialBunker InstanceMatBunker;
+    SaveManager _saveManager;
 
     public const string KEY_NAME = "MaterialNo.";
     public string KeyName => KEY_NAME;
     public int MatCount = 0;
     public const int MATERIAL_AMOUNT = 500;
     public Material[] Materials = new Material[MATERIAL_AMOUNT];
-    // のちのちセーブと紐付け
+    // セーブと紐付け
     public Dictionary<string, Sprite> CroppedImages = new Dictionary<string, Sprite>();
     public Dictionary<string, Material> ImageMaterials = new Dictionary<string, Material>();
     public Dictionary<string, string> ImageNames = new Dictionary<string, string>();
@@ -44,6 +45,23 @@ public class MaterialBunker : MonoBehaviour
 
     void Start()
     {
+        SaveManager _saveManager = SaveManager.InstanceSaveManager;
+        // ロード処理
+        MatCount = _saveManager.LoadCountMat();
+        for(int i = 0; i < MatCount; i++)
+        {
+            int nameCount = i + 1;
+            string addTmpKey = KEY_NAME + nameCount;
+
+            // CroppedImagesに追加。
+            Sprite tmpPhotoSpriteValue = _saveManager.LoadMaterialSprite(addTmpKey);
+            CroppedImages.Add(addTmpKey, tmpPhotoSpriteValue);
+
+            // ImageNamesに追加。
+            string tmpPhotoNamesValue = _saveManager.LoadMaterialSpriteName(addTmpKey);
+            ImageNames.Add(addTmpKey, tmpPhotoNamesValue);
+        }
+
         SetMaterials();
         SpritesAssignMat();
     }
@@ -103,6 +121,13 @@ public class MaterialBunker : MonoBehaviour
             tmpKey += nameCount;
             ImageMaterials.Add(tmpKey, Materials[i]);
         }
+    }
+
+    // 仮置き
+    public void SaveMat()
+    {
+        SaveManager instanceSaveManager = SaveManager.InstanceSaveManager;
+        instanceSaveManager.DoSaveMaterial();
     }
 
 }
