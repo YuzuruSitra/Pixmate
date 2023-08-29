@@ -74,8 +74,8 @@ public class MaterialBunker : MonoBehaviour
         string tmp = tmpKey + MatCount;
         CroppedImages.Add(tmp, setSprite);
         ImageNames.Add(tmp, tmp);
-        SaveManager instanceSaveManager = SaveManager.InstanceSaveManager;
-        instanceSaveManager.DoSaveSprite(MatCount,setSprite,tmp,tmp);
+        // Spriteのセーブ
+        _saveManager.DoSaveSprite(MatCount,setSprite,tmp,tmp);
         SpritesAssignMat();
     }
 
@@ -83,8 +83,8 @@ public class MaterialBunker : MonoBehaviour
     public void ChangePhotoName(string tmpName)
     {
         ImageNames[NowHavePhoto] = tmpName;
-        SaveManager instanceSaveManager = SaveManager.InstanceSaveManager;
-        instanceSaveManager.DoSaveSprite(MatCount,CroppedImages[NowHavePhoto],ImageNames[NowHavePhoto],NowHavePhoto);
+        // SpriteNameのセーブ
+        _saveManager.DoSaveSprite(MatCount,CroppedImages[NowHavePhoto],ImageNames[NowHavePhoto],NowHavePhoto);
     }
 
     // マテリアルにスプライトをセット
@@ -101,7 +101,6 @@ public class MaterialBunker : MonoBehaviour
             Texture2D matTexture = new Texture2D(CroppedImages[tmpKey].texture.width, CroppedImages[tmpKey].texture.height, TextureFormat.RGBA32, false);
             matTexture.SetPixels(CroppedImages[tmpKey].texture.GetPixels());
             matTexture.Apply();
-
             // マテリアルにテクスチャを割り当てる
             ImageMaterials[tmpKey].SetTexture("_BaseMap", matTexture);
 
@@ -123,11 +122,54 @@ public class MaterialBunker : MonoBehaviour
         }
     }
 
-    // 仮置き
-    public void SaveMat()
+    // 特定スプライトの削除時の辞書要素並び替えとセーブ処理
+    public void DeleteSortDictionary()
     {
-        SaveManager instanceSaveManager = SaveManager.InstanceSaveManager;
-        instanceSaveManager.DoSaveMaterial();
-    }
+        if(NowHavePhoto == null) return;
+        // 削除したい画像のKeyを取得
+        string tmp = System.Text.RegularExpressions.Regex.Replace(NowHavePhoto, @"[^0-9]", "");
+        int tmpInt = int.Parse(tmp);
 
+        // 画像を格納している辞書を削除したい画像から繰り上げる。
+        while (tmpInt <= MatCount)
+        {
+            string addNewKey = KEY_NAME + tmpInt;
+            string nextKey = KEY_NAME + (tmpInt + 1);
+
+            if(tmpInt < MatCount)
+            {
+                // 辞書から現在のキーの要素を取得
+                Sprite currentSprite = CroppedImages[nextKey];
+                Material currentMaterial = ImageMaterials[nextKey];
+
+                // 辞書に新しいキーで要素を追加
+                CroppedImages[addNewKey] = currentSprite;
+                ImageMaterials[addNewKey] = currentMaterial;
+            }
+            else
+            {
+                // 辞書の最後の要素を削除
+                CroppedImages.Remove(addNewKey);
+                ImageNames.Remove(addNewKey);
+                MatCount -= 1;
+            }
+            tmpInt++;
+        }
+        
+        // 選択中の画像を変更
+        NowHavePhoto = "MaterialNo.1";
+
+        // 保存する処理
+        _saveManager.DoSaveMaterialCount(MatCount);
+    
+        // PhotoSpriteとPhotoNameの書き込み
+        for(int i = 0; i < MatCount; i++)
+        {
+            int nameCount = i + 1;
+            string pullTmpKey = KEY_NAME + nameCount;
+            Sprite tmpPhotoSpriteValue = CroppedImages[pullTmpKey];
+            string tmpPhotoNamesValue = ImageNames[pullTmpKey];
+            _saveManager.DoSaveMaterial(tmpPhotoSpriteValue,tmpPhotoNamesValue,pullTmpKey);
+        }
+    }
 }

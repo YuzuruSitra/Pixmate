@@ -128,51 +128,15 @@ public class EditMatModeOrder : MonoBehaviour
         _materialBunker.ChangePhotoName(receiveName);
     }
 
-    // 特定スプライトの削除 ※MaterialBunkerクラスに移行予定
     void DeleteSprite()
     {
-        if(_materialBunker.NowHavePhoto == null) return;
-        // 削除したい画像のKeyを取得
-        string tmp = System.Text.RegularExpressions.Regex.Replace(_materialBunker.NowHavePhoto, @"[^0-9]", "");
-        int tmpInt = int.Parse(tmp);
-        string baseKeyName = MaterialBunker.KEY_NAME;
-
-        // 画像を格納している辞書を削除したい画像から繰り上げる。
-        while (tmpInt <= _materialBunker.MatCount)
-        {
-            string addNewKey = baseKeyName + tmpInt;
-            string nextKey = baseKeyName + (tmpInt + 1);
-
-            if(tmpInt < _materialBunker.MatCount)
-            {
-                // 辞書から現在のキーの要素を取得
-                Sprite currentSprite = _materialBunker.CroppedImages[nextKey];
-                Material currentMaterial = _materialBunker.ImageMaterials[nextKey];
-
-                // 辞書に新しいキーで要素を追加
-                _materialBunker.CroppedImages[addNewKey] = currentSprite;
-                _materialBunker.ImageMaterials[addNewKey] = currentMaterial;
-            }
-            else
-            {
-                // 辞書の最後の要素を削除
-                _materialBunker.CroppedImages.Remove(addNewKey);
-                _materialBunker.ImageMaterials.Remove(addNewKey);
-                _materialBunker.ImageNames.Remove(addNewKey);
-                _materialBunker.MatCount -= 1;
-            }
-            tmpInt++;
-        }
-        // 選択中の画像をnullにし再描画
-        _materialBunker.NowHavePhoto = "MaterialNo.1";
+        _materialBunker.DeleteSortDictionary();
         // 重複ケア
         _galleryShow.AllReturnPooled(_poolObj);
         // 描画処理
         _galleryShow.ShowSprits(_poolObj);
         // 選択フレームに画像をセット
         _galleryShow.ShowSelectItem(_setItemFlame, _itemNameText, _materialBunker.NowHavePhotoSprite, _materialBunker.NowHavePhotoNames);
-
-        // 保存する処理
-        _materialBunker.SaveMat();
     }
+
 }

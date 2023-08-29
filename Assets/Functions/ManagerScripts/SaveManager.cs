@@ -43,36 +43,32 @@ public class SaveManager : MonoBehaviour
     }
 
     // マテリアルのセーブ処理
-    public void DoSaveMaterial()
+    public void DoSaveMaterialCount(int matCount)
     {
         // QuickSaveSettingsのインスタンスを作成
         QuickSaveSettings settings = new QuickSaveSettings();
         // QuickSaveWriterのインスタンスを作成
         QuickSaveWriter writer = QuickSaveWriter.Create("Player",settings);
 
-        MaterialBunker materialBunker = MaterialBunker.InstanceMatBunker;   
         // データを書き込む
-        writer.Write("matCount", materialBunker.MatCount);
+        writer.Write("matCount", matCount);
+        // 変更を反映
+        writer.Commit();
+    }
 
-        // MaterialBunkerのセーブ処理        
-        string keyTemplate = materialBunker.KeyName;
-        Dictionary<string, Sprite> tmpPhotoSprites = materialBunker.CroppedImages;
-        Dictionary<string, string> tmpPhotoNames = materialBunker.ImageNames;
-        for(int i = 0; i < materialBunker.MatCount; i++)
-        {
-            int nameCount = i + 1;
-            string pullTmpKey = keyTemplate + nameCount;
+    public void DoSaveMaterial(Sprite savaSprite, string savaName, string key)
+    {
+        // QuickSaveSettingsのインスタンスを作成
+        QuickSaveSettings settings = new QuickSaveSettings();
+        // QuickSaveWriterのインスタンスを作成
+        QuickSaveWriter writer = QuickSaveWriter.Create("Player",settings);
 
-            // PhotoSpriteの書き込み
-            string savePhotoSpriteKey = pullTmpKey + PHOTO_SPRITE_KEY;
-            Sprite tmpPhotoSpriteValue = tmpPhotoSprites[pullTmpKey];
-            writer.Write(savePhotoSpriteKey, tmpPhotoSpriteValue);
+        // Spriteとその名前のセーブ
+        string savePhotoSpriteKey = key + PHOTO_SPRITE_KEY;
+        writer.Write(savePhotoSpriteKey, savaSprite);
 
-            // PhotoNameの書き込み
-            string savePhotoNamesKey = pullTmpKey + PHOTO_NAME_KEY;
-            string tmpPhotoNamesValue = tmpPhotoNames[pullTmpKey];
-            writer.Write(savePhotoNamesKey, tmpPhotoNamesValue);
-        }
+        string savePhotoNamesKey = key + PHOTO_NAME_KEY;
+        writer.Write(savePhotoNamesKey, savaName);
 
         // 変更を反映
         writer.Commit();
