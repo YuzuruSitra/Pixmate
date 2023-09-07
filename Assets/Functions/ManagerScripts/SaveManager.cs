@@ -13,6 +13,11 @@ public class SaveManager : MonoBehaviour
     private const string PHOTO_NAME_KEY = "_Name";
     // PixmateManager
     private const string PIXMATE_TEXTURE_KEY = "_Texture";
+    // WorldManager
+    private const string WORLDOBJ_POS_KEY = "_Pos";
+    private const string WORLDOBJ_ROT_KEY = "_Rot";
+    private const string WORLDOBJ_SHAPE_KEY = "_Shape";
+    private const string WORLDOBJ_MAT_KEY = "_Mat";
 
     void Awake()
     {
@@ -165,6 +170,29 @@ public class SaveManager : MonoBehaviour
         string loadTextureKey = key + PIXMATE_TEXTURE_KEY;
         return reader.Read<Sprite>(loadTextureKey);
     }
+
+    // WorldManager
+
+    // Worldのセーブ処理
+    public void DoSaveWorld(string key, Vector3 pos, Quaternion rot, string shape, int mat)
+    {
+        // QuickSaveSettingsのインスタンスを作成
+        QuickSaveSettings settings = new QuickSaveSettings();
+        // QuickSaveWriterのインスタンスを作成
+        QuickSaveWriter writer = QuickSaveWriter.Create("Player",settings);
+
+        // データを書き込む
+        writer.Write(key + WORLDOBJ_POS_KEY, pos);
+        writer.Write(key + WORLDOBJ_ROT_KEY, rot);
+        writer.Write(key + WORLDOBJ_SHAPE_KEY, shape);
+        writer.Write(key + WORLDOBJ_MAT_KEY, mat);
+        
+
+        // 変更を反映
+        writer.Commit();
+    }
+
+
 
     //データ削除
     public void DeleteDate()

@@ -18,6 +18,8 @@ public class MaterialBunker : MonoBehaviour
     public Dictionary<string, Sprite> CroppedImages = new Dictionary<string, Sprite>();
     public Dictionary<string, Material> ImageMaterials = new Dictionary<string, Material>();
     public Dictionary<string, string> ImageNames = new Dictionary<string, string>();
+    // 初期アセット
+    public Material[] DefaultMat = new Material[4];
 
     // 今所有しているもの
     public string NowHavePhoto = "MaterialNo.1";
@@ -45,7 +47,8 @@ public class MaterialBunker : MonoBehaviour
 
     void Start()
     {
-        SaveManager _saveManager = SaveManager.InstanceSaveManager;
+        _saveManager = SaveManager.InstanceSaveManager;
+
         // ロード処理
         MatCount = _saveManager.LoadCountMat();
         for(int i = 0; i < MatCount; i++)

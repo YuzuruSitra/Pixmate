@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using System.Text.RegularExpressions;
 
 public class TryGetKey
 {
@@ -16,5 +18,16 @@ public class TryGetKey
         string targetKey = targetMatName.Replace("CroppedImageMat_", materialBunker.KeyName);
         Debug.Log(targetKey);
         return targetKey;
+    }
+
+    // 何番目のマテリアルか取得
+    public int GetMatNumber(string targetMatName)
+    {
+        int outNum;
+        string numericPart = Regex.Match(targetMatName, @"\d+").Value;
+        int.TryParse(numericPart, out outNum);
+        outNum -= 1;
+        if(outNum < 0) outNum = 0;
+        return outNum;
     }
 }

@@ -25,7 +25,7 @@ public class UIManager : MonoBehaviour
     private GameObject _editMatPanel;
     [SerializeField] 
     private GameObject _editCropPanel;
-
+    
     private void Start()
     {
         _stateManager.OnStateChanged += UpdateUI;
