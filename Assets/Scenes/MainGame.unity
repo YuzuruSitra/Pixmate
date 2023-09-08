@@ -661,7 +661,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &42880544
 Transform:
   m_ObjectHideFlags: 0
@@ -1070,7 +1070,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 79959078}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.030873, y: -4.2620254, z: -1.1105648}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -10440,7 +10440,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &929992850
 Transform:
   m_ObjectHideFlags: 0
@@ -10897,12 +10897,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e5473cbbf56a4eb6b1b6b8ce6afb50f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _worldObjCount: 0
-  WorldEdgeXMax: 5
-  WorldEdgeXMin: -5
-  WorldEdgeZMax: 5
-  WorldEdgeZMin: -5
-  worldData: {fileID: 11400000, guid: bbed436747facd541b4a735c63bc3e3c, type: 2}
+  _mapParent: {fileID: 79959079}
+  _defaultWorldData: {fileID: 11400000, guid: bbed436747facd541b4a735c63bc3e3c, type: 2}
 --- !u!1 &961442007
 GameObject:
   m_ObjectHideFlags: 0
@@ -12725,10 +12721,10 @@ MonoBehaviour:
   - {fileID: 2100000, guid: c7840953a03b44e4fbb44c796351d872, type: 2}
   - {fileID: 2100000, guid: 0ab66de84bbcf47b59831d8aa2d850cb, type: 2}
   DefaultMat:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 2100000, guid: e7dc08451d7d94d98a6611816bdbda6c, type: 2}
+  - {fileID: 2100000, guid: a867db4e43b7b4522ac115e22f7482b8, type: 2}
+  - {fileID: 2100000, guid: 351dbd30157794cf9b73d74c04bacd7b, type: 2}
+  - {fileID: 2100000, guid: d39f8ff54a669413cb94de652ae9ff45, type: 2}
   NowHavePhoto: MaterialNo.1
 --- !u!4 &1079979877
 Transform:

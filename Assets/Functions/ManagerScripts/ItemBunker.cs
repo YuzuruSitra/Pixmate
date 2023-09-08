@@ -20,7 +20,10 @@ public class ItemBunker : MonoBehaviour
     [SerializeField]
     private Sprite[] _itemSprite = new Sprite[5];
     [SerializeField]
-    private GameObject[] _itemObject = new GameObject[5];  
+    private GameObject[] _itemObject = new GameObject[5];
+
+    public GameObject[] ItemObject => _itemObject;
+
     // アイテムの保持数
     //private int NowHaveItemCount;  
 

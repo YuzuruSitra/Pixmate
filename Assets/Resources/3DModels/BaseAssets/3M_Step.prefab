@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 474378035307719458}
   - component: {fileID: 474378035307719459}
   - component: {fileID: 474378035307719456}
+  - component: {fileID: 8263625075677008661}
   - component: {fileID: -6008710509715348437}
   m_Layer: 6
   m_Name: 3M_Step
@@ -84,6 +85,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &8263625075677008661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 474378035307719457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46e12659dbf1d49f89ea201623526696, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _thisObjID: 0
 --- !u!64 &-6008710509715348437
 MeshCollider:
   m_ObjectHideFlags: 0

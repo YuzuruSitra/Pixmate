@@ -79,7 +79,7 @@ public class SaveManager : MonoBehaviour
         writer.Commit();
     }
 
-    //Spriteのセーブ処理
+    // Spriteのセーブ処理
     public void DoSaveSprite(int matCount, Sprite sprite,string name,string key)
     {
         // QuickSaveSettingsのインスタンスを作成
@@ -108,6 +108,43 @@ public class SaveManager : MonoBehaviour
         writer.Write("pixmateCount", count);
         writer.Write(key + PIXMATE_TEXTURE_KEY, sprite);
         
+        // 変更を反映
+        writer.Commit();
+    }
+
+    // Worldのセーブ処理
+
+    // Worldのオブジェクト数をセーブ
+    
+    public void DoSaveWorldSize(int count)
+    {
+        // QuickSaveSettingsのインスタンスを作成
+        QuickSaveSettings settings = new QuickSaveSettings();
+        // QuickSaveWriterのインスタンスを作成
+        QuickSaveWriter writer = QuickSaveWriter.Create("Player",settings);
+
+        // データを書き込む
+        writer.Write("worldObjCount", count);
+
+        // 変更を反映
+        writer.Commit();
+    }
+
+    // Object情報をセーブ
+    public void DoSaveWorld(string key, Vector3 pos, Quaternion rot, string shape, int mat)
+    {
+        // QuickSaveSettingsのインスタンスを作成
+        QuickSaveSettings settings = new QuickSaveSettings();
+        // QuickSaveWriterのインスタンスを作成
+        QuickSaveWriter writer = QuickSaveWriter.Create("Player",settings);
+
+        // データを書き込む
+        writer.Write(key + WORLDOBJ_POS_KEY, pos);
+        writer.Write(key + WORLDOBJ_ROT_KEY, rot);
+        writer.Write(key + WORLDOBJ_SHAPE_KEY, shape);
+        writer.Write(key + WORLDOBJ_MAT_KEY, mat);
+        
+
         // 変更を反映
         writer.Commit();
     }
@@ -171,26 +208,6 @@ public class SaveManager : MonoBehaviour
         return reader.Read<Sprite>(loadTextureKey);
     }
 
-    // WorldManager
-
-    // Worldのセーブ処理
-    public void DoSaveWorld(string key, Vector3 pos, Quaternion rot, string shape, int mat)
-    {
-        // QuickSaveSettingsのインスタンスを作成
-        QuickSaveSettings settings = new QuickSaveSettings();
-        // QuickSaveWriterのインスタンスを作成
-        QuickSaveWriter writer = QuickSaveWriter.Create("Player",settings);
-
-        // データを書き込む
-        writer.Write(key + WORLDOBJ_POS_KEY, pos);
-        writer.Write(key + WORLDOBJ_ROT_KEY, rot);
-        writer.Write(key + WORLDOBJ_SHAPE_KEY, shape);
-        writer.Write(key + WORLDOBJ_MAT_KEY, mat);
-        
-
-        // 変更を反映
-        writer.Commit();
-    }
 
 
 
