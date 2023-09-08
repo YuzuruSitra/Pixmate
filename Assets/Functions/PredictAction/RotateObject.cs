@@ -24,6 +24,9 @@ public class RotateObject : MonoBehaviour
         GameObject targetObj = _predictManager.NowHaveCube;
         // 対象オブジェクトと回転方向をメソッドに渡す
         _spinCoroutine = StartCoroutine(DoRotation(_spinState.LEFT, targetObj));
+        // ワールドデータの保存
+        WorldManager _worldManager = WorldManager.InstanceWorldManager;
+        _worldManager.ChangeObjSaving(targetObj);
     }
 
     public void SpinningUpwards()
@@ -33,6 +36,9 @@ public class RotateObject : MonoBehaviour
         GameObject targetObj = _predictManager.NowHaveCube;
         // 対象オブジェクトと回転方向をメソッドに渡す
         _spinCoroutine = StartCoroutine(DoRotation(_spinState.UPWARDS, targetObj));
+        // ワールドデータの保存
+        WorldManager _worldManager = WorldManager.InstanceWorldManager;
+        _worldManager.ChangeObjSaving(targetObj);
     }
 
     IEnumerator DoRotation(_spinState state, GameObject targetObj)

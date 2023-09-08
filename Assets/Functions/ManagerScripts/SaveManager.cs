@@ -115,6 +115,20 @@ public class SaveManager : MonoBehaviour
     // Worldのセーブ処理
 
     // Worldのオブジェクト数をセーブ
+
+    public void DoSaveWorldInitialization(bool initial)
+    {
+        // QuickSaveSettingsのインスタンスを作成
+        QuickSaveSettings settings = new QuickSaveSettings();
+        // QuickSaveWriterのインスタンスを作成
+        QuickSaveWriter writer = QuickSaveWriter.Create("Player",settings);
+
+        // データを書き込む
+        writer.Write("worldInitialization", initial);
+
+        // 変更を反映
+        writer.Commit();
+    }
     
     public void DoSaveWorldSize(int count)
     {
@@ -143,7 +157,6 @@ public class SaveManager : MonoBehaviour
         writer.Write(key + WORLDOBJ_ROT_KEY, rot);
         writer.Write(key + WORLDOBJ_SHAPE_KEY, shape);
         writer.Write(key + WORLDOBJ_MAT_KEY, mat);
-        
 
         // 変更を反映
         writer.Commit();
@@ -208,8 +221,70 @@ public class SaveManager : MonoBehaviour
         return reader.Read<Sprite>(loadTextureKey);
     }
 
+    // WorldManager
 
+    public bool LoadWorldInitialization()
+    {
+        // QuickSaveSettingsのインスタンスを作成
+        QuickSaveSettings settings = new QuickSaveSettings();
+        // QuickSaveReaderのインスタンスを作成
+        QuickSaveReader reader = QuickSaveReader.Create("Player", settings);
+        
+        return reader.Read<bool>("worldInitialization"); 
+    }
+    public int LoadWorldSize()
+    {
+        // QuickSaveSettingsのインスタンスを作成
+        QuickSaveSettings settings = new QuickSaveSettings();
+        // QuickSaveReaderのインスタンスを作成
+        QuickSaveReader reader = QuickSaveReader.Create("Player", settings);
+        
+        return reader.Read<int>("worldObjCount"); 
+    }
 
+    public Vector3 LoadWorldObjPos(string key)
+    {
+        // QuickSaveSettingsのインスタンスを作成
+        QuickSaveSettings settings = new QuickSaveSettings();
+        // QuickSaveReaderのインスタンスを作成
+        QuickSaveReader reader = QuickSaveReader.Create("Player", settings);
+
+        // データを書き込む
+        return reader.Read<Vector3>(key + WORLDOBJ_POS_KEY); 
+    }
+
+    public Quaternion LoadWorldObjRot(string key)
+    {
+        // QuickSaveSettingsのインスタンスを作成
+        QuickSaveSettings settings = new QuickSaveSettings();
+        // QuickSaveReaderのインスタンスを作成
+        QuickSaveReader reader = QuickSaveReader.Create("Player", settings);
+
+        // データを書き込む
+        return reader.Read<Quaternion>(key + WORLDOBJ_ROT_KEY); 
+    }
+
+    public string LoadWorldObjShape(string key)
+    {
+        // QuickSaveSettingsのインスタンスを作成
+        QuickSaveSettings settings = new QuickSaveSettings();
+        // QuickSaveReaderのインスタンスを作成
+        QuickSaveReader reader = QuickSaveReader.Create("Player", settings);
+
+        // データを書き込む
+        return reader.Read<string>(key + WORLDOBJ_SHAPE_KEY); 
+    }
+
+    public int LoadWorldObjMat(string key)
+    {
+        // QuickSaveSettingsのインスタンスを作成
+        QuickSaveSettings settings = new QuickSaveSettings();
+        // QuickSaveReaderのインスタンスを作成
+        QuickSaveReader reader = QuickSaveReader.Create("Player", settings);
+
+        // データを書き込む
+        return reader.Read<int>(key + WORLDOBJ_MAT_KEY); 
+    }
 
     //データ削除
     public void DeleteDate()

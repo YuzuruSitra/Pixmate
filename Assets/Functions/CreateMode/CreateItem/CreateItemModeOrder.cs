@@ -67,7 +67,7 @@ public class CreateItemModeOrder : MonoBehaviour
         _showItemList.AllReturnPooled(_poolObj);
         // 描画処理
         _showItemList.ShowSprits(_poolObj);
-        // 線tなくオブジェクトの描画
+        // オブジェクトの描画
         ItemBunker itemBunker = ItemBunker.InstanceItemBunker;
         _setItemFlame.sprite = itemBunker.NowHaveItemSprite;
         UpdateItemUIs();

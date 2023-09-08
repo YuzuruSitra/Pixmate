@@ -9,7 +9,12 @@ public class AssignMaterial
     {
         PredictManager _predictManager = PredictManager.InstancePredictManager;
         MaterialBunker _materialBunker = MaterialBunker.InstanceMatBunker;
-        if(_materialBunker.NowHavePhotoMaterial == null || _predictManager.NowHaveCube == null || !_predictManager.InLange) return;
+        GameObject targetObj = _predictManager.NowHaveCube;
+        if(_materialBunker.NowHavePhotoMaterial == null || targetObj == null || !_predictManager.InLange) return;
         _predictManager.AssignMaterial(_materialBunker.NowHavePhotoMaterial);
+        
+        // ワールドデータの保存
+        WorldManager _worldManager = WorldManager.InstanceWorldManager;
+        _worldManager.ChangeObjSaving(targetObj);
     }
 }

@@ -7,7 +7,8 @@ public class ItemBunker : MonoBehaviour
     // 他スクリプトでも呼べるようにインスタンス化
     public static ItemBunker InstanceItemBunker;
     // 今保有しているアイテムの数
-    public int HavingItemCount = 5;
+    private int _havingItemCount = 5;
+    public int HavingItemCount => _havingItemCount;
     private string[] _itemName = new string[]
     {
         "Cube",
@@ -22,11 +23,7 @@ public class ItemBunker : MonoBehaviour
     [SerializeField]
     private GameObject[] _itemObject = new GameObject[5];
 
-    public GameObject[] ItemObject => _itemObject;
-
-    // アイテムの保持数
-    //private int NowHaveItemCount;  
-
+    public GameObject[] ItemObject => _itemObject; 
     Dictionary<string, Sprite> _itemSpriteDictionary = new Dictionary<string, Sprite>();
     public Dictionary<string, Sprite> ItemSpriteDictionary => _itemSpriteDictionary;
     Dictionary<string, GameObject> _itemObjectDictionary = new Dictionary<string, GameObject>();
@@ -43,22 +40,10 @@ public class ItemBunker : MonoBehaviour
             InstanceItemBunker = this;
         }
 
-        for(int i = 0; i < HavingItemCount; i++)
+        for(int i = 0; i < _havingItemCount; i++)
         {
             _itemSpriteDictionary.Add(_itemName[i], _itemSprite[i]);
             _itemObjectDictionary.Add(_itemName[i], _itemObject[i]);
         }
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

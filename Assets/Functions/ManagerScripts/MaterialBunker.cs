@@ -67,6 +67,10 @@ public class MaterialBunker : MonoBehaviour
 
         SetMaterials();
         SpritesAssignMat();
+
+        // ワールドのロード処理
+        WorldManager worldManager = WorldManager.InstanceWorldManager; 
+        worldManager.WorldLoad();
     }
 
     // スプライトの追加

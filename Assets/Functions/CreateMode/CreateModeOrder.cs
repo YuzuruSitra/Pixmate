@@ -26,7 +26,6 @@ public class CreateModeOrder : MonoBehaviour
     {
         if(newState != StateManager.GameState.CreateMode) return;
         ItemBunker itemBunker = ItemBunker.InstanceItemBunker;
-        string nowHaveItem = itemBunker.NowHaveItem;
         _havingItemImage.sprite = itemBunker.NowHaveItemSprite;
     }
 

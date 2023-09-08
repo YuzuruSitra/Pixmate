@@ -5,9 +5,10 @@ using UnityEditor;
 
 public class WorldManager : MonoBehaviour
 {
+    private bool _isInitialization;
     public static WorldManager InstanceWorldManager;
     SaveManager _saveManager;
-    public const string WORLDOBJ_KEY = "WorldObj";
+    public const string WORLD_OBJ_KEY = "WorldObj";
     [SerializeField] 
     private Transform _mapParent;
 
@@ -16,8 +17,8 @@ public class WorldManager : MonoBehaviour
 
     private List<Vector3> _objPosList = new List<Vector3>();
     private List<Quaternion> _objRotList = new List<Quaternion>();
-    private List<string> _objTagList = new List<string>();
-    private List<int> _objKindList = new List<int>();
+    private List<string> _objShapeList = new List<string>();
+    private List<int> _objMatList = new List<int>();
     private int _worldObjCount;
 
     void Awake()
@@ -32,42 +33,56 @@ public class WorldManager : MonoBehaviour
     void Start()
     {
         _saveManager = SaveManager.InstanceSaveManager;
-        //InitialWorldSetting();
-        WorldLoad();
     }
 
     /*------------------------------------------------------------------------*/
 
     // マテリアルのロード処理（仮）
-    void WorldLoad()
+    public void WorldLoad()
     {
-        _objPosList = _defaultWorldData.ObjPositions;
-        _objRotList = _defaultWorldData.ObjRotations;
-        _objTagList = _defaultWorldData.ObjTags;
-        _objKindList = _defaultWorldData.ObjKinds;
-        _worldObjCount  = _defaultWorldData.WorldObjCount;
+        _isInitialization = _saveManager.LoadWorldInitialization();
+        if(_isInitialization)
+        {
+            _worldObjCount  = _defaultWorldData.WorldObjCount;
+            _objPosList = _defaultWorldData.ObjPositions;
+            _objRotList = _defaultWorldData.ObjRotations;
+            _objShapeList = _defaultWorldData.ObjTags;
+            _objMatList = _defaultWorldData.ObjKinds;
+        }
+        else
+        {
+            _worldObjCount = _saveManager.LoadWorldSize();
+            for(int i = 0; i < _worldObjCount; i++)
+            {
+                string key = WORLD_OBJ_KEY + i;
+                _objPosList.Add(_saveManager.LoadWorldObjPos(key));
+                _objRotList.Add(_saveManager.LoadWorldObjRot(key));
+                _objShapeList.Add(_saveManager.LoadWorldObjShape(key));
+                _objMatList.Add(_saveManager.LoadWorldObjMat(key));
+            }
+        }
 
         ItemBunker itemBunker = ItemBunker.InstanceItemBunker;
 
         for (int i = 0; i < _worldObjCount; i++)
         {
             // 生成するオブジェクト
-            int insKind = GetItemKind(_objTagList[i]);
+            int insKind = GetItemKind(_objShapeList[i]);
 
             if (insKind == -1)
             {
-                Debug.LogError("Invalid tag: " + _objTagList[i]);
+                Debug.LogError("Invalid tag: " + _objShapeList[i]);
                 continue;
             }
 
             GameObject insObj = Instantiate(itemBunker.ItemObject[insKind], _objPosList[i], _objRotList[i], _mapParent);
 
             // マテリアルの選定
-            Material assignMat = GetAssignedMaterial(_objKindList[i]);
+            Material assignMat = GetAssignedMaterial(_objMatList[i]);
 
             if (assignMat == null)
             {
-                Debug.LogError("Invalid material index: " + _objKindList[i]);
+                Debug.LogError("Invalid material index: " + _objMatList[i]);
                 continue;
             }
 
@@ -100,10 +115,11 @@ public class WorldManager : MonoBehaviour
     Material GetAssignedMaterial(int targetNum)
     {
         MaterialBunker materialBunker = MaterialBunker.InstanceMatBunker;
-
-        if (targetNum < MaterialBunker.MATERIAL_AMOUNT)
+        
+        int keyNum = targetNum + 1;
+        if (keyNum < MaterialBunker.MATERIAL_AMOUNT)
         {
-            string tmpKey = materialBunker.KeyName + targetNum;
+            string tmpKey = materialBunker.KeyName + keyNum;
             return materialBunker.ImageMaterials.ContainsKey(tmpKey) ? materialBunker.ImageMaterials[tmpKey] : null;
         }
         else
@@ -122,11 +138,14 @@ public class WorldManager : MonoBehaviour
     // オブジェクト追加時のセーブ処理
     public void InsObjSaving(GameObject targetObj)
     {
+        if(targetObj == null) return;
+        Debug.Log("Add Saving");
+
         // IDの設定
         ObjectID objectID = targetObj.GetComponent<ObjectID>();
         objectID.SetObjID(_worldObjCount);
 
-        string key = WORLDOBJ_KEY + _worldObjCount;
+        string key = WORLD_OBJ_KEY + _worldObjCount;
         // オブジェクトの位置を整数に変換し格納
         Vector3 tmpPos = targetObj.transform.position;
         int x = Mathf.RoundToInt(tmpPos.x);
@@ -164,24 +183,29 @@ public class WorldManager : MonoBehaviour
         }
         _objPosList.Add(pos);
         _objRotList.Add(rot);
-        _objTagList.Add(tag);
-        _objKindList.Add(targetNum);
+        _objShapeList.Add(tag);
+        _objMatList.Add(targetNum);
 
         _worldObjCount  = _objPosList.Count;
         
         // saving.
         _saveManager.DoSaveWorld(key, pos, rot, tag, targetNum);
         _saveManager.DoSaveWorldSize(_worldObjCount);
+
+        SettingInitial();
     }
 
     // オブジェクト変更時のセーブ処理
     public void ChangeObjSaving(GameObject targetObj)
     {
+        if(targetObj == null) return;
+        Debug.Log("Change Saving");
+
         // IDの取得
         ObjectID objectID = targetObj.GetComponent<ObjectID>();
         int targetID = objectID.ThisObjID;
 
-        string key = WORLDOBJ_KEY + targetID;
+        string key = WORLD_OBJ_KEY + targetID;
         // オブジェクトの位置を整数に変換し格納
         Vector3 tmpPos = targetObj.transform.position;
         int x = Mathf.RoundToInt(tmpPos.x);
@@ -219,12 +243,14 @@ public class WorldManager : MonoBehaviour
         }
         _objPosList[targetID] = pos;
         _objRotList[targetID] = rot;
-        _objTagList[targetID] = tag;
-        _objKindList[targetID] = targetNum;
+        _objShapeList[targetID] = tag;
+        _objMatList[targetID] = targetNum;
 
         // saving.
         _saveManager.DoSaveWorld(key, pos, rot, tag, targetNum);
         _saveManager.DoSaveWorldSize(_worldObjCount);
+
+        SettingInitial();
     }
 
     // ワールドのオブジェクト削除時のセーブ
@@ -234,34 +260,43 @@ public class WorldManager : MonoBehaviour
         ObjectID objectID = targetObj.GetComponent<ObjectID>();
         int targetID = objectID.ThisObjID;
 
-        if(targetID >= _worldObjCount)
+        if(targetID > _worldObjCount)
         {
             Debug.LogError("A value that does not exist.");
             return;
         }
+
+        Debug.Log("Delete Saving");
         
         _objPosList.RemoveAt(targetID);
         _objRotList.RemoveAt(targetID);
-        _objTagList.RemoveAt(targetID);
-        _objKindList.RemoveAt(targetID);
+        _objShapeList.RemoveAt(targetID);
+        _objMatList.RemoveAt(targetID);
 
         _worldObjCount  = _objPosList.Count;
 
         for(int i = targetID; i < _worldObjCount; i++)
         {
-            string key = WORLDOBJ_KEY + i;
+            string key = WORLD_OBJ_KEY + i;
             // saving.
-            _saveManager.DoSaveWorld(key, _objPosList[i], _objRotList[i], _objTagList[i], _objKindList[i]);
+            _saveManager.DoSaveWorld(key, _objPosList[i], _objRotList[i], _objShapeList[i], _objMatList[i]);
         }
-
         // saving.
         _saveManager.DoSaveWorldSize(_worldObjCount);
+        SettingInitial();
+    }
+
+    void SettingInitial()
+    {
+        if(!_isInitialization) return;
+        _isInitialization = false;
+        _saveManager.DoSaveWorldInitialization(_isInitialization);
     }
 
     /*------------------------------------------------------------------------*/
 
     // 初期マップの作成用のセーブ処理
-    /*
+    
     void InitialWorldSetting()
     {
         // タグごとにゲームオブジェクトを検索し、taggedObjects1 に結合
@@ -277,7 +312,7 @@ public class WorldManager : MonoBehaviour
 
         for(int i = 0; i < worldObjCount; i++)
         {
-            string key = WORLDOBJ_KEY + i;
+            string key = WORLD_OBJ_KEY + i;
             // オブジェクトの位置を整数に変換し格納
             Vector3 tmpPos = allTaggedObjects[i].transform.position;
             int x = Mathf.RoundToInt(tmpPos.x);
@@ -315,14 +350,16 @@ public class WorldManager : MonoBehaviour
             }
             _objPosList.Add(pos);
             _objRotList.Add(rot);
-            _objTagList.Add(tag);
-            _objKindList.Add(targetNum);
+            _objShapeList.Add(tag);
+            _objMatList.Add(targetNum);
+
+            _saveManager.DoSaveWorld(key, pos, rot, tag, targetNum);
         }
         
         _defaultWorldData.ObjPositions = _objPosList;
         _defaultWorldData.ObjRotations = _objRotList;
-        _defaultWorldData.ObjTags = _objTagList;
-        _defaultWorldData.ObjKinds = _objKindList;
+        _defaultWorldData.ObjTags = _objShapeList;
+        _defaultWorldData.ObjKinds = _objMatList;
         _defaultWorldData.WorldObjCount = _defaultWorldData.ObjPositions.Count;
 
         //ダーティとしてマークする(変更があった事を記録する)
@@ -331,6 +368,6 @@ public class WorldManager : MonoBehaviour
         //保存する
         AssetDatabase.SaveAssets();
     }
-    */
+    
     
 }
