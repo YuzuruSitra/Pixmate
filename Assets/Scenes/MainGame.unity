@@ -12895,7 +12895,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _itemCube: {fileID: 433200320}
-  _pixmateGenerate: {fileID: 0}
+  _pixmateGenerate: {fileID: 433200319}
 --- !u!1 &1127278022
 GameObject:
   m_ObjectHideFlags: 0

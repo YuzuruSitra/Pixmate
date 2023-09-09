@@ -67,7 +67,7 @@ public class PixmatesManager : MonoBehaviour
             }
 
             // ※ロードした値に変更予定
-            Vector3 randomPosition = new Vector3( UnityEngine.Random.Range(-4f, 5f), 1f, UnityEngine.Random.Range(-4f, 5f));
+            Vector3 randomPosition = new Vector3( UnityEngine.Random.Range(-3f, 4f), 1f, UnityEngine.Random.Range(-3f, 4f));
             Vector3 scale = new Vector3(0.15f, 0.15f, 0.15f);
             Quaternion rot = Quaternion.Euler(0f, UnityEngine.Random.Range(-180f, 181f), 0f); 
             Array.Resize(ref _pixmateFoxes, _pixmateFoxes.Length + 1);

@@ -267,7 +267,7 @@ public class WorldManager : MonoBehaviour
         }
 
         Debug.Log("Delete Saving");
-        
+        // 修正予定:削除時にIDをソートし直す必要あり
         _objPosList.RemoveAt(targetID);
         _objRotList.RemoveAt(targetID);
         _objShapeList.RemoveAt(targetID);
