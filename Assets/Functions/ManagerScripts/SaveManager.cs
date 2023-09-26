@@ -8,6 +8,10 @@ public class SaveManager : MonoBehaviour
 {
     // 他スクリプトでも呼べるようにインスタンス化
     public static SaveManager InstanceSaveManager;
+
+    private QuickSaveReader _reader;
+    private QuickSaveWriter _writer;
+
     // MaterialBunker
     private const string PHOTO_SPRITE_KEY = "_Sprite";
     private const string PHOTO_NAME_KEY = "_Name";
@@ -33,6 +37,12 @@ public class SaveManager : MonoBehaviour
         QuickSaveGlobalSettings.StorageLocation = Application.dataPath;
 
         DoEncryption();
+
+        // QuickSaveSettingsのインスタンスを作成
+        QuickSaveSettings settings = new QuickSaveSettings();
+
+        _writer = QuickSaveWriter.Create("Player",settings);
+        _reader = QuickSaveReader.Create("Player", settings);
     }
 
     private void DoEncryption()//暗号化処理
@@ -50,66 +60,46 @@ public class SaveManager : MonoBehaviour
     // マテリアルのセーブ処理
     public void DoSaveMaterialCount(int matCount)
     {
-        // QuickSaveSettingsのインスタンスを作成
-        QuickSaveSettings settings = new QuickSaveSettings();
-        // QuickSaveWriterのインスタンスを作成
-        QuickSaveWriter writer = QuickSaveWriter.Create("Player",settings);
-
         // データを書き込む
-        writer.Write("matCount", matCount);
+        _writer.Write("matCount", matCount);
         // 変更を反映
-        writer.Commit();
+        _writer.Commit();
     }
 
     public void DoSaveMaterial(Sprite savaSprite, string savaName, string key)
     {
-        // QuickSaveSettingsのインスタンスを作成
-        QuickSaveSettings settings = new QuickSaveSettings();
-        // QuickSaveWriterのインスタンスを作成
-        QuickSaveWriter writer = QuickSaveWriter.Create("Player",settings);
-
         // Spriteとその名前のセーブ
         string savePhotoSpriteKey = key + PHOTO_SPRITE_KEY;
-        writer.Write(savePhotoSpriteKey, savaSprite);
+        _writer.Write(savePhotoSpriteKey, savaSprite);
 
         string savePhotoNamesKey = key + PHOTO_NAME_KEY;
-        writer.Write(savePhotoNamesKey, savaName);
+        _writer.Write(savePhotoNamesKey, savaName);
 
         // 変更を反映
-        writer.Commit();
+        _writer.Commit();
     }
 
     // Spriteのセーブ処理
     public void DoSaveSprite(int matCount, Sprite sprite,string name,string key)
     {
-        // QuickSaveSettingsのインスタンスを作成
-        QuickSaveSettings settings = new QuickSaveSettings();
-        // QuickSaveWriterのインスタンスを作成
-        QuickSaveWriter writer = QuickSaveWriter.Create("Player",settings);
-
         // データを書き込む
-        writer.Write("matCount", matCount);
-        writer.Write(key + PHOTO_SPRITE_KEY, sprite);
-        writer.Write(key + PHOTO_NAME_KEY, name);
+        _writer.Write("matCount", matCount);
+        _writer.Write(key + PHOTO_SPRITE_KEY, sprite);
+        _writer.Write(key + PHOTO_NAME_KEY, name);
 
         // 変更を反映
-        writer.Commit();
+        _writer.Commit();
     }
 
     // Pixmateのセーブ処理
     public void DoSavePixmates(int count, Sprite sprite,string key)
     {
-        // QuickSaveSettingsのインスタンスを作成
-        QuickSaveSettings settings = new QuickSaveSettings();
-        // QuickSaveWriterのインスタンスを作成
-        QuickSaveWriter writer = QuickSaveWriter.Create("Player",settings);
-
         // データを書き込む
-        writer.Write("pixmateCount", count);
-        writer.Write(key + PIXMATE_TEXTURE_KEY, sprite);
+        _writer.Write("pixmateCount", count);
+        _writer.Write(key + PIXMATE_TEXTURE_KEY, sprite);
         
         // 変更を反映
-        writer.Commit();
+        _writer.Commit();
     }
 
     // Worldのセーブ処理
@@ -118,48 +108,33 @@ public class SaveManager : MonoBehaviour
 
     public void DoSaveWorldInitialization(bool initial)
     {
-        // QuickSaveSettingsのインスタンスを作成
-        QuickSaveSettings settings = new QuickSaveSettings();
-        // QuickSaveWriterのインスタンスを作成
-        QuickSaveWriter writer = QuickSaveWriter.Create("Player",settings);
-
         // データを書き込む
-        writer.Write("worldInitialization", initial);
+        _writer.Write("worldInitialization", initial);
 
         // 変更を反映
-        writer.Commit();
+        _writer.Commit();
     }
     
     public void DoSaveWorldSize(int count)
     {
-        // QuickSaveSettingsのインスタンスを作成
-        QuickSaveSettings settings = new QuickSaveSettings();
-        // QuickSaveWriterのインスタンスを作成
-        QuickSaveWriter writer = QuickSaveWriter.Create("Player",settings);
-
         // データを書き込む
-        writer.Write("worldObjCount", count);
+        _writer.Write("worldObjCount", count);
 
         // 変更を反映
-        writer.Commit();
+        _writer.Commit();
     }
 
     // Object情報をセーブ
     public void DoSaveWorld(string key, Vector3 pos, Quaternion rot, string shape, int mat)
     {
-        // QuickSaveSettingsのインスタンスを作成
-        QuickSaveSettings settings = new QuickSaveSettings();
-        // QuickSaveWriterのインスタンスを作成
-        QuickSaveWriter writer = QuickSaveWriter.Create("Player",settings);
-
         // データを書き込む
-        writer.Write(key + WORLDOBJ_POS_KEY, pos);
-        writer.Write(key + WORLDOBJ_ROT_KEY, rot);
-        writer.Write(key + WORLDOBJ_SHAPE_KEY, shape);
-        writer.Write(key + WORLDOBJ_MAT_KEY, mat);
+        _writer.Write(key + WORLDOBJ_POS_KEY, pos);
+        _writer.Write(key + WORLDOBJ_ROT_KEY, rot);
+        _writer.Write(key + WORLDOBJ_SHAPE_KEY, shape);
+        _writer.Write(key + WORLDOBJ_MAT_KEY, mat);
 
         // 変更を反映
-        writer.Commit();
+        _writer.Commit();
     }
 
     // データの読み込み
@@ -167,140 +142,77 @@ public class SaveManager : MonoBehaviour
     // MaterialBunker
     public int LoadCountMat()
     {
-        // QuickSaveSettingsのインスタンスを作成
-        QuickSaveSettings settings = new QuickSaveSettings();
-        // QuickSaveReaderのインスタンスを作成
-        QuickSaveReader reader = QuickSaveReader.Create("Player", settings);
-
-        return reader.Read<int>("matCount");
+        return _reader.Read<int>("matCount");
     }
 
     public Sprite LoadMaterialSprite(string key)
     {
-        // QuickSaveSettingsのインスタンスを作成
-        QuickSaveSettings settings = new QuickSaveSettings();
-        // QuickSaveReaderのインスタンスを作成
-        QuickSaveReader reader = QuickSaveReader.Create("Player", settings);
-
         string loadTextureKey = key + PHOTO_SPRITE_KEY;
-        return reader.Read<Sprite>(loadTextureKey);
+        return _reader.Read<Sprite>(loadTextureKey);
     }
 
     public string LoadMaterialSpriteName(string key)
     {
-        // QuickSaveSettingsのインスタンスを作成
-        QuickSaveSettings settings = new QuickSaveSettings();
-        // QuickSaveReaderのインスタンスを作成
-        QuickSaveReader reader = QuickSaveReader.Create("Player", settings);
-
         string loadPhotoNamesKey = key + PHOTO_NAME_KEY;
-        return reader.Read<string>(loadPhotoNamesKey);
+        return _reader.Read<string>(loadPhotoNamesKey);
     }
 
     // PixmatesManager
     public int LoadPixmateCount()
     {
-        // QuickSaveSettingsのインスタンスを作成
-        QuickSaveSettings settings = new QuickSaveSettings();
-        // QuickSaveReaderのインスタンスを作成
-        QuickSaveReader reader = QuickSaveReader.Create("Player", settings);
-
-        return reader.Read<int>("pixmateCount");
+        return _reader.Read<int>("pixmateCount");
         // デバッグ用
         //return 0;
     }
 
     public Sprite LoadPixmateSprite(string key)
     {
-        // QuickSaveSettingsのインスタンスを作成
-        QuickSaveSettings settings = new QuickSaveSettings();
-        // QuickSaveReaderのインスタンスを作成
-        QuickSaveReader reader = QuickSaveReader.Create("Player", settings);
-
         string loadTextureKey = key + PIXMATE_TEXTURE_KEY;
-        return reader.Read<Sprite>(loadTextureKey);
+        return _reader.Read<Sprite>(loadTextureKey);
     }
 
     // WorldManager
 
     public bool LoadWorldInitialization()
-    {
-        // QuickSaveSettingsのインスタンスを作成
-        QuickSaveSettings settings = new QuickSaveSettings();
-        // QuickSaveReaderのインスタンスを作成
-        QuickSaveReader reader = QuickSaveReader.Create("Player", settings);
-        
-        return reader.Read<bool>("worldInitialization"); 
+    {        
+        return _reader.Read<bool>("worldInitialization"); 
     }
+
     public int LoadWorldSize()
     {
-        // QuickSaveSettingsのインスタンスを作成
-        QuickSaveSettings settings = new QuickSaveSettings();
-        // QuickSaveReaderのインスタンスを作成
-        QuickSaveReader reader = QuickSaveReader.Create("Player", settings);
-        
-        return reader.Read<int>("worldObjCount"); 
+        return _reader.Read<int>("worldObjCount");
     }
 
     public Vector3 LoadWorldObjPos(string key)
     {
-        // QuickSaveSettingsのインスタンスを作成
-        QuickSaveSettings settings = new QuickSaveSettings();
-        // QuickSaveReaderのインスタンスを作成
-        QuickSaveReader reader = QuickSaveReader.Create("Player", settings);
-
-        // データを書き込む
-        return reader.Read<Vector3>(key + WORLDOBJ_POS_KEY); 
+        return _reader.Read<Vector3>(key + WORLDOBJ_POS_KEY);
     }
 
     public Quaternion LoadWorldObjRot(string key)
     {
-        // QuickSaveSettingsのインスタンスを作成
-        QuickSaveSettings settings = new QuickSaveSettings();
-        // QuickSaveReaderのインスタンスを作成
-        QuickSaveReader reader = QuickSaveReader.Create("Player", settings);
-
-        // データを書き込む
-        return reader.Read<Quaternion>(key + WORLDOBJ_ROT_KEY); 
+        return _reader.Read<Quaternion>(key + WORLDOBJ_ROT_KEY);
     }
 
     public string LoadWorldObjShape(string key)
     {
-        // QuickSaveSettingsのインスタンスを作成
-        QuickSaveSettings settings = new QuickSaveSettings();
-        // QuickSaveReaderのインスタンスを作成
-        QuickSaveReader reader = QuickSaveReader.Create("Player", settings);
-
-        // データを書き込む
-        return reader.Read<string>(key + WORLDOBJ_SHAPE_KEY); 
+        return _reader.Read<string>(key + WORLDOBJ_SHAPE_KEY);
     }
 
     public int LoadWorldObjMat(string key)
     {
-        // QuickSaveSettingsのインスタンスを作成
-        QuickSaveSettings settings = new QuickSaveSettings();
-        // QuickSaveReaderのインスタンスを作成
-        QuickSaveReader reader = QuickSaveReader.Create("Player", settings);
-
-        // データを書き込む
-        return reader.Read<int>(key + WORLDOBJ_MAT_KEY); 
+        return _reader.Read<int>(key + WORLDOBJ_MAT_KEY);
     }
 
     //データ削除
     public void DeleteDate()
     {
-        // QuickSaveSettingsのインスタンスを作成
-        QuickSaveSettings settings = new QuickSaveSettings();
-        // QuickSaveWriterのインスタンスを作成
-        QuickSaveWriter writer = QuickSaveWriter.Create("Player", settings);
-
         // 初期データ
-        writer.Write("matCount", 0);
+        _writer.Write("matCount", 0);
         MaterialBunker materialBunker = MaterialBunker.InstanceMatBunker;
         materialBunker.CroppedImages.Clear();
 
         // データを書き込む
-        writer.Commit();
+        _writer.Commit();
     }
 }
 

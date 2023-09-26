@@ -37,7 +37,8 @@ public class WorldManager : MonoBehaviour
 
     /*------------------------------------------------------------------------*/
 
-    // マテリアルのロード処理（仮）
+    // ワールドのロード処理（仮）
+    
     public void WorldLoad()
     {
         _isInitialization = _saveManager.LoadWorldInitialization();
@@ -87,13 +88,14 @@ public class WorldManager : MonoBehaviour
             }
 
             Renderer renderer = insObj.GetComponent<Renderer>();
-            renderer.material = assignMat;
+            renderer.GetComponent<Renderer>().material = assignMat;
 
             // IDの割り振り
             ObjectID objectID = insObj.GetComponent<ObjectID>();
             objectID.SetObjID(i);
         }
     }
+    
 
     int GetItemKind(string tag)
     {
