@@ -15,10 +15,15 @@ public class WorldManager : MonoBehaviour
     [SerializeField] 
     private DefaultWorldData _defaultWorldData;
 
+    [SerializeField]
     private List<Vector3> _objPosList = new List<Vector3>();
+    [SerializeField]
     private List<Quaternion> _objRotList = new List<Quaternion>();
+    [SerializeField]
     private List<string> _objShapeList = new List<string>();
+    [SerializeField]
     private List<int> _objMatList = new List<int>();
+    [SerializeField]
     private int _worldObjCount;
 
     void Awake()
@@ -32,7 +37,7 @@ public class WorldManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _saveManager = SaveManager.InstanceSaveManager;
+        
     }
 
     /*------------------------------------------------------------------------*/
@@ -41,7 +46,9 @@ public class WorldManager : MonoBehaviour
     
     public void WorldLoad()
     {
-        _isInitialization = _saveManager.LoadWorldInitialization();
+        _saveManager = SaveManager.InstanceSaveManager;
+        //_isInitialization = _saveManager.LoadWorldInitialization();
+        _isInitialization = true;
         if(_isInitialization)
         {
             _worldObjCount  = _defaultWorldData.WorldObjCount;
@@ -53,6 +60,14 @@ public class WorldManager : MonoBehaviour
         else
         {
             _worldObjCount = _saveManager.LoadWorldSize();
+            // 例外が起きた場合初期マップをロード
+            if(_worldObjCount == 0) 
+            {
+                _saveManager.DoSaveWorldInitialization(true);
+                WorldLoad();
+                return;
+            }
+
             for(int i = 0; i < _worldObjCount; i++)
             {
                 string key = WORLD_OBJ_KEY + i;
@@ -94,6 +109,24 @@ public class WorldManager : MonoBehaviour
             ObjectID objectID = insObj.GetComponent<ObjectID>();
             objectID.SetObjID(i);
         }
+
+        // 初めてワールドを生成した場合はセーブする。
+        if(!_isInitialization) return;
+
+        Debug.Log(_worldObjCount);
+        for(int i = 0; i < _worldObjCount; i++)
+        {
+            if(_saveManager == null)
+            {
+                Debug.Log("null");
+                return;
+            }
+            string key = WORLD_OBJ_KEY + i;
+            Debug.Log("key:" + key + " pos:" + _objPosList[i] + " rot:" + _objRotList[i] + " shape:" + _objShapeList[i] + " mat:" + _objMatList[i]);
+            _saveManager.DoSaveWorld(key, _objPosList[i], _objRotList[i], _objShapeList[i], _objMatList[i]);
+        }
+        _saveManager.DoSaveWorldSize(_worldObjCount);
+
     }
     
 
@@ -298,7 +331,9 @@ public class WorldManager : MonoBehaviour
     /*------------------------------------------------------------------------*/
 
     // 初期マップの作成用のセーブ処理
+
     
+#if UNITY_EDITOR
     void InitialWorldSetting()
     {
         // タグごとにゲームオブジェクトを検索し、taggedObjects1 に結合
@@ -370,6 +405,7 @@ public class WorldManager : MonoBehaviour
         //保存する
         AssetDatabase.SaveAssets();
     }
+#endif
     
     
 }

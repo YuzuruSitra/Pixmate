@@ -1,10 +1,14 @@
 using UnityEngine;
 using System.IO;
+using System.Diagnostics;
 
 public class MaterialCreator : MonoBehaviour
 {
+    /*
     public Color materialColor = Color.white;
 
+
+    [Conditional("UNITY_EDITOR")]
     void Start()
     {
         CreateAndSaveMaterial(materialColor);
@@ -38,6 +42,7 @@ public class MaterialCreator : MonoBehaviour
 
         return newMaterial;
     }
+    */
 }
 
 

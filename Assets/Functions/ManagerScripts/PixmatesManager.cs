@@ -39,14 +39,14 @@ public class PixmatesManager : MonoBehaviour
         _saveManager = SaveManager.InstanceSaveManager;
         
         // ロード処理
-        _pixmatesCount = _saveManager.LoadPixmateCount();
+        // _pixmatesCount = _saveManager.LoadPixmateCount();
         for(int i = 0; i < _pixmatesCount; i++)
         {
             // CroppedImagesに追加。
             int nameCount = i + 1;
             string addTmpKey = PIXMATE_KEY + nameCount;
             Sprite sprite = _saveManager.LoadPixmateSprite(addTmpKey);
-            _textureImages.Add(addTmpKey, sprite);
+            if(sprite != null) _textureImages.Add(addTmpKey, sprite);
         }
 
         // Pixmateの生成

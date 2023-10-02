@@ -50,7 +50,7 @@ public class MaterialBunker : MonoBehaviour
         _saveManager = SaveManager.InstanceSaveManager;
 
         // ロード処理
-        MatCount = _saveManager.LoadCountMat();
+        // MatCount = _saveManager.LoadCountMat();
         for(int i = 0; i < MatCount; i++)
         {
             int nameCount = i + 1;
@@ -58,11 +58,11 @@ public class MaterialBunker : MonoBehaviour
 
             // CroppedImagesに追加。
             Sprite tmpPhotoSpriteValue = _saveManager.LoadMaterialSprite(addTmpKey);
-            CroppedImages.Add(addTmpKey, tmpPhotoSpriteValue);
+            if(tmpPhotoSpriteValue != null) CroppedImages.Add(addTmpKey, tmpPhotoSpriteValue);
 
             // ImageNamesに追加。
             string tmpPhotoNamesValue = _saveManager.LoadMaterialSpriteName(addTmpKey);
-            ImageNames.Add(addTmpKey, tmpPhotoNamesValue);
+            if(tmpPhotoNamesValue != null) ImageNames.Add(addTmpKey, tmpPhotoNamesValue);
         }
 
         SetMaterials();

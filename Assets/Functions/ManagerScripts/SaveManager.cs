@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using CI.QuickSave;
+using System; 
 
 // ゲームデータのセーブ管理
 public class SaveManager : MonoBehaviour
@@ -29,32 +30,28 @@ public class SaveManager : MonoBehaviour
         {
             InstanceSaveManager= this;
         }
+
     }
 
     void Start()
     {
-        // データの保存先をApplication.dataPathに変更
-        QuickSaveGlobalSettings.StorageLocation = Application.dataPath;
-
-        DoEncryption();
-
-        // QuickSaveSettingsのインスタンスを作成
-        QuickSaveSettings settings = new QuickSaveSettings();
-
-        _writer = QuickSaveWriter.Create("Player",settings);
-        _reader = QuickSaveReader.Create("Player", settings);
-    }
-
-    private void DoEncryption()//暗号化処理
-    {
+        // データの保存先をApplication.persistentDataPathに変更
+        QuickSaveGlobalSettings.StorageLocation = Application.persistentDataPath;
+        Debug.Log(Application.persistentDataPath);
         // QuickSaveSettingsのインスタンスを作成
         QuickSaveSettings settings = new QuickSaveSettings();
         // 暗号化の方法
-        settings.SecurityMode = SecurityMode.None;
+        settings.SecurityMode = SecurityMode.Aes;
         // 暗号化キー
-        settings.Password = "Pass";
+        settings.Password = "Password";
         // 圧縮の方法
         settings.CompressionMode = CompressionMode.Gzip;
+
+        _writer = QuickSaveWriter.Create("Player1", settings);
+        _reader = QuickSaveReader.Create("Player1", settings);
+        Debug.Log(_writer);
+        Debug.Log(_reader);
+        
     }
 
     // マテリアルのセーブ処理
@@ -142,45 +139,109 @@ public class SaveManager : MonoBehaviour
     // MaterialBunker
     public int LoadCountMat()
     {
-        return _reader.Read<int>("matCount");
+        try
+        {
+            return _reader.Read<int>("matCount");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogWarning("データの読み込みエラー: " + ex.Message);
+
+            return 0; 
+        }
     }
 
     public Sprite LoadMaterialSprite(string key)
     {
         string loadTextureKey = key + PHOTO_SPRITE_KEY;
-        return _reader.Read<Sprite>(loadTextureKey);
+        try
+        {
+            return _reader.Read<Sprite>(loadTextureKey);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogWarning("データの読み込みエラー: " + ex.Message);
+
+            return null; 
+        }
     }
 
     public string LoadMaterialSpriteName(string key)
     {
         string loadPhotoNamesKey = key + PHOTO_NAME_KEY;
-        return _reader.Read<string>(loadPhotoNamesKey);
+        try
+        {
+            return _reader.Read<string>(loadPhotoNamesKey);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogWarning("データの読み込みエラー: " + ex.Message);
+
+            return null; 
+        }
     }
 
     // PixmatesManager
     public int LoadPixmateCount()
     {
-        return _reader.Read<int>("pixmateCount");
         // デバッグ用
-        //return 0;
+        return 0;
+        try
+        {
+            return _reader.Read<int>("pixmateCount");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogWarning("データの読み込みエラー: " + ex.Message);
+
+            return 0; 
+        }
     }
 
     public Sprite LoadPixmateSprite(string key)
     {
         string loadTextureKey = key + PIXMATE_TEXTURE_KEY;
-        return _reader.Read<Sprite>(loadTextureKey);
+        try
+        {
+            return _reader.Read<Sprite>(loadTextureKey);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogWarning("データの読み込みエラー: " + ex.Message);
+
+            return null; 
+        }
     }
 
     // WorldManager
 
     public bool LoadWorldInitialization()
     {        
-        return _reader.Read<bool>("worldInitialization"); 
+        // ワールドのセーブデータがなかった場合はtrueを返す。
+        try
+        {
+            return _reader.Read<bool>("worldInitialization");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogWarning("データの読み込みエラー: " + ex.Message);
+
+            return true; 
+        }
     }
 
     public int LoadWorldSize()
     {
-        return _reader.Read<int>("worldObjCount");
+        try
+        {
+            return _reader.Read<int>("worldObjCount");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogWarning("データの読み込みエラー: " + ex.Message);
+
+            return 0; 
+        }
     }
 
     public Vector3 LoadWorldObjPos(string key)
