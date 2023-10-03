@@ -47,8 +47,8 @@ public class WorldManager : MonoBehaviour
     public void WorldLoad()
     {
         _saveManager = SaveManager.InstanceSaveManager;
-        //_isInitialization = _saveManager.LoadWorldInitialization();
-        _isInitialization = true;
+        _isInitialization = _saveManager.LoadWorldInitialization();
+        //_isInitialization = true;
         if(_isInitialization)
         {
             _worldObjCount  = _defaultWorldData.WorldObjCount;
@@ -116,13 +116,7 @@ public class WorldManager : MonoBehaviour
         Debug.Log(_worldObjCount);
         for(int i = 0; i < _worldObjCount; i++)
         {
-            if(_saveManager == null)
-            {
-                Debug.Log("null");
-                return;
-            }
             string key = WORLD_OBJ_KEY + i;
-            Debug.Log("key:" + key + " pos:" + _objPosList[i] + " rot:" + _objRotList[i] + " shape:" + _objShapeList[i] + " mat:" + _objMatList[i]);
             _saveManager.DoSaveWorld(key, _objPosList[i], _objRotList[i], _objShapeList[i], _objMatList[i]);
         }
         _saveManager.DoSaveWorldSize(_worldObjCount);
@@ -199,17 +193,20 @@ public class WorldManager : MonoBehaviour
         int maxMat = MaterialBunker.MATERIAL_AMOUNT;
         switch(targetName)
         {
-            case "GrassMat (Instance)":
+            case "DefaultMat (Instance)":
                 targetNum = maxMat;
                 break;
-            case "SandMat (Instance)":
+            case "GrassMat (Instance)":
                 targetNum = maxMat + 1;
                 break;
-            case "StemMat (Instance)":
+            case "SandMat (Instance)":
                 targetNum = maxMat + 2;
                 break;
-            case "LeafMat (Instance)":
+            case "StemMat (Instance)":
                 targetNum = maxMat + 3;
+                break;
+            case "LeafMat (Instance)":
+                targetNum = maxMat + 4;
                 break;
             default:
                 TryGetKey tryGetKey = new TryGetKey();
@@ -259,17 +256,20 @@ public class WorldManager : MonoBehaviour
         int maxMat = MaterialBunker.MATERIAL_AMOUNT;
         switch(targetName)
         {
-            case "GrassMat (Instance)":
+            case "DefaultMat (Instance)":
                 targetNum = maxMat;
                 break;
-            case "SandMat (Instance)":
+            case "GrassMat (Instance)":
                 targetNum = maxMat + 1;
                 break;
-            case "StemMat (Instance)":
+            case "SandMat (Instance)":
                 targetNum = maxMat + 2;
                 break;
-            case "LeafMat (Instance)":
+            case "StemMat (Instance)":
                 targetNum = maxMat + 3;
+                break;
+            case "LeafMat (Instance)":
+                targetNum = maxMat + 4;
                 break;
             default:
                 TryGetKey tryGetKey = new TryGetKey();
@@ -347,6 +347,8 @@ public class WorldManager : MonoBehaviour
         
         int worldObjCount = allTaggedObjects.Length;
 
+        SaveManager saveManager = SaveManager.InstanceSaveManager;
+
         for(int i = 0; i < worldObjCount; i++)
         {
             string key = WORLD_OBJ_KEY + i;
@@ -368,17 +370,20 @@ public class WorldManager : MonoBehaviour
             int maxMat = MaterialBunker.MATERIAL_AMOUNT;
             switch(targetName)
             {
-                case "GrassMat (Instance)":
+                case "DefaultMat (Instance)":
                     targetNum = maxMat;
                     break;
-                case "SandMat (Instance)":
+                case "GrassMat (Instance)":
                     targetNum = maxMat + 1;
                     break;
-                case "StemMat (Instance)":
+                case "SandMat (Instance)":
                     targetNum = maxMat + 2;
                     break;
-                case "LeafMat (Instance)":
+                case "StemMat (Instance)":
                     targetNum = maxMat + 3;
+                    break;
+                case "LeafMat (Instance)":
+                    targetNum = maxMat + 4;
                     break;
                 default:
                     TryGetKey tryGetKey = new TryGetKey();
@@ -390,7 +395,7 @@ public class WorldManager : MonoBehaviour
             _objShapeList.Add(tag);
             _objMatList.Add(targetNum);
 
-            _saveManager.DoSaveWorld(key, pos, rot, tag, targetNum);
+            saveManager.DoSaveWorld(key, pos, rot, tag, targetNum);
         }
         
         _defaultWorldData.ObjPositions = _objPosList;

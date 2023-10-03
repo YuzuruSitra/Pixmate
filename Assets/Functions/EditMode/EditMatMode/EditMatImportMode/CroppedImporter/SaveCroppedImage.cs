@@ -16,19 +16,7 @@ public class SaveCroppedImage : MonoBehaviour
         Texture2D saveTexture = croppedTexture;
         saveTexture = ResizeTexture(saveTexture, CROP_SIZE, CROP_SIZE);
 
-
         MaterialBunker materialBunker = MaterialBunker.InstanceMatBunker;
-
-        string path = Path.Combine(Application.dataPath, "Resources/CroppedImages");
-        if (!Directory.Exists(path)) Directory.CreateDirectory(path);
-
-        // 保存するマテリアルのパスを設定
-        int imageIndex = materialBunker.MatCount + 1;
-        string fileName = $"CroppedImage_{imageIndex}.png";
-        string filePath = Path.Combine(path, fileName);
-
-        byte[] pngData = saveTexture.EncodeToPNG();
-        File.WriteAllBytes(filePath, pngData);
 
         Sprite newSprite = Sprite.Create(saveTexture, new Rect(0f, 0f, saveTexture.width, saveTexture.height), new Vector2(0.5f, 0.5f));
         //スプライトを保存

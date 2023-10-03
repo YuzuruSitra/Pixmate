@@ -37,7 +37,7 @@ public class SaveManager : MonoBehaviour
     {
         // データの保存先をApplication.persistentDataPathに変更
         QuickSaveGlobalSettings.StorageLocation = Application.persistentDataPath;
-        Debug.Log(Application.persistentDataPath);
+
         // QuickSaveSettingsのインスタンスを作成
         QuickSaveSettings settings = new QuickSaveSettings();
         // 暗号化の方法
@@ -47,10 +47,8 @@ public class SaveManager : MonoBehaviour
         // 圧縮の方法
         settings.CompressionMode = CompressionMode.Gzip;
 
-        _writer = QuickSaveWriter.Create("Player1", settings);
-        _reader = QuickSaveReader.Create("Player1", settings);
-        Debug.Log(_writer);
-        Debug.Log(_reader);
+        _writer = QuickSaveWriter.Create("Player", settings);
+        _reader = QuickSaveReader.Create("Player", settings);
         
     }
 
@@ -185,7 +183,7 @@ public class SaveManager : MonoBehaviour
     public int LoadPixmateCount()
     {
         // デバッグ用
-        return 0;
+        //return 0;
         try
         {
             return _reader.Read<int>("pixmateCount");

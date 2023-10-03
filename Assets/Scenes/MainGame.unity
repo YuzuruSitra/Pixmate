@@ -10555,7 +10555,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mapParent: {fileID: 79959079}
-  _defaultWorldData: {fileID: 11400000, guid: bbed436747facd541b4a735c63bc3e3c, type: 2}
+  _defaultWorldData: {fileID: 11400000, guid: 763a79e5ffcd84a8580c79002cab3d7a, type: 2}
+  _objPosList: []
+  _objRotList: []
+  _objShapeList: []
+  _objMatList: 
+  _worldObjCount: 0
 --- !u!1 &961442007
 GameObject:
   m_ObjectHideFlags: 0
@@ -12382,6 +12387,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: c7840953a03b44e4fbb44c796351d872, type: 2}
   - {fileID: 2100000, guid: 0ab66de84bbcf47b59831d8aa2d850cb, type: 2}
   DefaultMat:
+  - {fileID: 2100000, guid: 245e56ecdb5cd4cb5838f30d6d53677a, type: 2}
   - {fileID: 2100000, guid: e7dc08451d7d94d98a6611816bdbda6c, type: 2}
   - {fileID: 2100000, guid: a867db4e43b7b4522ac115e22f7482b8, type: 2}
   - {fileID: 2100000, guid: 351dbd30157794cf9b73d74c04bacd7b, type: 2}
@@ -19162,7 +19168,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1618412035
 Transform:
   m_ObjectHideFlags: 0
@@ -20180,6 +20186,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e48298968c4d4c29817a17f32b10ef5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _importImageFromGallery: {fileID: 2076616537}
   _stateManager: {fileID: 201916548}
   _importModeOrder: {fileID: 974203577}
   _galleryShow: {fileID: 313173905}

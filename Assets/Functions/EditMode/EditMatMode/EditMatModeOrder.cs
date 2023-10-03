@@ -4,9 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+
 public class EditMatModeOrder : MonoBehaviour
 {
     MaterialBunker _materialBunker;
+    [SerializeField]
+    private ImportImageFromGallery _importImageFromGallery;
 
     [SerializeField] 
     private StateManager _stateManager;
@@ -59,6 +62,8 @@ public class EditMatModeOrder : MonoBehaviour
 
         // プールの生成とリスナー登録
         SetPoolListener();
+        // ImageImport add listener
+        _importImageFromGallery.IsImportedSuccess += CloseImporteMode;
     }
 
     void OnDestroy()
@@ -85,9 +90,16 @@ public class EditMatModeOrder : MonoBehaviour
 
     void GoImportMode()
     {
+        Debug.Log("PushImport");
         _stateManager.ChangeState(StateManager.GameState.EditMatImportMode);
-        // インポートしなかった場合EditMatModeに戻す
-        if(!_importModeOrder.ActiveImportMode)_stateManager.ChangeState(StateManager.GameState.EditMatMode);
+    }
+
+    // インポートしなかった場合EditMatModeに戻す
+    void CloseImporteMode(bool isSuccess)
+    {
+        if(isSuccess) return;
+        Debug.Log("CloseImporteMode" + isSuccess);
+        _stateManager.ChangeState(StateManager.GameState.EditMatMode);
     }
 
     /*---------------------------------------------*/

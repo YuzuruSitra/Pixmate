@@ -7,9 +7,9 @@ public class ImportModeOrder : MonoBehaviour
 {
     [SerializeField] 
     private StateManager _stateManager;
-    
-    [SerializeField] 
+    [SerializeField]
     private ImportImageFromGallery _importImageFromGallery;
+
     [SerializeField] 
     private SaveCroppedImage _saveCroppedImage;
     [SerializeField] 
@@ -31,7 +31,6 @@ public class ImportModeOrder : MonoBehaviour
     private bool _activeImportMode = false;
     public bool ActiveImportMode => _activeImportMode;
 
-
     void Start()
     {
         _stateManager.OnStateChanged += OpenImageImport;
@@ -41,6 +40,8 @@ public class ImportModeOrder : MonoBehaviour
         _importButton.onClick.AddListener(DoneImport);
         _reverseButton.onClick.AddListener(_cropImage.ReverseTexture2D);
         _rotateButton.onClick.AddListener(_cropImage.RotateTexture2D);
+
+    _importImageFromGallery.IsImportedSuccess += SucceseImported;
     }
 
     void Update()
@@ -61,10 +62,14 @@ public class ImportModeOrder : MonoBehaviour
 
         // インポート
         _importImageFromGallery.ImportImage(_imageImportFlame);
-        _activeImportMode = _importImageFromGallery.ImportSuccess;
-        // クロップ
-        if(!_activeImportMode)return;
 
+    }
+
+    void SucceseImported(bool isSuccess)
+    {
+        _activeImportMode = isSuccess;
+        if(!isSuccess) return;
+        Debug.Log("SucceseImported" + isSuccess);
         _cropImage.DoCropImage(_imageImportFlame);
     }
 

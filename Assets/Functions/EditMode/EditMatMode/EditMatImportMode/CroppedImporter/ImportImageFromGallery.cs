@@ -4,11 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using NativeGalleryNamespace;
 using System.IO;
+using System;
 
 public class ImportImageFromGallery : MonoBehaviour
 {
-    private bool _importSuccess;
-    public bool ImportSuccess => _importSuccess;
+    // インポート成否イベント
+    public event Action<bool> IsImportedSuccess;
 
     // 画像インポート処理
     public void ImportImage(GameObject importImageFlame)
@@ -29,12 +30,16 @@ public class ImportImageFromGallery : MonoBehaviour
     private IEnumerator ImportImageCoroutine(GameObject importImageFlame)
     {
         string imagePath = null;
+        
         NativeGallery.GetImageFromGallery((path) =>
         {
+            Debug.Log("aaa");
             imagePath = path;
+            
             // 画像を選択した場合
             if (imagePath != null)
             {
+                Debug.Log("bbb");
                 // Load the image as a texture
                 Texture2D texture = new Texture2D(1, 1);
                 texture.LoadImage(File.ReadAllBytes(imagePath));
@@ -48,20 +53,26 @@ public class ImportImageFromGallery : MonoBehaviour
                 // Set the sprite to the imported image
                 Image flameImage = importImageFlame.GetComponent<Image>();
                 flameImage.sprite = sprite;
+                
+                // 画像を選択した場合クロップモードへ
+                IsSuccess(true);
+                Debug.Log("ccc");
+            }
+            else
+            {
+                // 画像を選択しなかった場合通常モードに戻る
+                IsSuccess(false);
+                Debug.Log("ddd");
             }
         }, "Select an Image", "image/*");
 
-        if(imagePath != null)
-        {
-            // 画像を選択した場合クロップモードへ
-            _importSuccess = true;
-        }
-        else
-        {
-            // 画像を選択しなかった場合通常モードに戻る
-            _importSuccess = false;
-        }
-        yield return null;
+        yield return null; // コルーチンの完了を示すために必要
+    }
+
+    public void IsSuccess(bool b)
+    {
+        // 同じステートを弾く
+        IsImportedSuccess?.Invoke(b);
     }
 
     private Texture2D ConvertToJPEG(Texture2D inputTexture, int quality = 75)

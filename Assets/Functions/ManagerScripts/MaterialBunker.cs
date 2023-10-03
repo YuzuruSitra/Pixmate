@@ -19,7 +19,7 @@ public class MaterialBunker : MonoBehaviour
     public Dictionary<string, Material> ImageMaterials = new Dictionary<string, Material>();
     public Dictionary<string, string> ImageNames = new Dictionary<string, string>();
     // 初期アセット
-    public Material[] DefaultMat = new Material[4];
+    public Material[] DefaultMat = new Material[5];
 
     // 今所有しているもの
     public string NowHavePhoto = "MaterialNo.1";
@@ -50,7 +50,7 @@ public class MaterialBunker : MonoBehaviour
         _saveManager = SaveManager.InstanceSaveManager;
 
         // ロード処理
-        // MatCount = _saveManager.LoadCountMat();
+        MatCount = _saveManager.LoadCountMat();
         for(int i = 0; i < MatCount; i++)
         {
             int nameCount = i + 1;
