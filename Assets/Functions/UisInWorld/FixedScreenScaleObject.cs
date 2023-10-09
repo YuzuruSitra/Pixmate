@@ -23,6 +23,6 @@ public class FixedScreenScaleObject : MonoBehaviour {
 	}
 
 	private void LateUpdate() {
-		transform.localScale = Vector3.one * _baseScale * GetDistance();
+		// transform.localScale = Vector3.one * _baseScale * GetDistance();
 	}
 }

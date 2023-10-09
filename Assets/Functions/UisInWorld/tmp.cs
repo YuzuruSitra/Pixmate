@@ -10,7 +10,7 @@ public class tmp : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        cardNameText.text = "表示させたい文字列";
+        cardNameText.text = "aaaa";
     }
 
     // Update is called once per frame

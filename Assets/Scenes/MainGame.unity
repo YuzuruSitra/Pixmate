@@ -24863,12 +24863,24 @@ PrefabInstance:
       propertyPath: m_Avatar
       value: 
       objectReference: {fileID: 9000000, guid: 20a3065d4d204514088e1dc15383cf1d, type: 3}
+    - target: {fileID: 4850648707366645641, guid: b6b40119dcff17c4487b2e31bbf05a72, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4850648707366645641, guid: b6b40119dcff17c4487b2e31bbf05a72, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6100250837502869138, guid: b6b40119dcff17c4487b2e31bbf05a72, type: 3}
       propertyPath: m_Name
       value: Pixmate_Fox
       objectReference: {fileID: 0}
     - target: {fileID: 6100250837502869138, guid: b6b40119dcff17c4487b2e31bbf05a72, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247123011377864422, guid: b6b40119dcff17c4487b2e31bbf05a72, type: 3}
+      propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6909543809018979368, guid: b6b40119dcff17c4487b2e31bbf05a72, type: 3}

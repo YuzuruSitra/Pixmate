@@ -18,6 +18,9 @@ public class SaveManager : MonoBehaviour
     private const string PHOTO_NAME_KEY = "_Name";
     // PixmateManager
     private const string PIXMATE_TEXTURE_KEY = "_Texture";
+    private const string PIXMATE_POS_KEY = "_Pos";
+    private const string PIXMATE_SCALE_KEY = "_Scale";
+    private const string PIXMATE_ROT_KEY = "_Rot";
     // WorldManager
     private const string WORLDOBJ_POS_KEY = "_Pos";
     private const string WORLDOBJ_ROT_KEY = "_Rot";
@@ -94,6 +97,24 @@ public class SaveManager : MonoBehaviour
         _writer.Write(key + PIXMATE_TEXTURE_KEY, sprite);
         
         // 変更を反映
+        _writer.Commit();
+    }
+
+    public void DoSavePixmatePos(Vector3 pos, string key)
+    {
+        _writer.Write(key + PIXMATE_POS_KEY, pos);
+        _writer.Commit();
+    }
+
+    public void DoSavePixmateScale(float scale, string key)
+    {
+        _writer.Write(key + PIXMATE_SCALE_KEY, scale);
+        _writer.Commit();
+    }
+
+    public void DoSavePixmateRot(Quaternion rot, string key)
+    {
+        _writer.Write(key + PIXMATE_ROT_KEY, rot);
         _writer.Commit();
     }
 
@@ -191,7 +212,6 @@ public class SaveManager : MonoBehaviour
         catch (Exception ex)
         {
             Debug.LogWarning("データの読み込みエラー: " + ex.Message);
-
             return 0; 
         }
     }
@@ -208,6 +228,51 @@ public class SaveManager : MonoBehaviour
             Debug.LogWarning("データの読み込みエラー: " + ex.Message);
 
             return null; 
+        }
+    }
+
+    public Vector3 LoadPixmatePosition(string key)
+    {
+        string loadPosKey = key + PIXMATE_POS_KEY;
+        try
+        {
+            return _reader.Read<Vector3>(loadPosKey);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogWarning("データの読み込みエラー: " + ex.Message);
+
+            return new Vector3( UnityEngine.Random.Range(-3f, 4f), 1f, UnityEngine.Random.Range(-3f, 4f));
+        }
+    }
+
+    public float LoadPixmateScale(string key , float initialScale)
+    {
+        string loadPosKey = key + PIXMATE_SCALE_KEY;
+        try
+        {
+            return _reader.Read<float>(loadPosKey);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogWarning("データの読み込みエラー: " + ex.Message);
+
+            return initialScale;
+        }
+    }
+
+    public Quaternion LoadPixmateRot(string key)
+    {
+        string loadPosKey = key + PIXMATE_ROT_KEY;
+        try
+        {
+            return _reader.Read<Quaternion>(loadPosKey);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogWarning("データの読み込みエラー: " + ex.Message);
+
+            return Quaternion.Euler(0f, UnityEngine.Random.Range(-180f, 181f), 0f); ;
         }
     }
 

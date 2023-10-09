@@ -6,6 +6,13 @@ using System;
 
 public class PixmatesManager : MonoBehaviour
 {
+    // 最初のサイズと最大サイズ設定
+    public const float INITIAL_SCALE_FOX = 0.15f;
+    private const float MAX_SIZE_FOX = 0.3f;
+    // 単位は分(2は仮置き)
+    private const float GROWTH_TIME = 2f;
+    // Pixmateの成長時間
+    private float _foxGrowSpeed = 0f;
     public static PixmatesManager InstancePixmatesManager;
     SaveManager _saveManager;
 
@@ -25,7 +32,8 @@ public class PixmatesManager : MonoBehaviour
 
     // セーブと紐づけ
     public Dictionary<string, Sprite> _textureImages = new Dictionary<string, Sprite>();
-
+    // 定期セーブの間隔
+    private const float PERIODIC_TIME = 15f;
     void Awake()
     {
         if (InstancePixmatesManager == null)
@@ -37,6 +45,10 @@ public class PixmatesManager : MonoBehaviour
     void Start()
     {
         _saveManager = SaveManager.InstanceSaveManager;
+        // 成長速度の計算
+        _foxGrowSpeed = (MAX_SIZE_FOX - INITIAL_SCALE_FOX) / (GROWTH_TIME * 60);
+        // 成長速度の受け渡し
+        _prefabFox.GetComponent<FoxEcology>().GrowSpeed = _foxGrowSpeed;
         
         // ロード処理
         _pixmatesCount = _saveManager.LoadPixmateCount();
@@ -49,13 +61,14 @@ public class PixmatesManager : MonoBehaviour
             if(sprite != null) _textureImages.Add(addTmpKey, sprite);
         }
 
+        Vector3 insScale = new Vector3(0,0,0);
         // Pixmateの生成
         for(int i = 0; i < _pixmatesCount; i++)
         {
-            string textureKey = PIXMATE_KEY + (i + 1);
+            string key = PIXMATE_KEY + (i + 1);
             Texture2D matTexture = Texture2D.whiteTexture;
             // テクスチャの取得
-            if (_textureImages.TryGetValue(textureKey, out Sprite targetSprite))
+            if (_textureImages.TryGetValue(key, out Sprite targetSprite))
             {
                 matTexture = new Texture2D(targetSprite.texture.width, targetSprite.texture.height, TextureFormat.RGBA32, false);
                 matTexture.SetPixels(targetSprite.texture.GetPixels());
@@ -66,14 +79,18 @@ public class PixmatesManager : MonoBehaviour
                 continue;
             }
 
-            // ※ロードした値に変更予定
-            Vector3 randomPosition = new Vector3( UnityEngine.Random.Range(-3f, 4f), 1f, UnityEngine.Random.Range(-3f, 4f));
-            Vector3 scale = new Vector3(0.15f, 0.15f, 0.15f);
-            Quaternion rot = Quaternion.Euler(0f, UnityEngine.Random.Range(-180f, 181f), 0f); 
+            Vector3 randomPosition = _saveManager.LoadPixmatePosition(key);
+            float scale = _saveManager.LoadPixmateScale(key, INITIAL_SCALE_FOX);
+            insScale.x = scale;
+            insScale.y = scale;
+            insScale.z = scale;
+            Quaternion rot = _saveManager.LoadPixmateRot(key);
             Array.Resize(ref _pixmateFoxes, _pixmateFoxes.Length + 1);
-            _pixmateFoxes[_pixmateFoxes.Length - 1] = InstantiatePixmate(randomPosition, rot, scale, matTexture);
+            _pixmateFoxes[_pixmateFoxes.Length - 1] = InstantiatePixmate(randomPosition, rot, insScale, matTexture);
             ActivationPixmate(_pixmateFoxes[i].GetComponent<FoxEcology>());
         }
+
+        InvokeRepeating("PeriodicSave", PERIODIC_TIME, PERIODIC_TIME);
     }
 
     // Pixmateの動き出し
@@ -107,6 +124,18 @@ public class PixmatesManager : MonoBehaviour
         GameObject childObj = insPixmate.transform.GetChild(0).gameObject;
         childObj.GetComponent<SkinnedMeshRenderer>().material.SetTexture("_BaseMap", texture);
         return insPixmate;
+    }
+
+    // 定期セーブ
+    void PeriodicSave()
+    {
+        for(int i = 0; i < _pixmateFoxes.Length; i++)
+        {
+            string key = PIXMATE_KEY + (i + 1);
+            _saveManager.DoSavePixmatePos(_pixmateFoxes[i].transform.position, key);
+            _saveManager.DoSavePixmateScale(_pixmateFoxes[i].transform.localScale.x, key);
+            _saveManager.DoSavePixmateRot(_pixmateFoxes[i].transform.rotation, key);
+        }
     }
 
 }

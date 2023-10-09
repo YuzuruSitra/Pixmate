@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 public class FoxEcology : MonoBehaviour
 {
+    // 成長速度
+    public float GrowSpeed;
     // 活動状態を管理
     private bool _isAllive = false;
     [SerializeField]
@@ -35,11 +37,14 @@ public class FoxEcology : MonoBehaviour
             { "Idole", new FoxIdoleState() },
             { "Walk", new FoxWalkState() },
             { "Jump", new FoxJumpState() },
-            { "Avoid", new FoxAvoidState() }
+            { "Avoid", new FoxAvoidState() },
+            { "Maiting", new FoxMaitingState() }
         };
         _currentState = _states["Idole"]; // 初期状態を待機状態に設定
         _beforeSpecialState = _currentState;
         _currentState.EnterState(this);
+
+        // 初期サイズから最大サイズを計算して指定時間で育つように設定
     }
 
     // 他の管理クラスから呼びだすとPixmateが動き出す
@@ -53,6 +58,7 @@ public class FoxEcology : MonoBehaviour
 
     private void Update()
     {
+        
         if(!_isAllive) return;
 
         // 障害物判定
