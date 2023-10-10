@@ -5,6 +5,8 @@ public class FoxEcology : MonoBehaviour
 {
     // 成長速度
     public float GrowSpeed;
+    private int _interval = 5;
+    private bool _oneTime = true;
     // 活動状態を管理
     private bool _isAllive = false;
     [SerializeField]
@@ -60,6 +62,25 @@ public class FoxEcology : MonoBehaviour
     {
         
         if(!_isAllive) return;
+        // 成長
+        if ((int)Time.time % _interval == 0 && _oneTime)
+        {
+            float currentScale = transform.localScale.x;
+            if (currentScale < PixmatesManager.MAX_SIZE_FOX)
+            {
+                currentScale += GrowSpeed * _interval;
+                // 最大サイズを超えないように設定
+                currentScale = Mathf.Min(currentScale, PixmatesManager.MAX_SIZE_FOX);
+                transform.localScale = new Vector3(currentScale, currentScale, currentScale);
+            }
+            _oneTime = false;
+//            Debug.Log(currentScale);
+        }
+        else if((int)Time.time % _interval != 0)
+        {
+            if(!_oneTime) _oneTime = true;
+        }
+        
 
         // 障害物判定
         _isNoObstacle = IsObstacleDecision();
@@ -186,9 +207,9 @@ public class FoxEcology : MonoBehaviour
     // 接地判定
     private bool isGroundStay()
     {
-        float groundRayLength = 0.2f;
+        float groundRayLength = 0.4f;
 
-        Vector3 groundOffset = new Vector3(0, 0.1f, 0);
+        Vector3 groundOffset = new Vector3(0, 0.1f, 0.35f);
         Vector3 groundRayOffset = transform.forward * groundOffset.z + transform.up * groundOffset.y + transform.right * groundOffset.x;
         Vector3 groundOrigin = transform.position + groundRayOffset;
         Vector3 groundDirection = -transform.up;
@@ -218,6 +239,15 @@ public class FoxEcology : MonoBehaviour
         Debug.DrawRay(dropRay.origin, dropRay.direction * rayLength, rayColor);
 
         return isGroundDecisio;
+    }
+
+    // 交配判定
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("PixmateFox"))
+        {
+            // 交配可能時間なら実行
+        }
     }
 
     // 特殊行動が終わるとIdoleへ

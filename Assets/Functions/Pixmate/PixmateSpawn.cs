@@ -22,6 +22,7 @@ public class PixmateSpawn : MonoBehaviour
     // アニメーションの継続時間
     private const float DURATION = 2.5f;
     private const float MAX_WEIGHT = 100.0f;
+    private WaitForSeconds _openEggWfs = new WaitForSeconds(10.0f);
 
     // Start is called before the first frame update
     void Start()
@@ -106,7 +107,7 @@ public class PixmateSpawn : MonoBehaviour
         // Pixmateの動き出し
         _pixmateManager.ActivationPixmate(_insPixmate.GetComponent<FoxEcology>());
         // 処理の終了
-        yield return new WaitForSeconds(10.0f);
+        yield return _openEggWfs;
         gameObject.SetActive(false);
     }
 

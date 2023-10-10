@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using UnityEngine.UIElements;
 
 public class PixmatesManager : MonoBehaviour
 {
     // 最初のサイズと最大サイズ設定
     public const float INITIAL_SCALE_FOX = 0.15f;
-    private const float MAX_SIZE_FOX = 0.3f;
+    public const float MAX_SIZE_FOX = 0.3f;
     // 単位は分(2は仮置き)
     private const float GROWTH_TIME = 2f;
     // Pixmateの成長時間
@@ -29,11 +32,16 @@ public class PixmatesManager : MonoBehaviour
     // 生成Prefab
     [SerializeField]
     private GameObject _prefabFox;
+    private Vector3[] _savePos;
+    private float[] _saveScale;
+    private Quaternion[] _saveRot;
 
     // セーブと紐づけ
     public Dictionary<string, Sprite> _textureImages = new Dictionary<string, Sprite>();
     // 定期セーブの間隔
     private const float PERIODIC_TIME = 15f;
+    // 非同期用
+    private CancellationTokenSource _cancellationTokenSource;
     void Awake()
     {
         if (InstancePixmatesManager == null)
@@ -42,7 +50,7 @@ public class PixmatesManager : MonoBehaviour
         }
     }
 
-    void Start()
+    private void Start()
     {
         _saveManager = SaveManager.InstanceSaveManager;
         // 成長速度の計算
@@ -88,9 +96,17 @@ public class PixmatesManager : MonoBehaviour
             Array.Resize(ref _pixmateFoxes, _pixmateFoxes.Length + 1);
             _pixmateFoxes[_pixmateFoxes.Length - 1] = InstantiatePixmate(randomPosition, rot, insScale, matTexture);
             ActivationPixmate(_pixmateFoxes[i].GetComponent<FoxEcology>());
-        }
+        };
 
-        InvokeRepeating("PeriodicSave", PERIODIC_TIME, PERIODIC_TIME);
+        _cancellationTokenSource = new CancellationTokenSource(); // キャンセルトークン生成
+            
+        PeriodicSaveAsync(_cancellationTokenSource.Token).Forget();
+    }
+
+    private void OnDestroy()
+    {
+        // Destroy時にキャンセルする
+        _cancellationTokenSource?.Cancel();
     }
 
     // Pixmateの動き出し
@@ -132,10 +148,46 @@ public class PixmatesManager : MonoBehaviour
         for(int i = 0; i < _pixmateFoxes.Length; i++)
         {
             string key = PIXMATE_KEY + (i + 1);
-            _saveManager.DoSavePixmatePos(_pixmateFoxes[i].transform.position, key);
-            _saveManager.DoSavePixmateScale(_pixmateFoxes[i].transform.localScale.x, key);
-            _saveManager.DoSavePixmateRot(_pixmateFoxes[i].transform.rotation, key);
+            Transform targetTransform = _pixmateFoxes[i].transform;
+            _saveManager.DoSavePixmatePos(targetTransform.position, key);
+            _saveManager.DoSavePixmateScale(targetTransform.localScale.x, key);
+            _saveManager.DoSavePixmateRot(targetTransform.rotation, key);
+            Debug.Log("aaa");
         }
     }
 
+    private async UniTask PeriodicSaveAsync(CancellationToken token)
+    {
+        while (!token.IsCancellationRequested)
+        {
+            
+            await UniTask.Delay(TimeSpan.FromSeconds(PERIODIC_TIME));
+
+            _savePos = new Vector3[_pixmateFoxes.Length];
+            _saveScale = new float[_pixmateFoxes.Length];
+            _saveRot = new Quaternion[_pixmateFoxes.Length];
+
+            for(int i = 0; i < _pixmateFoxes.Length; i++)
+            {
+                Transform targetTransform = _pixmateFoxes[i].transform;
+                _savePos[i] = targetTransform.position;
+                _saveScale[i] = targetTransform.localScale.x;
+                _saveRot[i] = targetTransform.rotation;
+            }
+
+            Debug.Log("Start:" + Time.time);
+            // 保存処理をThreadPoolで非同期に実行
+            await UniTask.RunOnThreadPool(() =>
+            {
+                for (int i = 0; i < _pixmateFoxes.Length; i++)
+                {
+                    string key = PIXMATE_KEY + (i + 1);
+                    _saveManager.DoSavePixmatePos(_savePos[i], key);
+                    _saveManager.DoSavePixmateScale(_saveScale[i], key);
+                    _saveManager.DoSavePixmateRot(_saveRot[i], key);
+                }
+            });
+            Debug.Log("Fin:" + Time.time);
+        }
+    }
 }

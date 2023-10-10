@@ -58,6 +58,7 @@ public class ObjInstantiater : MonoBehaviour
             case "Gene":
                 rootPos = _predictManager.SameCubePos;
                 _pixmateGenerate.GenerateMate(rootPos,targetObj,rayHitObj);
+                _worldManager.DeleteObjSaving(rayHitObj);
                 break;
             default:
                 break;
