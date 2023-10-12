@@ -12,7 +12,7 @@ public class PixmateSpawn : MonoBehaviour
     private Material _material;
 
     // 生成したprefab
-    private GameObject _insPixmate;
+    private FoxEcology _insPixmate;
     // 生成に必要な時間
     private const float REQUIRE_TIME = 5.0f;
     // 経過時間
@@ -70,9 +70,12 @@ public class PixmateSpawn : MonoBehaviour
         Quaternion insRot = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + 180f, transform.rotation.eulerAngles.z);
         float scale = PixmatesManager.INITIAL_SCALE_FOX;
         Vector3 insScale = new Vector3(scale, scale, scale);
-        _insPixmate = _pixmateManager.InstantiatePixmate(insPos, insRot, insScale, matTexture);
+        // 性別の決定
+        int ForM = Random.Range(0, 2);
+
+        _insPixmate = _pixmateManager.InstantiatePixmate(insPos, insRot, insScale, matTexture, ForM);
         // マテリアルの生成手続き
-        _pixmateManager.SpawnPixmate(matTexture);
+        _pixmateManager.SpawnPixmate(matTexture, ForM);
     }
 
     // Update is called once per frame
@@ -105,7 +108,7 @@ public class PixmateSpawn : MonoBehaviour
         UpdateBlendShapes(MAX_WEIGHT);
         
         // Pixmateの動き出し
-        _pixmateManager.ActivationPixmate(_insPixmate.GetComponent<FoxEcology>());
+        _pixmateManager.ActivationPixmate(_insPixmate);
         // 処理の終了
         yield return _openEggWfs;
         gameObject.SetActive(false);

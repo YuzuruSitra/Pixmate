@@ -16,7 +16,6 @@ public class TryGetKey
         targetMatName = targetMatName.Replace(" (Instance)", "");
 
         string targetKey = targetMatName.Replace("CroppedImageMat_", materialBunker.KeyName);
-        Debug.Log(targetKey);
         return targetKey;
     }
 

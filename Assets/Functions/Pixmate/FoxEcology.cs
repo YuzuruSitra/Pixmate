@@ -5,6 +5,8 @@ public class FoxEcology : MonoBehaviour
 {
     // 成長速度
     public float GrowSpeed;
+    [SerializeField]
+    public float PixmateForM;
     private int _interval = 5;
     private bool _oneTime = true;
     // 活動状態を管理
@@ -21,6 +23,9 @@ public class FoxEcology : MonoBehaviour
     public float MoveSpeed => _moveSpeed;
     int nextActionTime;
     private float _elapsedTime = 0f;
+    // 交配クールタイム(分)
+    private const float MAITE_COOL_TIME = 0.5f;
+    private float _elapseMateTime = 0;
     // 強制行動を踏んでいる時はfalseに。
     private bool _isNoObstacle = true;
     public bool IsNoObstacle => _isNoObstacle;
@@ -30,6 +35,7 @@ public class FoxEcology : MonoBehaviour
     // 正面に1マス以内に床があるか判定
     private bool _isFrontFloorDecision = true;
     public bool IsFrontFloorDecision => _isFrontFloorDecision;
+
 
     private void Awake()
     {
@@ -60,8 +66,10 @@ public class FoxEcology : MonoBehaviour
 
     private void Update()
     {
-        
         if(!_isAllive) return;
+        // 交配時間の計測
+        _elapseMateTime += Time.deltaTime;
+
         // 成長
         if ((int)Time.time % _interval == 0 && _oneTime)
         {
@@ -74,7 +82,6 @@ public class FoxEcology : MonoBehaviour
                 transform.localScale = new Vector3(currentScale, currentScale, currentScale);
             }
             _oneTime = false;
-//            Debug.Log(currentScale);
         }
         else if((int)Time.time % _interval != 0)
         {
@@ -134,7 +141,7 @@ public class FoxEcology : MonoBehaviour
         newState.EnterState(this);
         _currentState = newState;
 
-        if(newState == _states["Jump"] || newState.GetType() == typeof(FoxAvoidState))
+        if(newState == _states["Jump"] || newState == _states["Avoid"] || newState == _states["Maiting"])
         {
             // 時間だと管理しづらいので一考の余地あり
             _doSpecialAction = true;
@@ -156,6 +163,9 @@ public class FoxEcology : MonoBehaviour
                 break;
             case FoxAvoidState:
                 _foxAnimCtrl.DoAvoid();
+                break;
+            case FoxMaitingState:
+                _foxAnimCtrl.DoIdole();
                 break;
         }
     }
@@ -247,6 +257,9 @@ public class FoxEcology : MonoBehaviour
         if (other.gameObject.CompareTag("PixmateFox"))
         {
             // 交配可能時間なら実行
+            if(MAITE_COOL_TIME * 60 > _elapseMateTime) return;
+            _elapseMateTime = 0f;
+            ChangeState(_states["Maiting"]);
         }
     }
 

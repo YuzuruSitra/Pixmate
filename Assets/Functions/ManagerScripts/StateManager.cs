@@ -16,7 +16,9 @@ public class StateManager : MonoBehaviour
 
     public event Action<GameState> OnStateChanged;
 
-    private GameState _currentState;
+    private GameState _currentState = GameState.DefaultMode;
+    private GameState _beforeState;
+    public GameState BeforeState => _beforeState;
 
     private void Start()
     {
@@ -28,7 +30,9 @@ public class StateManager : MonoBehaviour
         // 同じステートを弾く
         ////////////////
         if(_currentState == newState) return;
+        _beforeState = _currentState;
         _currentState = newState;
+        
         OnStateChanged?.Invoke(_currentState);
     }
     

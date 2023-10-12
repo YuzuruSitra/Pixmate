@@ -31,9 +31,4 @@ public class FoxJumpState : IAIState
     {
 
     }
-
-    private void DoJump()
-    {
-
-    }
 }

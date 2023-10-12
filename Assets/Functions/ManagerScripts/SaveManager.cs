@@ -18,6 +18,7 @@ public class SaveManager : MonoBehaviour
     private const string PHOTO_NAME_KEY = "_Name";
     // PixmateManager
     private const string PIXMATE_TEXTURE_KEY = "_Texture";
+    private const string PIXMATE_FORM_KEY = "_ForM";
     private const string PIXMATE_POS_KEY = "_Pos";
     private const string PIXMATE_SCALE_KEY = "_Scale";
     private const string PIXMATE_ROT_KEY = "_Rot";
@@ -90,12 +91,13 @@ public class SaveManager : MonoBehaviour
     }
 
     // Pixmateのセーブ処理
-    public void DoSavePixmates(int count, Sprite sprite,string key)
+    public void DoSavePixmates(int count, Sprite sprite, int ForM,string key)
     {
         // データを書き込む
         _writer.Write("pixmateCount", count);
         _writer.Write(key + PIXMATE_TEXTURE_KEY, sprite);
-        
+        Debug.Log("Save:"+key);
+        _writer.Write(key + PIXMATE_FORM_KEY, ForM);
         // 変更を反映
         _writer.Commit();
     }
@@ -208,6 +210,21 @@ public class SaveManager : MonoBehaviour
         try
         {
             return _reader.Read<int>("pixmateCount");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogWarning("データの読み込みエラー: " + ex.Message);
+            return 0; 
+        }
+    }
+
+    public int LoadPixmateForM(string key)
+    {
+        // デバッグ用
+        string loadForMKey = key + PIXMATE_FORM_KEY;
+        try
+        {
+            return _reader.Read<int>(loadForMKey);
         }
         catch (Exception ex)
         {
@@ -338,6 +355,23 @@ public class SaveManager : MonoBehaviour
         // データを書き込む
         _writer.Commit();
     }
-}
 
-// セーブクラスとマネージャークラスが相互に参照を持っているのでマネージャークラス > セーブクラスのみへ修正予定
+    public void DeletePixmate()
+    {
+        // 初期データ
+        _writer.Write("matCount", 0);
+        MaterialBunker materialBunker = MaterialBunker.InstanceMatBunker;
+        materialBunker.CroppedImages.Clear();
+
+        // データを書き込む
+        _writer.Commit();
+    }
+
+    public void DoResetPixmates()
+    {
+        // データを書き込む
+        _writer.Write("pixmateCount", 0);
+        // 変更を反映
+        _writer.Commit();
+    }
+}

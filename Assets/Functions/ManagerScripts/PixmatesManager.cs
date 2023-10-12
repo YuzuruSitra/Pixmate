@@ -27,7 +27,7 @@ public class PixmatesManager : MonoBehaviour
     // 現在いるPixmateの数
     private int _pixmatesCount = 0;
     public int PixmatesCount => _pixmatesCount;
-    private GameObject[] _pixmateFoxes = new GameObject[0];
+    private FoxEcology[] _pixmateFoxes = new FoxEcology[0];
 
     // 生成Prefab
     [SerializeField]
@@ -94,8 +94,10 @@ public class PixmatesManager : MonoBehaviour
             insScale.z = scale;
             Quaternion rot = _saveManager.LoadPixmateRot(key);
             Array.Resize(ref _pixmateFoxes, _pixmateFoxes.Length + 1);
-            _pixmateFoxes[_pixmateFoxes.Length - 1] = InstantiatePixmate(randomPosition, rot, insScale, matTexture);
-            ActivationPixmate(_pixmateFoxes[i].GetComponent<FoxEcology>());
+            int ForM = _saveManager.LoadPixmateForM(key);
+            _pixmateFoxes[_pixmateFoxes.Length - 1] = InstantiatePixmate(randomPosition, rot, insScale, matTexture ,ForM);
+            FoxEcology pixmateEcology = _pixmateFoxes[i];
+            ActivationPixmate(pixmateEcology);
         };
 
         _cancellationTokenSource = new CancellationTokenSource(); // キャンセルトークン生成
@@ -116,7 +118,7 @@ public class PixmatesManager : MonoBehaviour
     }
 
     // Pixmateの追加処理
-    public void SpawnPixmate(Texture2D texture)
+    public void SpawnPixmate(Texture2D texture, int ForM)
     {
         _pixmatesCount ++;
         
@@ -126,41 +128,28 @@ public class PixmatesManager : MonoBehaviour
         if(pixmateSprite == null) return;
         string key = PIXMATE_KEY + _pixmatesCount;
         _textureImages.Add(key, pixmateSprite);
-
         // セーブ処理
-        _saveManager.DoSavePixmates(_pixmatesCount, pixmateSprite, key);
+        _saveManager.DoSavePixmates(_pixmatesCount, pixmateSprite, ForM, key);
     }
 
-    public GameObject InstantiatePixmate(Vector3 insPos, Quaternion insRot,Vector3 scale, Texture2D texture)
+    public FoxEcology InstantiatePixmate(Vector3 insPos, Quaternion insRot, Vector3 scale, Texture2D texture, int ForM)
     {
         // Pixmateの生成処理
         GameObject insPixmate = Instantiate(_prefabFox, insPos, insRot);
+        FoxEcology foxEcology = insPixmate.GetComponent<FoxEcology>();
+        foxEcology.PixmateForM = ForM;
         insPixmate.transform.localScale = scale;
         // テクスチャの割り当て
         GameObject childObj = insPixmate.transform.GetChild(0).gameObject;
         childObj.GetComponent<SkinnedMeshRenderer>().material.SetTexture("_BaseMap", texture);
-        return insPixmate;
+        return foxEcology;
     }
 
     // 定期セーブ
-    void PeriodicSave()
-    {
-        for(int i = 0; i < _pixmateFoxes.Length; i++)
-        {
-            string key = PIXMATE_KEY + (i + 1);
-            Transform targetTransform = _pixmateFoxes[i].transform;
-            _saveManager.DoSavePixmatePos(targetTransform.position, key);
-            _saveManager.DoSavePixmateScale(targetTransform.localScale.x, key);
-            _saveManager.DoSavePixmateRot(targetTransform.rotation, key);
-            Debug.Log("aaa");
-        }
-    }
-
     private async UniTask PeriodicSaveAsync(CancellationToken token)
     {
         while (!token.IsCancellationRequested)
         {
-            
             await UniTask.Delay(TimeSpan.FromSeconds(PERIODIC_TIME));
 
             _savePos = new Vector3[_pixmateFoxes.Length];

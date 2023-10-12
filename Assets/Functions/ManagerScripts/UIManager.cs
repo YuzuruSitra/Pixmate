@@ -20,6 +20,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject _createItemPanel;
     [SerializeField] 
+    private GameObject _settingPanel;
+    [SerializeField] 
     private GameObject _editPanel;
     [SerializeField] 
     private GameObject _editMatPanel;
@@ -148,6 +150,7 @@ public class UIManager : MonoBehaviour
     void OnSettingsUI()
     {
         AllInactiveUI();
+        _settingPanel.SetActive(true);
     }
 
     // 全てのUIを非アクティブ化
@@ -160,7 +163,8 @@ public class UIManager : MonoBehaviour
         _editPanel.SetActive(false);
         _editMatPanel.SetActive(false);
         _editCropPanel.SetActive(false);
-        for(int i=0; i < _createPanelButton.Length; i++)
+        _settingPanel.SetActive(false);
+        for(int i = 0; i < _createPanelButton.Length; i++)
         {
             _createPanelButton[i].SetActive(false);
         }
