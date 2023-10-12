@@ -26,6 +26,7 @@ public class FoxEcology : MonoBehaviour
     // 交配クールタイム(分)
     private const float MAITE_COOL_TIME = 0.5f;
     private float _elapseMateTime = 0;
+    private Material _maiteTargetMat;
     // 強制行動を踏んでいる時はfalseに。
     private bool _isNoObstacle = true;
     public bool IsNoObstacle => _isNoObstacle;
@@ -63,7 +64,7 @@ public class FoxEcology : MonoBehaviour
         nextActionTime = Random.Range(5, 10);
         ChangeState(_states["Idole"]);
     }
-
+    
     private void Update()
     {
         if(!_isAllive) return;
@@ -260,7 +261,42 @@ public class FoxEcology : MonoBehaviour
             if(MAITE_COOL_TIME * 60 > _elapseMateTime) return;
             _elapseMateTime = 0f;
             ChangeState(_states["Maiting"]);
+            if(PixmateForM == 1 && other.GetComponent<FoxEcology>().PixmateForM == 0) _maiteTargetMat =  other.GetComponent<MeshRenderer>().material;
         }
+    }
+
+    // 交配処理
+    void MaitingIns()
+    {
+        // Textureの生成
+        Texture2D matTexture = Texture2D.whiteTexture;
+        // スプライトからテクスチャを作成
+        //_maiteTargetSprite
+        // 合成クラスに渡してスプライト型で取り戻す
+        // if (croppedImages.TryGetValue(targetKey, out Sprite targetSprite))
+        // {
+        //     matTexture = new Texture2D(targetSprite.texture.width, targetSprite.texture.height, TextureFormat.RGBA32, false);
+        //     matTexture.SetPixels(targetSprite.texture.GetPixels());
+        //     matTexture.Apply();
+
+        //     _material.SetTexture("_BaseMap", matTexture);
+        // }
+        // else
+        // {
+        //     Debug.LogError("Target sprite not found in croppedImages dictionary.");
+        // }
+
+        // Pixmateの生成処理
+        Vector3 insPos = new Vector3(transform.position.x, transform.position.y - 0.1f, transform.position.z - 1.0f);
+        Quaternion insRot = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + 180f, transform.rotation.eulerAngles.z);
+        float scale = PixmatesManager.INITIAL_SCALE_FOX;
+        Vector3 insScale = new Vector3(scale, scale, scale);
+        // 性別の決定
+        int ForM = Random.Range(0, 2);
+
+        //_insPixmate = _pixmateManager.InstantiatePixmate(insPos, insRot, insScale, matTexture, ForM);
+        // マテリアルの生成手続き
+        //_pixmateManager.SpawnPixmate(matTexture, ForM);
     }
 
     // 特殊行動が終わるとIdoleへ
@@ -272,3 +308,5 @@ public class FoxEcology : MonoBehaviour
     }
 
 }
+
+// Pixmanagerが監視して交配があれば子オブジェクトを生成するように変更予定

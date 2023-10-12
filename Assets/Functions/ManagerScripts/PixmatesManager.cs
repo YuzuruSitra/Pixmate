@@ -13,7 +13,7 @@ public class PixmatesManager : MonoBehaviour
     public const float INITIAL_SCALE_FOX = 0.15f;
     public const float MAX_SIZE_FOX = 0.3f;
     // 単位は分(2は仮置き)
-    private const float GROWTH_TIME = 2f;
+    private const float GROWTH_TIME = 0.5f;
     // Pixmateの成長時間
     private float _foxGrowSpeed = 0f;
     public static PixmatesManager InstancePixmatesManager;
