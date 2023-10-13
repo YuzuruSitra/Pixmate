@@ -6,6 +6,7 @@ using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 public class PixmatesManager : MonoBehaviour
 {
@@ -35,6 +36,9 @@ public class PixmatesManager : MonoBehaviour
     private Vector3[] _savePos;
     private float[] _saveScale;
     private Quaternion[] _saveRot;
+
+    [SerializeField]
+    private Material _material;
 
     // セーブと紐づけ
     public Dictionary<string, Sprite> _textureImages = new Dictionary<string, Sprite>();
@@ -93,8 +97,8 @@ public class PixmatesManager : MonoBehaviour
             insScale.y = scale;
             insScale.z = scale;
             Quaternion rot = _saveManager.LoadPixmateRot(key);
-            Array.Resize(ref _pixmateFoxes, _pixmateFoxes.Length + 1);
             int ForM = _saveManager.LoadPixmateForM(key);
+            Array.Resize(ref _pixmateFoxes, _pixmateFoxes.Length + 1);
             _pixmateFoxes[_pixmateFoxes.Length - 1] = InstantiatePixmate(randomPosition, rot, insScale, matTexture ,ForM);
             FoxEcology pixmateEcology = _pixmateFoxes[i];
             ActivationPixmate(pixmateEcology);
@@ -138,6 +142,8 @@ public class PixmatesManager : MonoBehaviour
         GameObject insPixmate = Instantiate(_prefabFox, insPos, insRot);
         FoxEcology foxEcology = insPixmate.GetComponent<FoxEcology>();
         foxEcology.PixmateForM = ForM;
+        // 仮置き
+        foxEcology.PixmatesManager = this;
         insPixmate.transform.localScale = scale;
         // テクスチャの割り当て
         GameObject childObj = insPixmate.transform.GetChild(0).gameObject;
@@ -178,5 +184,46 @@ public class PixmatesManager : MonoBehaviour
             });
             Debug.Log("Fin:" + Time.time);
         }
+    }
+
+    public void MaitingStart(Texture2D target1, Texture2D target2)
+    {
+        MatingColor matingColor = new MatingColor();
+        // Textureの生成
+        Texture2D matTexture = Texture2D.whiteTexture;
+
+        // スプライトからテクスチャを作成
+        Sprite sprite = null;
+        if (target1 != null && target2 != null) sprite = matingColor.DoPixelsFusion(target1, target2);
+
+        if (sprite != null)
+        {
+            matTexture = new Texture2D(sprite.texture.width, sprite.texture.height, TextureFormat.RGBA32, false);
+            matTexture.SetPixels(sprite.texture.GetPixels());
+            matTexture.Apply();
+
+            _material.SetTexture("_BaseMap", matTexture);
+        }
+        else
+        {
+            Debug.LogError("Target sprite not found in croppedImages dictionary.");
+            return;
+        }
+
+        // Pixmateの生成処理
+        Vector3 insPos = new Vector3(transform.position.x, transform.position.y - 0.1f, transform.position.z - 1.0f);
+        Quaternion insRot = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + 180f, transform.rotation.eulerAngles.z);
+        float scale = INITIAL_SCALE_FOX;
+        Vector3 insScale = new Vector3(scale, scale, scale);
+        // 性別の決定
+        int ForM = UnityEngine.Random.Range(0, 2);
+
+        Array.Resize(ref _pixmateFoxes, _pixmateFoxes.Length + 1);
+        FoxEcology foxEcology = InstantiatePixmate(insPos, insRot, insScale, matTexture , ForM);
+        _pixmateFoxes[_pixmateFoxes.Length - 1] = foxEcology;
+        // マテリアルの生成手続き
+
+        SpawnPixmate(matTexture, ForM);
+        ActivationPixmate(foxEcology);
     }
 }

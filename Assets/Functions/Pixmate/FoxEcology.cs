@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 public class FoxEcology : MonoBehaviour
 {
+    // 仮置き
+    public PixmatesManager PixmatesManager;
     // 成長速度
     public float GrowSpeed;
-    [SerializeField]
     public float PixmateForM;
     private int _interval = 5;
     private bool _oneTime = true;
@@ -24,7 +25,7 @@ public class FoxEcology : MonoBehaviour
     int nextActionTime;
     private float _elapsedTime = 0f;
     // 交配クールタイム(分)
-    private const float MAITE_COOL_TIME = 0.5f;
+    private const float MAITE_COOL_TIME = 0.1f;
     private float _elapseMateTime = 0;
     private Material _maiteTargetMat;
     // 強制行動を踏んでいる時はfalseに。
@@ -36,7 +37,6 @@ public class FoxEcology : MonoBehaviour
     // 正面に1マス以内に床があるか判定
     private bool _isFrontFloorDecision = true;
     public bool IsFrontFloorDecision => _isFrontFloorDecision;
-
 
     private void Awake()
     {
@@ -94,7 +94,7 @@ public class FoxEcology : MonoBehaviour
         _isNoObstacle = IsObstacleDecision();
 
         // 接地判定
-        _isGround = isGroundStay();
+        _isGround = IsGroundStay();
 
         // 目の前の1.5マス下に地面があるか判定
         _isFrontFloorDecision = FrontFloorDecisio();
@@ -216,7 +216,7 @@ public class FoxEcology : MonoBehaviour
     }
 
     // 接地判定
-    private bool isGroundStay()
+    private bool IsGroundStay()
     {
         float groundRayLength = 0.4f;
 
@@ -261,42 +261,15 @@ public class FoxEcology : MonoBehaviour
             if(MAITE_COOL_TIME * 60 > _elapseMateTime) return;
             _elapseMateTime = 0f;
             ChangeState(_states["Maiting"]);
-            if(PixmateForM == 1 && other.GetComponent<FoxEcology>().PixmateForM == 0) _maiteTargetMat =  other.GetComponent<MeshRenderer>().material;
+            if(PixmateForM == 1 && other.GetComponent<FoxEcology>().PixmateForM == 0) 
+            {
+                Texture2D targetTexture =  other.gameObject.transform.GetChild(0).GetComponent<SkinnedMeshRenderer>().materials[0].GetTexture("_MainTex") as Texture2D;
+                Texture2D thisTexture =  gameObject.transform.GetChild(0).GetComponent<SkinnedMeshRenderer>().materials[0].GetTexture("_MainTex") as Texture2D;
+                if(targetTexture == null) Debug.Log("targetNull");
+                if(thisTexture == null) Debug.Log("thisNull");
+                PixmatesManager.MaitingStart(thisTexture, targetTexture);
+            }
         }
-    }
-
-    // 交配処理
-    void MaitingIns()
-    {
-        // Textureの生成
-        Texture2D matTexture = Texture2D.whiteTexture;
-        // スプライトからテクスチャを作成
-        //_maiteTargetSprite
-        // 合成クラスに渡してスプライト型で取り戻す
-        // if (croppedImages.TryGetValue(targetKey, out Sprite targetSprite))
-        // {
-        //     matTexture = new Texture2D(targetSprite.texture.width, targetSprite.texture.height, TextureFormat.RGBA32, false);
-        //     matTexture.SetPixels(targetSprite.texture.GetPixels());
-        //     matTexture.Apply();
-
-        //     _material.SetTexture("_BaseMap", matTexture);
-        // }
-        // else
-        // {
-        //     Debug.LogError("Target sprite not found in croppedImages dictionary.");
-        // }
-
-        // Pixmateの生成処理
-        Vector3 insPos = new Vector3(transform.position.x, transform.position.y - 0.1f, transform.position.z - 1.0f);
-        Quaternion insRot = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + 180f, transform.rotation.eulerAngles.z);
-        float scale = PixmatesManager.INITIAL_SCALE_FOX;
-        Vector3 insScale = new Vector3(scale, scale, scale);
-        // 性別の決定
-        int ForM = Random.Range(0, 2);
-
-        //_insPixmate = _pixmateManager.InstantiatePixmate(insPos, insRot, insScale, matTexture, ForM);
-        // マテリアルの生成手続き
-        //_pixmateManager.SpawnPixmate(matTexture, ForM);
     }
 
     // 特殊行動が終わるとIdoleへ

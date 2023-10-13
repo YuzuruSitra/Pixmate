@@ -3,39 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MatingColor : MonoBehaviour
+public class MatingColor
 {
-    [SerializeField]
-    Image[] _pixImages = new Image[2];
     const int TARGET_SIZE = 64;
     const int SUBDIVISIONS = 4;
     int[,] _squares;
     int[] _square;
-    
-    [SerializeField]
-    Image _outTexture;
 
-    void Start()
-    {
-        DoPixelsFusion();
-    }
-
-    void DoPixelsFusion()
+    public Sprite DoPixelsFusion(Texture2D target1, Texture2D target2)
     {
         ArrayInitializing();
 
         Texture2D tmpTexture1;
-        tmpTexture1 = ResizeTexture(_pixImages[0].sprite.texture, TARGET_SIZE, TARGET_SIZE);
+        tmpTexture1 = ResizeTexture(target1, TARGET_SIZE, TARGET_SIZE);
         Color32[] pixelColors1 = tmpTexture1.GetPixels32();
 
         Texture2D tmpTexture2;
-        tmpTexture2 = ResizeTexture(_pixImages[1].sprite.texture, TARGET_SIZE, TARGET_SIZE);
+        tmpTexture2 = ResizeTexture(target2, TARGET_SIZE, TARGET_SIZE);
         Color32[] pixelColors2 = tmpTexture2.GetPixels32();
         
         Texture2D completeImage = CombineMat(_square ,TARGET_SIZE , pixelColors1, pixelColors2);
-
+        
         // ImageオブジェクトのTextureを設定
-        _outTexture.sprite = Sprite.Create(completeImage, new Rect(0, 0, completeImage.width, completeImage.height), Vector2.one * 0.5f);
+        Sprite sprite = Sprite.Create(completeImage, new Rect(0, 0, completeImage.width, completeImage.height), Vector2.one * 0.5f);
+        Debug.Log(sprite);
+        return sprite;
     }
 
 
