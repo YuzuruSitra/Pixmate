@@ -2097,7 +2097,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0.417, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2430,9 +2430,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24568223b19de44cc8e6e8faa28dca0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PixmatesManager: {fileID: 0}
   GrowSpeed: 0.0012500001
+  PixmateForM: 0
   _foxAnimCtrl: {fileID: 1728686421}
   _moveSpeed: 1
+  MaitingUI: {fileID: 6572117184373789866}
+  MaitingSlider: {fileID: 1404566293415382464}
   _doSpecialAction: 0
 --- !u!114 &1728686421
 MonoBehaviour:

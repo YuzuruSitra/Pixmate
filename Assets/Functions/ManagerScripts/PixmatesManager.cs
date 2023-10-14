@@ -37,9 +37,6 @@ public class PixmatesManager : MonoBehaviour
     private float[] _saveScale;
     private Quaternion[] _saveRot;
 
-    [SerializeField]
-    private Material _material;
-
     // セーブと紐づけ
     public Dictionary<string, Sprite> _textureImages = new Dictionary<string, Sprite>();
     // 定期セーブの間隔
@@ -91,7 +88,7 @@ public class PixmatesManager : MonoBehaviour
                 continue;
             }
 
-            Vector3 randomPosition = _saveManager.LoadPixmatePosition(key);
+            Vector3 insPosition = _saveManager.LoadPixmatePosition(key);
             float scale = _saveManager.LoadPixmateScale(key, INITIAL_SCALE_FOX);
             insScale.x = scale;
             insScale.y = scale;
@@ -99,7 +96,7 @@ public class PixmatesManager : MonoBehaviour
             Quaternion rot = _saveManager.LoadPixmateRot(key);
             int ForM = _saveManager.LoadPixmateForM(key);
             Array.Resize(ref _pixmateFoxes, _pixmateFoxes.Length + 1);
-            _pixmateFoxes[_pixmateFoxes.Length - 1] = InstantiatePixmate(randomPosition, rot, insScale, matTexture ,ForM);
+            _pixmateFoxes[_pixmateFoxes.Length - 1] = InstantiatePixmate(insPosition, rot, insScale, matTexture ,ForM);
             FoxEcology pixmateEcology = _pixmateFoxes[i];
             ActivationPixmate(pixmateEcology);
         };
@@ -174,8 +171,13 @@ public class PixmatesManager : MonoBehaviour
             // 保存処理をThreadPoolで非同期に実行
             await UniTask.RunOnThreadPool(() =>
             {
-                for (int i = 0; i < _pixmateFoxes.Length; i++)
+                int foxCount = _pixmateFoxes.Length;
+                for (int i = 0; i < foxCount; i++)
                 {
+                    if(foxCount != _pixmateFoxes.Length)
+                    {
+                        break;
+                    }
                     string key = PIXMATE_KEY + (i + 1);
                     _saveManager.DoSavePixmatePos(_savePos[i], key);
                     _saveManager.DoSavePixmateScale(_saveScale[i], key);
@@ -186,7 +188,7 @@ public class PixmatesManager : MonoBehaviour
         }
     }
 
-    public void MaitingStart(Texture2D target1, Texture2D target2)
+    public void MaitingStart(Texture2D target1, Texture2D target2, Transform insTransform)
     {
         MatingColor matingColor = new MatingColor();
         // Textureの生成
@@ -201,8 +203,6 @@ public class PixmatesManager : MonoBehaviour
             matTexture = new Texture2D(sprite.texture.width, sprite.texture.height, TextureFormat.RGBA32, false);
             matTexture.SetPixels(sprite.texture.GetPixels());
             matTexture.Apply();
-
-            _material.SetTexture("_BaseMap", matTexture);
         }
         else
         {
@@ -211,8 +211,8 @@ public class PixmatesManager : MonoBehaviour
         }
 
         // Pixmateの生成処理
-        Vector3 insPos = new Vector3(transform.position.x, transform.position.y - 0.1f, transform.position.z - 1.0f);
-        Quaternion insRot = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + 180f, transform.rotation.eulerAngles.z);
+        Vector3 insPos = new Vector3(insTransform.position.x, insTransform.position.y + 0.5f, insTransform.position.z - 1.0f);
+        Quaternion insRot = Quaternion.Euler(insTransform.rotation.eulerAngles.x, insTransform.rotation.eulerAngles.y, insTransform.rotation.eulerAngles.z);
         float scale = INITIAL_SCALE_FOX;
         Vector3 insScale = new Vector3(scale, scale, scale);
         // 性別の決定

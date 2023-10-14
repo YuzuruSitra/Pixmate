@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 public class FoxEcology : MonoBehaviour
 {
     // 仮置き
@@ -26,8 +27,15 @@ public class FoxEcology : MonoBehaviour
     private float _elapsedTime = 0f;
     // 交配クールタイム(分)
     private const float MAITE_COOL_TIME = 0.1f;
-    private float _elapseMateTime = 0;
-    private Material _maiteTargetMat;
+    public float ElapseMateTime = 0;
+    // 交配相手のテクスチャ
+    private Texture2D _targetTexture;
+    public Texture2D TargetTexture => _targetTexture;
+    private Texture2D _thisTexture;
+    public Texture2D ThisTexture => _thisTexture;
+    // 交配用UI
+    public GameObject MaitingUI;
+    public Slider MaitingSlider;
     // 強制行動を踏んでいる時はfalseに。
     private bool _isNoObstacle = true;
     public bool IsNoObstacle => _isNoObstacle;
@@ -61,15 +69,16 @@ public class FoxEcology : MonoBehaviour
     {
         // 最初のState遷移インターバル
         _isAllive = true;
-        nextActionTime = Random.Range(5, 10);
+        nextActionTime = Random.Range(8, 10);
         ChangeState(_states["Idole"]);
+        _thisTexture =  gameObject.transform.GetChild(0).GetComponent<SkinnedMeshRenderer>().materials[0].GetTexture("_BaseMap") as Texture2D;
     }
     
     private void Update()
     {
         if(!_isAllive) return;
         // 交配時間の計測
-        _elapseMateTime += Time.deltaTime;
+        ElapseMateTime += Time.deltaTime;
 
         // 成長
         if ((int)Time.time % _interval == 0 && _oneTime)
@@ -142,12 +151,16 @@ public class FoxEcology : MonoBehaviour
         newState.EnterState(this);
         _currentState = newState;
 
-        if(newState == _states["Jump"] || newState == _states["Avoid"] || newState == _states["Maiting"])
+        if(newState == _states["Jump"] || newState == _states["Avoid"])
         {
             // 時間だと管理しづらいので一考の余地あり
             _doSpecialAction = true;
             int waitTime = Random.Range(4, 8);
             Invoke("FinSpecialaction",waitTime);
+        }
+        if(newState == _states["Maiting"])
+        {
+            _doSpecialAction = true;
         }
 
         // アニメーションの呼び出し
@@ -258,16 +271,15 @@ public class FoxEcology : MonoBehaviour
         if (other.gameObject.CompareTag("PixmateFox"))
         {
             // 交配可能時間なら実行
-            if(MAITE_COOL_TIME * 60 > _elapseMateTime) return;
-            _elapseMateTime = 0f;
-            ChangeState(_states["Maiting"]);
+            if(MAITE_COOL_TIME * 60 > ElapseMateTime) return;
+            if(PixmatesManager.MAX_SIZE_FOX > transform.localScale.x && PixmatesManager.MAX_SIZE_FOX > other.transform.localScale.x) return;
             if(PixmateForM == 1 && other.GetComponent<FoxEcology>().PixmateForM == 0) 
             {
-                Texture2D targetTexture =  other.gameObject.transform.GetChild(0).GetComponent<SkinnedMeshRenderer>().materials[0].GetTexture("_MainTex") as Texture2D;
-                Texture2D thisTexture =  gameObject.transform.GetChild(0).GetComponent<SkinnedMeshRenderer>().materials[0].GetTexture("_MainTex") as Texture2D;
-                if(targetTexture == null) Debug.Log("targetNull");
-                if(thisTexture == null) Debug.Log("thisNull");
-                PixmatesManager.MaitingStart(thisTexture, targetTexture);
+                GameObject targetObj = other.gameObject;
+                _targetTexture = targetObj.transform.GetChild(0).GetComponent<SkinnedMeshRenderer>().materials[0].GetTexture("_BaseMap") as Texture2D;
+                // 相手のステートチェンジ
+                targetObj.GetComponent<FoxEcology>().ChangeState(_states["Maiting"]);
+                ChangeState(_states["Maiting"]);
             }
         }
     }
