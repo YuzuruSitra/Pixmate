@@ -2416,7 +2416,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 6
+  m_Radius: 5
   m_Center: {x: 0, y: 2, z: 0}
 --- !u!114 &1728686412
 MonoBehaviour:
@@ -2435,6 +2435,7 @@ MonoBehaviour:
   PixmateForM: 0
   _foxAnimCtrl: {fileID: 1728686421}
   _moveSpeed: 1
+  ElapseMateTime: 0
   MaitingUI: {fileID: 6572117184373789866}
   MaitingSlider: {fileID: 1404566293415382464}
   _doSpecialAction: 0

@@ -26,7 +26,6 @@ public class MatingColor
         
         // ImageオブジェクトのTextureを設定
         Sprite sprite = Sprite.Create(completeImage, new Rect(0, 0, completeImage.width, completeImage.height), Vector2.one * 0.5f);
-        Debug.Log(sprite);
         return sprite;
     }
 

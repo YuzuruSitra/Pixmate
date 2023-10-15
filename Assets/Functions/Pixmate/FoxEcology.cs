@@ -77,8 +77,9 @@ public class FoxEcology : MonoBehaviour
     private void Update()
     {
         if(!_isAllive) return;
+        if(PixmateForM == 0) Debug.Log(_currentState);
         // 交配時間の計測
-        ElapseMateTime += Time.deltaTime;
+        if(PixmateForM == 1) ElapseMateTime += Time.deltaTime;
 
         // 成長
         if ((int)Time.time % _interval == 0 && _oneTime)
@@ -97,7 +98,6 @@ public class FoxEcology : MonoBehaviour
         {
             if(!_oneTime) _oneTime = true;
         }
-        
 
         // 障害物判定
         _isNoObstacle = IsObstacleDecision();
@@ -108,6 +108,7 @@ public class FoxEcology : MonoBehaviour
         // 目の前の1.5マス下に地面があるか判定
         _isFrontFloorDecision = FrontFloorDecisio();
         
+
         // 現在ステートのUpdate処理
         _currentState.UpdateState(this);
 
@@ -190,6 +191,7 @@ public class FoxEcology : MonoBehaviour
     // 障害物判定
     private bool IsObstacleDecision()
     {
+        if(_doSpecialAction) return false;
         bool isNoObstac = true;
         float rayOffsetX = 0f;
         float rayOffsetY = 0.9f;
@@ -210,6 +212,7 @@ public class FoxEcology : MonoBehaviour
             {
                 case "Player":
                 case "MainCamera":
+                case "PixmateFox":
                     break;
                 default:
                     Vector3 hitObjOrigin = hitObject.transform.position + Vector3.up * 0.35f;
@@ -272,16 +275,54 @@ public class FoxEcology : MonoBehaviour
         {
             // 交配可能時間なら実行
             if(MAITE_COOL_TIME * 60 > ElapseMateTime) return;
-            if(PixmatesManager.MAX_SIZE_FOX > transform.localScale.x && PixmatesManager.MAX_SIZE_FOX > other.transform.localScale.x) return;
+            if(PixmatesManager.MAX_SIZE_FOX > transform.localScale.x || PixmatesManager.MAX_SIZE_FOX > other.transform.localScale.x) return;
             if(PixmateForM == 1 && other.GetComponent<FoxEcology>().PixmateForM == 0) 
             {
                 GameObject targetObj = other.gameObject;
+                // 相手を見る
+                StartCoroutine(RotateTowardsTarget(other.transform));
+
+                // テクスチャを取得
                 _targetTexture = targetObj.transform.GetChild(0).GetComponent<SkinnedMeshRenderer>().materials[0].GetTexture("_BaseMap") as Texture2D;
+                
                 // 相手のステートチェンジ
-                targetObj.GetComponent<FoxEcology>().ChangeState(_states["Maiting"]);
+                targetObj.GetComponent<FoxEcology>().ReceiveMaite(transform);
                 ChangeState(_states["Maiting"]);
             }
         }
+    }
+
+    // 交配相手の方を向く
+    private IEnumerator RotateTowardsTarget(Transform targetObj)
+    {
+        Vector3 targetPosition = targetObj.position;
+        Vector3 direction = targetPosition - transform.position;
+        Quaternion targetRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+        
+        float elapsedTime = 0;
+        Quaternion initialRotation = transform.rotation;
+        float rotationTime = 1;
+
+        while (elapsedTime < rotationTime)
+        {
+            float t = elapsedTime / rotationTime;
+            transform.rotation = Quaternion.Slerp(initialRotation, targetRotation, t);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    public void ReceiveMaite(Transform target)
+    {
+        _currentState.ExitState(this);
+        _states["Maiting"].EnterState(this);
+
+        StartCoroutine(RotateTowardsTarget(target));
+        _currentState = _states["Maiting"];
+
+        _doSpecialAction = true;
+        
+        _foxAnimCtrl.DoIdole();
     }
 
     // 特殊行動が終わるとIdoleへ
