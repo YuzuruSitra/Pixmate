@@ -1,14 +1,10 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class CtrlSightPad : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     private bool _isViewPad;
-    public bool IsViewPad => _isViewPad;
-
     // イベントの定義
     public event Action<bool> ChangeViewState;
 

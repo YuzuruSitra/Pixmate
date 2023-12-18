@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class OrderMoveActions : MonoBehaviour
+public class OrderMoveFunctions : MonoBehaviour
 {
     // プレイヤー制御
     [SerializeField]
@@ -17,7 +15,7 @@ public class OrderMoveActions : MonoBehaviour
     [SerializeField]
     private CtrlMovePad _ctrlMovePad;
 
-    Vector2 lastTouchPos = new Vector2(0,0);
+    Vector2 lastTouchPos = Vector2.zero;
     private bool _pushedViewPad;
 
     void Start()
@@ -71,7 +69,6 @@ public class OrderMoveActions : MonoBehaviour
     }
 
     /*---------------------------------------------*/
-
     void OnDestroy()
     {
         // イベントのリスナー削除
@@ -86,39 +83,21 @@ public class OrderMoveActions : MonoBehaviour
 
     int CalcDecisionX(float calcX)
     {
-        int outX = 0;
-        // 入力の判定
-        if(calcX == 0)
-        {
-            outX = 0;
-        }
-        else if (calcX < -_ctrlMovePad.WidthPadding)
-        {
-            outX = -1;
-        } 
+        if (calcX < -_ctrlMovePad.WidthPadding)
+            return -1;
         else if (calcX > _ctrlMovePad.WidthPadding)
-        {
-            outX = 1;
-        }
-        return outX;
+            return 1;
+        else
+            return 0;
     }
 
     int CalcDecisionZ(float calcZ)
     {
-        int outZ = 0;
-        if(calcZ == 0)
-        {
-            outZ = 0;
-        }
-        else if (calcZ < -_ctrlMovePad.HeightPadding)
-        {
-            outZ = -1;
-        } 
+        if (calcZ < -_ctrlMovePad.HeightPadding)
+            return -1;
         else if (calcZ > _ctrlMovePad.HeightPadding)
-        {
-            outZ = 1;
-        }
-        return outZ;
+            return 1;
+        else
+            return 0;
     }
-
 }

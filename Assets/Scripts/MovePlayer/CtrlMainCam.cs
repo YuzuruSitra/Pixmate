@@ -1,21 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CtrlMainCam : MonoBehaviour
 {
-    [SerializeField]
-    private CtrlPlayer _ctrlPlayer;
-
-    [SerializeField]
-    private CtrlSightPad _ctrlSightPad;
-
+    [Header("回転範囲の上限値")]
     [SerializeField]
     private float maxLimit = 45.0f;
 
+    [Header("回転範囲の下限値")]
     [SerializeField]
     private float minLimit = -45.0f;
-    
     
     // 設計見直し
     public void CtrlRotCamera(float rotY)
