@@ -3,24 +3,22 @@ using UnityEngine;
 
 public class RotateObject : MonoBehaviour
 {
+    private bool _isRotate;
+    public bool IsRotate => _isRotate;
     [SerializeField]
     private Transform _cameraTransform;
     private Coroutine _spinCoroutine;
-    private PredictManager _predictManager;
+    [SerializeField]
+    private PredictionAdjuster _predictionAdjuster;
     [Header("回転にかける時間")]
     [SerializeField]
     private float _rotationDuration = 1f;
 
-    void Start()
-    {
-        _predictManager = PredictManager.InstancePredictManager;
-    }
-
     public void SpinningLeft()
     {
-        if (_spinCoroutine != null || _predictManager == null) return;
+        if (_spinCoroutine != null || _predictionAdjuster == null) return;
 
-        GameObject targetObj = _predictManager.NowHaveCube;
+        GameObject targetObj = _predictionAdjuster.NowHaveCube;
         if (targetObj == null) return;
 
         Quaternion startRotation = GetNormalizedRotation(targetObj.transform.eulerAngles);
@@ -31,9 +29,9 @@ public class RotateObject : MonoBehaviour
 
     public void SpinningUpwards()
     {
-        if (_spinCoroutine != null || _predictManager == null) return;
+        if (_spinCoroutine != null || _predictionAdjuster == null) return;
 
-        GameObject targetObj = _predictManager.NowHaveCube;
+        GameObject targetObj = _predictionAdjuster.NowHaveCube;
         if (targetObj == null) return;
 
         Quaternion startRotation = GetNormalizedRotation(targetObj.transform.eulerAngles);
@@ -51,6 +49,7 @@ public class RotateObject : MonoBehaviour
 
     IEnumerator DoRotation(Quaternion startRotation, Quaternion targetRotation, Transform targetTransform)
     {
+        _isRotate = true;
         float elapsedTime = 0f;
         while (elapsedTime < _rotationDuration)
         {
@@ -60,8 +59,7 @@ public class RotateObject : MonoBehaviour
         }
 
         targetTransform.rotation = targetRotation;
-        // 予測線の表示
-        _predictManager.IsRotate = false;
+        _isRotate = false;
         _spinCoroutine = null;
     }
 

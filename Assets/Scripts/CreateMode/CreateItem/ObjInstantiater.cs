@@ -11,6 +11,8 @@ public class ObjInstantiater : MonoBehaviour
     private ObjectManipulator _objectManipulator;
     [SerializeField]
     private PixmateGenerate _pixmateGenerate;
+    [SerializeField]
+    PredictionAdjuster _predictionAdjuster;
 
     void Start()
     {
@@ -21,42 +23,41 @@ public class ObjInstantiater : MonoBehaviour
     public void Generate1()
     {
         // 必要なデータのインスタンス化
-        PredictManager _predictManager = PredictManager.InstancePredictManager;
         ItemBunker _itemBunker = ItemBunker.InstanceItemBunker;
         GameObject targetObj = _itemBunker.NowHaveItemObject;
-        GameObject rayHitObj = _predictManager.NowHaveCube;
-        bool targetInLange = _predictManager.InLange;
+        GameObject rayHitObj = _predictionAdjuster.NowHaveCube;
+        bool targetInLange = _predictionAdjuster.InLange;
         Vector3 rootPos;
 
         // アイテムが指定されていない且つ対象が射程外なら処理を終了
         if(targetObj == null || !targetInLange)return;
 
-        string currentItem = _itemBunker.NowHaveItem;
+        string currentItem = _itemBunker.SelectItem;
         GameObject insObj = null;
         switch(currentItem)
         {
             case "Cube":
-                rootPos = _predictManager.AdjCubePos;
+                rootPos = _predictionAdjuster.AdjCubePos;
                 insObj = _objectManipulator.GenerateCube(rootPos,targetObj);
                 _worldManager.InsObjSaving(insObj);
                 break;
             case "HalfCube":
-                rootPos = _predictManager.AdjCubePos;
+                rootPos = _predictionAdjuster.AdjCubePos;
                 insObj = _objectManipulator.GenerateCube(rootPos,targetObj);
                 _worldManager.InsObjSaving(insObj);
                 break;
             case "Step":
-                rootPos = _predictManager.AdjCubePos;
+                rootPos = _predictionAdjuster.AdjCubePos;
                 insObj = _objectManipulator.GenerateCube(rootPos,targetObj);
                 _worldManager.InsObjSaving(insObj);
                 break;
             case "SmallCube":
-                rootPos = _predictManager.AdjCubePos;
+                rootPos = _predictionAdjuster.AdjCubePos;
                 insObj = _objectManipulator.GenerateCube(rootPos,targetObj);
                 _worldManager.InsObjSaving(insObj);
                 break;
             case "Gene":
-                rootPos = _predictManager.SameCubePos;
+                rootPos = _predictionAdjuster.SameCubePos;
                 _pixmateGenerate.GenerateMate(rootPos,targetObj,rayHitObj);
                 _worldManager.DeleteObjSaving(rayHitObj);
                 break;
@@ -70,16 +71,15 @@ public class ObjInstantiater : MonoBehaviour
     public void Generate2()
     {
         // 必要なデータのインスタンス化
-        PredictManager _predictManager = PredictManager.InstancePredictManager;
         ItemBunker _itemBunker = ItemBunker.InstanceItemBunker;
         GameObject targetObj = _itemBunker.NowHaveItemObject;
-        GameObject rayHitObj = _predictManager.NowHaveCube;
-        bool targetInLange = _predictManager.InLange;
+        GameObject rayHitObj = _predictionAdjuster.NowHaveCube;
+        bool targetInLange = _predictionAdjuster.InLange;
 
         // アイテムが指定されていない且つ対象が射程外なら処理を終了
         if(targetObj == null || !targetInLange)return;
 
-        string currentItem = _itemBunker.NowHaveItem;
+        string currentItem = _itemBunker.SelectItem;
         switch(currentItem)
         {
             case "Cube":

@@ -10,6 +10,7 @@ TagManager:
   - Step
   - SmallCube
   - PixmateFox
+  - PredictFunctions
   layers:
   - Default
   - TransparentFX

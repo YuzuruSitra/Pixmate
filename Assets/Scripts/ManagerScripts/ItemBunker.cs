@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -29,10 +29,12 @@ public class ItemBunker : MonoBehaviour
     Dictionary<string, GameObject> _itemObjectDictionary = new Dictionary<string, GameObject>();
     public Dictionary<string, GameObject> ItemObjectDictionary => _itemObjectDictionary;
     // 今所有しているもの
-    public string NowHaveItem = "Cube";
-    public Sprite NowHaveItemSprite => _itemSpriteDictionary[NowHaveItem];
-    public GameObject NowHaveItemObject => _itemObjectDictionary[NowHaveItem];
+    private string _selectItem = "Cube";
+    public string SelectItem => _selectItem;
+    public Sprite NowHaveItemSprite => _itemSpriteDictionary[_selectItem];
+    public GameObject NowHaveItemObject => _itemObjectDictionary[_selectItem];
 
+    public event Action<String> OnItemChanged;
     void Awake()
     {
         if (InstanceItemBunker == null)
@@ -45,5 +47,12 @@ public class ItemBunker : MonoBehaviour
             _itemSpriteDictionary.Add(_itemName[i], _itemSprite[i]);
             _itemObjectDictionary.Add(_itemName[i], _itemObject[i]);
         }
+    }
+
+    public void ChangeItem(string newItem)
+    {
+        if(_selectItem == newItem) return;
+        _selectItem = newItem;
+        OnItemChanged?.Invoke(_selectItem);
     }
 }

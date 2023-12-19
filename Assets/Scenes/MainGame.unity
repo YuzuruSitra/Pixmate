@@ -1526,9 +1526,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 117213828}
+  - component: {fileID: 117213831}
+  - component: {fileID: 117213830}
+  - component: {fileID: 117213829}
   m_Layer: 0
-  m_Name: PredictAction
-  m_TagString: Untagged
+  m_Name: PredictFunctions
+  m_TagString: PredictFunctions
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1550,6 +1553,65 @@ Transform:
   m_Father: {fileID: 1226248202}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &117213829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 117213827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cc714c6e9a80410897addb0bdd06ec5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemBunker: {fileID: 1339386320}
+  _predictionAdjuster: {fileID: 117213831}
+  _rotateObject: {fileID: 294899213}
+  _predictAdjCube: {fileID: 1318950151}
+  _predictSameCube: {fileID: 3872290880249582993}
+  _stateManager: {fileID: 201916548}
+--- !u!114 &117213830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 117213827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26a3051d86550436b8d0527182aba4f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemBunker: {fileID: 1339386320}
+  _predictionAdjuster: {fileID: 117213831}
+  _predictAdjCube: {fileID: 1318950151}
+  _predictSameCube: {fileID: 3872290880249582993}
+  _predictSurfeceMesh:
+  - {fileID: 4300000, guid: 43c8bf24038f340fb895626148f21c06, type: 2}
+  - {fileID: 4300000, guid: 2b5b933883b1e4a839a8cf6ce384a839, type: 2}
+  - {fileID: 4300000, guid: e74d5d12f00a840bab8566ab244ba9ca, type: 2}
+  - {fileID: 4300000, guid: 7fd490ff8cb0b49d8a07bbafb8e4d0d9, type: 2}
+  _predictFlameMesh:
+  - {fileID: 4300000, guid: d78f68f7790284952813385ba0e79874, type: 2}
+  - {fileID: 4300000, guid: 620a6ec1f59d6424d9d100640dfdb72b, type: 2}
+  - {fileID: 4300000, guid: d9ae935a6f42a4ec29b0c238e7671094, type: 2}
+  - {fileID: 4300000, guid: 9addbb98db59441ec9b8613acb90bcd2, type: 2}
+  _predictSameSurfaceCube: {fileID: 632422797}
+--- !u!114 &117213831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 117213827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39de354ee024648fa9a8486b914d53d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _predictAdjCube: {fileID: 1318950151}
+  _predictSameCube: {fileID: 3872290880249582993}
 --- !u!1 &118373105
 GameObject:
   m_ObjectHideFlags: 0
@@ -3273,7 +3335,6 @@ Transform:
   - {fileID: 113498192}
   - {fileID: 201916549}
   - {fileID: 1339386319}
-  - {fileID: 564920508}
   - {fileID: 959494790}
   - {fileID: 1235493599}
   m_Father: {fileID: 1226248202}
@@ -3639,6 +3700,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _cameraTransform: {fileID: 1304387194}
+  _predictionAdjuster: {fileID: 117213831}
   _rotationDuration: 1
 --- !u!1 &313173903
 GameObject:
@@ -6325,65 +6387,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 561575827}
   m_Mesh: {fileID: 4300000, guid: 2b5b933883b1e4a839a8cf6ce384a839, type: 2}
---- !u!1 &564920507
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 564920508}
-  - component: {fileID: 564920509}
-  m_Layer: 0
-  m_Name: PredictManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &564920508
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 564920507}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 271056174}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &564920509
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 564920507}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04dca5de89c544273add59e6ce493d56, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _stateManager: {fileID: 201916548}
-  IsRotate: 0
-  _predictAdjCube: {fileID: 1318950151}
-  _predictSameCube: {fileID: 3872290880249582993}
-  _predictSameSurfaceCube: {fileID: 632422797}
-  _predictSurfeceMesh:
-  - {fileID: 4300000, guid: 43c8bf24038f340fb895626148f21c06, type: 2}
-  - {fileID: 4300000, guid: ae5cd1055a4394875975aed6ce7d6d33, type: 2}
-  - {fileID: 4300000, guid: d9f3449ba2f9f4da996abf0fd57964d7, type: 2}
-  - {fileID: 4300000, guid: 7fd490ff8cb0b49d8a07bbafb8e4d0d9, type: 2}
-  _predictFlameMesh:
-  - {fileID: 4300000, guid: d78f68f7790284952813385ba0e79874, type: 2}
-  - {fileID: 4300000, guid: 620a6ec1f59d6424d9d100640dfdb72b, type: 2}
-  - {fileID: 4300000, guid: d9ae935a6f42a4ec29b0c238e7671094, type: 2}
-  - {fileID: 4300000, guid: 9addbb98db59441ec9b8613acb90bcd2, type: 2}
 --- !u!4 &568432108 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8398646404858179262, guid: 6259f4c5c7775444796589694ca2cce7, type: 3}
@@ -10945,7 +10948,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 271056174}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &959494791
 MonoBehaviour:
@@ -13305,8 +13308,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43e67d687dd854273ac16556e20c7555, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemCube: {fileID: 433200320}
+  _objectManipulator: {fileID: 433200320}
   _pixmateGenerate: {fileID: 433200319}
+  _predictionAdjuster: {fileID: 117213831}
 --- !u!1 &1127278022
 GameObject:
   m_ObjectHideFlags: 0
@@ -13969,6 +13973,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9600cde7543384fcfb57b7620e1ea966, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _objectManipulator: {fileID: 433200320}
+  _predictionAdjuster: {fileID: 117213831}
   _stateManager: {fileID: 201916548}
   _rotateObject: {fileID: 294899213}
   _assignMatImage: {fileID: 1421566936}
@@ -14229,7 +14235,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 271056174}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1235493600
 MonoBehaviour:
@@ -15774,7 +15780,6 @@ MonoBehaviour:
   - {fileID: 474378035307719457, guid: 497cfe08ec98448d797a71dbd645226c, type: 3}
   - {fileID: 8830749012349826847, guid: 3c9233baeb18f4058a71986c02c3e373, type: 3}
   - {fileID: 1717385290}
-  NowHaveItem: Cube
 --- !u!1 &1354265195
 GameObject:
   m_ObjectHideFlags: 0

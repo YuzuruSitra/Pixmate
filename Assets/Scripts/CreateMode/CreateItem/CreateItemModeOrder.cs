@@ -44,7 +44,6 @@ public class CreateItemModeOrder : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         // プールオブジェクトの配列を初期化
         _poolObj = new GameObject[_havingItemCount];
 
@@ -94,7 +93,7 @@ public class CreateItemModeOrder : MonoBehaviour
         ItemBunker itemBunker = ItemBunker.InstanceItemBunker;
         string getKey = PushFlame();
         // 選択しているアイテムによってCreateModeの行動が変わる
-        itemBunker.NowHaveItem = getKey;
+        itemBunker.ChangeItem(getKey);
         // 選択中の画像表示
         _setItemFlame.sprite = itemBunker.NowHaveItemSprite;
         UpdateItemUIs();
@@ -119,7 +118,7 @@ public class CreateItemModeOrder : MonoBehaviour
     private void UpdateItemUIs()
     {
         ItemBunker itemBunker = ItemBunker.InstanceItemBunker;
-        string nowHaveItem = itemBunker.NowHaveItem;
+        string nowHaveItem = itemBunker.SelectItem;
         string itemName = "";
         string itemExp = "";
 

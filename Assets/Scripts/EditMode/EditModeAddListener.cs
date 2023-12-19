@@ -5,10 +5,14 @@ using UnityEngine.UI;
 
 public class EditModeAddListener : MonoBehaviour
 {
+    [SerializeField]
+    private ObjectManipulator _objectManipulator;
+    [SerializeField]
+    private PredictionAdjuster _predictionAdjuster;
     [SerializeField] 
     private StateManager _stateManager;
 
-    private AssignMaterial _assignMaterial = new AssignMaterial();
+    private AssignMaterial _assignMaterial;
     [SerializeField] 
     private RotateObject _rotateObject;
 
@@ -35,9 +39,9 @@ public class EditModeAddListener : MonoBehaviour
     [SerializeField]
     private Button _assignMatButton;
 
-
     void Start()
     {
+        _assignMaterial = new AssignMaterial(_objectManipulator, _predictionAdjuster);
         // ボタンのリスナーに登録
         _settingsButton.onClick.AddListener(GoSettingsMode);
         _homeButton.onClick.AddListener(GoDefaultMode);

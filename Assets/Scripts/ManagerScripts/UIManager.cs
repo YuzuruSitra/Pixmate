@@ -81,7 +81,7 @@ public class UIManager : MonoBehaviour
         AllInactiveUI();
         _movePads.SetActive(true);
         _createPanel.SetActive(true);
-        string setItem = ItemBunker.InstanceItemBunker.NowHaveItem;
+        string setItem = ItemBunker.InstanceItemBunker.SelectItem;
         Image[] buttonImage = new Image[2];
         for(int i = 0; i < _createPanelButton.Length; i++)
         {
