@@ -8,7 +8,7 @@ public class ObjInstantiater : MonoBehaviour
     WorldManager _worldManager;
     // 各種アイテムのクラス
     [SerializeField]
-    private ItemCube _itemCube;
+    private ObjectManipulator _objectManipulator;
     [SerializeField]
     private PixmateGenerate _pixmateGenerate;
 
@@ -37,22 +37,22 @@ public class ObjInstantiater : MonoBehaviour
         {
             case "Cube":
                 rootPos = _predictManager.AdjCubePos;
-                insObj = _itemCube.GenerateCube(rootPos,targetObj);
+                insObj = _objectManipulator.GenerateCube(rootPos,targetObj);
                 _worldManager.InsObjSaving(insObj);
                 break;
             case "HalfCube":
                 rootPos = _predictManager.AdjCubePos;
-                insObj = _itemCube.GenerateCube(rootPos,targetObj);
+                insObj = _objectManipulator.GenerateCube(rootPos,targetObj);
                 _worldManager.InsObjSaving(insObj);
                 break;
             case "Step":
                 rootPos = _predictManager.AdjCubePos;
-                insObj = _itemCube.GenerateCube(rootPos,targetObj);
+                insObj = _objectManipulator.GenerateCube(rootPos,targetObj);
                 _worldManager.InsObjSaving(insObj);
                 break;
             case "SmallCube":
                 rootPos = _predictManager.AdjCubePos;
-                insObj = _itemCube.GenerateCube(rootPos,targetObj);
+                insObj = _objectManipulator.GenerateCube(rootPos,targetObj);
                 _worldManager.InsObjSaving(insObj);
                 break;
             case "Gene":
@@ -84,19 +84,19 @@ public class ObjInstantiater : MonoBehaviour
         {
             case "Cube":
                 _worldManager.DeleteObjSaving(rayHitObj);
-                _itemCube.InventCube(rayHitObj);
+                _objectManipulator.InventCube(rayHitObj);
                 break;
             case "HalfCube":
                 _worldManager.DeleteObjSaving(rayHitObj);
-                _itemCube.InventCube(rayHitObj);
+                _objectManipulator.InventCube(rayHitObj);
                 break;
             case "Step":
                 _worldManager.DeleteObjSaving(rayHitObj);
-                _itemCube.InventCube(rayHitObj);
+                _objectManipulator.InventCube(rayHitObj);
                 break;
             case "SmallCube":
                 _worldManager.DeleteObjSaving(rayHitObj);
-                _itemCube.InventCube(rayHitObj);
+                _objectManipulator.InventCube(rayHitObj);
                 break;
             case "Gene":
 

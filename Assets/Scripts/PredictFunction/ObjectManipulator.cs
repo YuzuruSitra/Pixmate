@@ -1,8 +1,7 @@
 using UnityEngine;
 
-public class ItemCube : MonoBehaviour
+public class ObjectManipulator : MonoBehaviour
 {
-
     public GameObject GenerateCube(Vector3 createPos, GameObject createObj)
     {
         if(createPos == null) return null;
