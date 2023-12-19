@@ -3638,7 +3638,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c50bb559ba014deb8589112ae949242, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _camPos: {fileID: 798548015}
+  _cameraTransform: {fileID: 1304387194}
+  _rotationDuration: 1
 --- !u!1 &313173903
 GameObject:
   m_ObjectHideFlags: 0
@@ -14631,8 +14632,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2178f35dcec6f4ccd8e4f5fe61bcd577, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ctrlPlayer: {fileID: 798548016}
-  _ctrlSightPad: {fileID: 788742235}
   maxLimit: 45
   minLimit: -45
 --- !u!65 &1304387197

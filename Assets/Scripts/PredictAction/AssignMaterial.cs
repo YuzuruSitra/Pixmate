@@ -5,16 +5,25 @@ using UnityEngine.UI;
 
 public class AssignMaterial
 {
+    PredictManager _predictManager;
+    MaterialBunker _materialBunker;
+    // ワールドデータの保存
+    WorldManager _worldManager;
+    
+    public AssignMaterial()
+    {
+        _predictManager = PredictManager.InstancePredictManager;
+        _materialBunker = MaterialBunker.InstanceMatBunker;
+        _worldManager = WorldManager.InstanceWorldManager;
+    }
+
     public void DoAssignMat()
     {
-        PredictManager _predictManager = PredictManager.InstancePredictManager;
-        MaterialBunker _materialBunker = MaterialBunker.InstanceMatBunker;
         GameObject targetObj = _predictManager.NowHaveCube;
         if(_materialBunker.NowHavePhotoMaterial == null || targetObj == null || !_predictManager.InLange) return;
         _predictManager.AssignMaterial(_materialBunker.NowHavePhotoMaterial);
         
         // ワールドデータの保存
-        WorldManager _worldManager = WorldManager.InstanceWorldManager;
         _worldManager.ChangeObjSaving(targetObj);
     }
 }

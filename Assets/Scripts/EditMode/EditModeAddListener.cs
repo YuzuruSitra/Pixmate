@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EditModeOrder : MonoBehaviour
+public class EditModeAddListener : MonoBehaviour
 {
     [SerializeField] 
     private StateManager _stateManager;
