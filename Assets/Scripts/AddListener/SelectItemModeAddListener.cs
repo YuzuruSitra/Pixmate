@@ -1,11 +1,10 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class CreateItemModeOrder : MonoBehaviour
+// アイテム選択モードのリスナー登録
+public class SelectItemModeAddListener : MonoBehaviour
 {
     [SerializeField] 
     private StateManager _stateManager;
@@ -39,6 +38,8 @@ public class CreateItemModeOrder : MonoBehaviour
     // 名前と説明のScriptableObject。
     [SerializeField]
     private ItemInformation _itemInformation;
+    [SerializeField]
+    private Button _returnButton;
 
 
     // Start is called before the first frame update
@@ -48,6 +49,8 @@ public class CreateItemModeOrder : MonoBehaviour
         _poolObj = new GameObject[_havingItemCount];
 
         _stateManager.OnStateChanged += OpenCreateItem;
+
+        _returnButton.onClick.AddListener(ReturnCreateMode);
 
         // プールの生成とリスナー登録
         SetPoolListener();
@@ -61,7 +64,7 @@ public class CreateItemModeOrder : MonoBehaviour
     // CreateItemパネル展開時の処理
     void OpenCreateItem(StateManager.GameState newState)
     {
-        if(newState != StateManager.GameState.CreateItemMode) return;
+        if(newState != StateManager.GameState.SelectItemMode) return;
         // 重複ケア
         _showItemList.AllReturnPooled(_poolObj);
         // 描画処理

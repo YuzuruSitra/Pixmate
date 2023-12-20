@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// テクスチャを合成するクラス
 public class TextureFusioner
 {
     const int TARGET_SIZE = 64;

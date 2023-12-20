@@ -7,10 +7,10 @@ public class StateManager : MonoBehaviour
     {
         DefaultMode,
         CreateMode,
-        CreateItemMode,
+        SelectItemMode,
         EditMode,
-        EditMatMode,
-        EditMatImportMode,
+        SelectMaterialMode,
+        ImportMaterialMode,
         SettingsMode
     }
 

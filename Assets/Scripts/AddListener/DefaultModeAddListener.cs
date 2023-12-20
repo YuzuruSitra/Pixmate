@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DefaultModeOrder : MonoBehaviour
+// デフォルトモードのリスナー登録
+public class DefaultModeAddListener : MonoBehaviour
 {
     [SerializeField] 
     private StateManager _stateManager;

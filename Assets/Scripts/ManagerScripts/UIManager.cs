@@ -49,16 +49,16 @@ public class UIManager : MonoBehaviour
             case StateManager.GameState.CreateMode:
                 OnCreateUI();
                 break;
-            case StateManager.GameState.CreateItemMode:
+            case StateManager.GameState.SelectItemMode:
                 OnCreateItemUI();
                 break;
             case StateManager.GameState.EditMode:
                 OnEditUI();
                 break;
-            case StateManager.GameState.EditMatMode:
+            case StateManager.GameState.SelectMaterialMode:
                 OnEditMatUI();
                 break;
-            case StateManager.GameState.EditMatImportMode:
+            case StateManager.GameState.ImportMaterialMode:
                 OnEditCropUI();
                 break;
             case StateManager.GameState.SettingsMode:

@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// 編集モードのリスナー登録
 public class EditModeAddListener : MonoBehaviour
 {
     // ワールドデータの保存
@@ -80,7 +79,7 @@ public class EditModeAddListener : MonoBehaviour
 
     void GoSetMatMode()
     {
-        _stateManager.ChangeState(StateManager.GameState.EditMatMode);
+        _stateManager.ChangeState(StateManager.GameState.SelectMaterialMode);
     }
 
     void returnEditMode()

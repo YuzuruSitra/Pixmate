@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ImportModeOrder : MonoBehaviour
+// インポートモードのリスナー登録
+public class ImportMaterialModeAddListener : MonoBehaviour
 {
     [SerializeField] 
     private StateManager _stateManager;
@@ -58,7 +57,7 @@ public class ImportModeOrder : MonoBehaviour
     // ImageImportパネル展開時の処理
     void OpenImageImport(StateManager.GameState newState)
     {
-        if(newState != StateManager.GameState.EditMatImportMode) return;
+        if(newState != StateManager.GameState.ImportMaterialMode) return;
 
         // インポート
         _importImageFromGallery.ImportImage(_imageImportFlame);
@@ -69,14 +68,13 @@ public class ImportModeOrder : MonoBehaviour
     {
         _activeImportMode = isSuccess;
         if(!isSuccess) return;
-        Debug.Log("SucceseImported" + isSuccess);
         _cropImage.DoCropImage(_imageImportFlame);
     }
 
     private void CancelImport()
     {
         _activeImportMode = false;
-        _stateManager.ChangeState(StateManager.GameState.EditMatMode);
+        _stateManager.ChangeState(StateManager.GameState.SelectMaterialMode);
     }
 
     // ボタンで実行
@@ -84,7 +82,7 @@ public class ImportModeOrder : MonoBehaviour
     {
         // クロップのSpriteを保存
         _saveCroppedImage.AddCroppedSprite(_cropImage.CroppedTexture);
-        _stateManager.ChangeState(StateManager.GameState.EditMatMode);
+        _stateManager.ChangeState(StateManager.GameState.SelectMaterialMode);
     }
 
 }

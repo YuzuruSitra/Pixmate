@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SettingModeOrder : MonoBehaviour
+// 設定モードのリスナー登録
+public class SettingModeAddListener : MonoBehaviour
 {
     [SerializeField] 
     private StateManager _stateManager;
@@ -11,15 +10,13 @@ public class SettingModeOrder : MonoBehaviour
     private Button _returnButton;
     [SerializeField]
     private Button _deletePixmateButton;
+    [SerializeField]
     private SaveManager _saveManager;
 
-    // Start is called before the first frame update
     void Start()
     {
-        _saveManager = SaveManager.InstanceSaveManager;
         _returnButton.onClick.AddListener(ReturnMode);
         _deletePixmateButton.onClick.AddListener(DeletePixmate);
-
     }
 
     void ReturnMode()

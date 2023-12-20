@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-
-public class EditMatModeOrder : MonoBehaviour
+// エディットマットモードのリスナー登録
+public class SelectMaterialModeAddListener : MonoBehaviour
 {
     MaterialBunker _materialBunker;
     [SerializeField]
@@ -13,9 +11,6 @@ public class EditMatModeOrder : MonoBehaviour
 
     [SerializeField] 
     private StateManager _stateManager;
-
-    [SerializeField] 
-    private ImportModeOrder _importModeOrder;
 
     [SerializeField] 
     private GalleryShow _galleryShow;
@@ -74,7 +69,7 @@ public class EditMatModeOrder : MonoBehaviour
     // OpenEditMatパネル展開時の処理
     void OpenEditMat(StateManager.GameState newState)
     {
-        if(newState != StateManager.GameState.EditMatMode) return;
+        if(newState != StateManager.GameState.SelectMaterialMode) return;
         // 重複ケア
         _galleryShow.AllReturnPooled(_poolObj);
         // 描画処理
@@ -91,15 +86,14 @@ public class EditMatModeOrder : MonoBehaviour
     void GoImportMode()
     {
         Debug.Log("PushImport");
-        _stateManager.ChangeState(StateManager.GameState.EditMatImportMode);
+        _stateManager.ChangeState(StateManager.GameState.ImportMaterialMode);
     }
 
     // インポートしなかった場合EditMatModeに戻す
     void CloseImporteMode(bool isSuccess)
     {
         if(isSuccess) return;
-        Debug.Log("CloseImporteMode" + isSuccess);
-        _stateManager.ChangeState(StateManager.GameState.EditMatMode);
+        _stateManager.ChangeState(StateManager.GameState.SelectMaterialMode);
     }
 
     /*---------------------------------------------*/
