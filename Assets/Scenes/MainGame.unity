@@ -13973,6 +13973,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9600cde7543384fcfb57b7620e1ea966, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _worldManager: {fileID: 959494791}
   _objectManipulator: {fileID: 433200320}
   _predictionAdjuster: {fileID: 117213831}
   _stateManager: {fileID: 201916548}

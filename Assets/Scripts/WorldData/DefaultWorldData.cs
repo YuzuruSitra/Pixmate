@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Numerics;
 
+// ワールドデータのScriptableObject用クラス
 [CreateAssetMenu(fileName = "WorldData", menuName = "ScriptableObjects/WorldData")]
 public class DefaultWorldData : ScriptableObject
 {
