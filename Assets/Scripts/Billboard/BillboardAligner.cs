@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
 
-/// <summary>
-/// 常にカメラの方を向くオブジェクト回転をカメラに固定
-/// </summary>
-public class Billboard : MonoBehaviour 
+// オブジェクトを常にカメラの方へ向けるクラス
+public class BillboardAligner : MonoBehaviour 
 {
 	private Quaternion _currentRot;
 
