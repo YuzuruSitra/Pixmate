@@ -1,18 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class MatingColor
+public class TextureFusioner
 {
     const int TARGET_SIZE = 64;
     const int SUBDIVISIONS = 4;
-    int[,] _squares;
     int[] _square;
 
-    public Sprite DoPixelsFusion(Texture2D target1, Texture2D target2)
+    public Sprite CombineTextures(Texture2D target1, Texture2D target2)
     {
-        ArrayInitializing();
+        InitializingArray();
 
         Texture2D tmpTexture1;
         tmpTexture1 = ResizeTexture(target1, TARGET_SIZE, TARGET_SIZE);
@@ -22,7 +18,7 @@ public class MatingColor
         tmpTexture2 = ResizeTexture(target2, TARGET_SIZE, TARGET_SIZE);
         Color32[] pixelColors2 = tmpTexture2.GetPixels32();
         
-        Texture2D completeImage = CombineMat(_square ,TARGET_SIZE , pixelColors1, pixelColors2);
+        Texture2D completeImage = CombineMaterials(_square ,TARGET_SIZE , pixelColors1, pixelColors2);
         
         // ImageオブジェクトのTextureを設定
         Sprite sprite = Sprite.Create(completeImage, new Rect(0, 0, completeImage.width, completeImage.height), Vector2.one * 0.5f);
@@ -32,9 +28,8 @@ public class MatingColor
 
     /*----------------------------------------------------------------*/
 
-    void ArrayInitializing()
+    void InitializingArray()
     {
-        _squares = new int[TARGET_SIZE, TARGET_SIZE];
         _square = new int[TARGET_SIZE * TARGET_SIZE];
 
         for (int x = 0; x < TARGET_SIZE; x++)
@@ -42,7 +37,6 @@ public class MatingColor
             for (int y = 0; y < TARGET_SIZE; y++)
             {
                 int index = x + y * TARGET_SIZE;
-                _squares [x , y] = index;
 
                 int subdivisionX = x / SUBDIVISIONS;
                 int subdivisionY = y / SUBDIVISIONS;
@@ -72,7 +66,7 @@ public class MatingColor
         return resizedTexture;
     }
 
-    Texture2D CombineMat(int[] square ,int maxSize , Color32[] pixPaint1, Color32[] pixPaint2)
+    Texture2D CombineMaterials(int[] square ,int maxSize , Color32[] pixPaint1, Color32[] pixPaint2)
     {
         int length = square.Length;
         int[] selectKey = new int[length]; 

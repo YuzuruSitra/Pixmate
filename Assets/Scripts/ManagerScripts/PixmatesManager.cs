@@ -190,13 +190,13 @@ public class PixmatesManager : MonoBehaviour
 
     public void MaitingStart(Texture2D target1, Texture2D target2, Transform insTransform)
     {
-        MatingColor matingColor = new MatingColor();
+        TextureFusioner textureFusioner = new TextureFusioner();
         // Textureの生成
         Texture2D matTexture = Texture2D.whiteTexture;
 
         // スプライトからテクスチャを作成
         Sprite sprite = null;
-        if (target1 != null && target2 != null) sprite = matingColor.DoPixelsFusion(target1, target2);
+        if (target1 != null && target2 != null) sprite = textureFusioner.CombineTextures(target1, target2);
 
         if (sprite != null)
         {
