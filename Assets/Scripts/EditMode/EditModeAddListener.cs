@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class EditModeAddListener : MonoBehaviour
 {
+    // ワールドデータの保存
+    [SerializeField]
+    WorldManager _worldManager;
     [SerializeField]
     private ObjectManipulator _objectManipulator;
     [SerializeField]
@@ -12,7 +15,7 @@ public class EditModeAddListener : MonoBehaviour
     [SerializeField] 
     private StateManager _stateManager;
 
-    private AssignMaterial _assignMaterial;
+    private MaterialAssigner _materialAssigner;
     [SerializeField] 
     private RotateObject _rotateObject;
 
@@ -41,14 +44,14 @@ public class EditModeAddListener : MonoBehaviour
 
     void Start()
     {
-        _assignMaterial = new AssignMaterial(_objectManipulator, _predictionAdjuster);
+        _materialAssigner = new MaterialAssigner(_objectManipulator, _predictionAdjuster);
         // ボタンのリスナーに登録
         _settingsButton.onClick.AddListener(GoSettingsMode);
         _homeButton.onClick.AddListener(GoDefaultMode);
         _setMatButton.onClick.AddListener(GoSetMatMode);
         _rotLeftButton.onClick.AddListener(_rotateObject.SpinningLeft);
         _rotUpwardsButton.onClick.AddListener(_rotateObject.SpinningUpwards);
-        _assignMatButton.onClick.AddListener(_assignMaterial.DoAssignMat);
+        _assignMatButton.onClick.AddListener(DoAssignMatSaving);
         _stateManager.OnStateChanged += OpenEdit;
     }
 
@@ -83,5 +86,12 @@ public class EditModeAddListener : MonoBehaviour
     void returnEditMode()
     {
         _stateManager.ChangeState(StateManager.GameState.EditMode);
+    }
+
+    void DoAssignMatSaving()
+    {
+        GameObject changeObj = _materialAssigner.DoAssignMat();
+        if (changeObj == null) return;
+        _worldManager.ChangeObjSaving(changeObj);
     }
 }
