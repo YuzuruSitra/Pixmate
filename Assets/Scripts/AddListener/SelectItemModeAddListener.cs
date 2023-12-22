@@ -9,7 +9,7 @@ public class SelectItemModeAddListener : MonoBehaviour
     [SerializeField] 
     private StateManager _stateManager;
     [SerializeField] 
-    private ShowItemList _showItemList;
+    private ItemPoolHandler _itemPoolHandler;
 
     // ビュー用
     [SerializeField] 
@@ -66,9 +66,9 @@ public class SelectItemModeAddListener : MonoBehaviour
     {
         if(newState != StateManager.GameState.SelectItemMode) return;
         // 重複ケア
-        _showItemList.AllReturnPooled(_poolObj);
+        _itemPoolHandler.ReturnAllToPool(_poolObj);
         // 描画処理
-        _showItemList.ShowSprits(_poolObj);
+        _itemPoolHandler.ShowItems(_poolObj);
         // オブジェクトの描画
         ItemBunker itemBunker = ItemBunker.InstanceItemBunker;
         _setItemFlame.sprite = itemBunker.NowHaveItemSprite;
@@ -82,7 +82,7 @@ public class SelectItemModeAddListener : MonoBehaviour
         for(int i = 0;  i < _poolObj.Length; i++)
         {
             // プールの生成格納
-            _poolObj[i]  = _showItemList.GeneratePool(_flamePrefab, _PoolParentObj);
+            _poolObj[i]  = _itemPoolHandler.GenerateitemPool(_flamePrefab, _PoolParentObj);
             //ボタンをリスナー登録
             Button activeButton =  _poolObj[i].GetComponent<Button>();
 

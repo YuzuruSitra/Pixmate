@@ -13,7 +13,7 @@ public class SelectMaterialModeAddListener : MonoBehaviour
     private StateManager _stateManager;
 
     [SerializeField] 
-    private GalleryShow _galleryShow;
+    private SpritePoolHandler _spritePoolHandler;
 
     // ビュー用
     [SerializeField] 
@@ -71,11 +71,11 @@ public class SelectMaterialModeAddListener : MonoBehaviour
     {
         if(newState != StateManager.GameState.SelectMaterialMode) return;
         // 重複ケア
-        _galleryShow.AllReturnPooled(_poolObj);
+        _spritePoolHandler.ReturnAllToPool(_poolObj);
         // 描画処理
-        _galleryShow.ShowSprits(_poolObj);
+        _spritePoolHandler.ShowSprites(_poolObj);
         // 選択フレームに画像をセット
-        _galleryShow.ShowSelectItem(_setItemFlame, _itemNameText, _materialBunker.NowHavePhotoSprite, _materialBunker.NowHavePhotoNames);
+        _spritePoolHandler.ShowSelectedItem(_setItemFlame, _itemNameText, _materialBunker.NowHavePhotoSprite, _materialBunker.NowHavePhotoNames);
     }
 
     void ReturnEditMode()
@@ -104,7 +104,7 @@ public class SelectMaterialModeAddListener : MonoBehaviour
         for(int i = 0;  i < _poolObj.Length; i++)
         {
             // プールの生成格納
-            _poolObj[i]  = _galleryShow.GeneratePool(_flamePrefab, _PoolParentObj);
+            _poolObj[i]  = _spritePoolHandler.GeneratePool(_flamePrefab, _PoolParentObj);
             //ボタンをリスナー登録
             Button activeButton =  _poolObj[i].GetComponent<Button>();
 
@@ -116,7 +116,7 @@ public class SelectMaterialModeAddListener : MonoBehaviour
     void SelectFlame()
     {
         _materialBunker.NowHavePhoto = PushFlame();
-        _galleryShow.ShowSelectItem(_setItemFlame, _itemNameText, _materialBunker.NowHavePhotoSprite, _materialBunker.NowHavePhotoNames);
+        _spritePoolHandler.ShowSelectedItem(_setItemFlame, _itemNameText, _materialBunker.NowHavePhotoSprite, _materialBunker.NowHavePhotoNames);
     }
 
     public string PushFlame()
@@ -138,11 +138,11 @@ public class SelectMaterialModeAddListener : MonoBehaviour
     {
         _materialBunker.DeleteSortDictionary();
         // 重複ケア
-        _galleryShow.AllReturnPooled(_poolObj);
+        _spritePoolHandler.ReturnAllToPool(_poolObj);
         // 描画処理
-        _galleryShow.ShowSprits(_poolObj);
+        _spritePoolHandler.ShowSprites(_poolObj);
         // 選択フレームに画像をセット
-        _galleryShow.ShowSelectItem(_setItemFlame, _itemNameText, _materialBunker.NowHavePhotoSprite, _materialBunker.NowHavePhotoNames);
+        _spritePoolHandler.ShowSelectedItem(_setItemFlame, _itemNameText, _materialBunker.NowHavePhotoSprite, _materialBunker.NowHavePhotoNames);
     }
 
 }
