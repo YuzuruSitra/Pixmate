@@ -11,6 +11,8 @@ TagManager:
   - SmallCube
   - PixmateFox
   - PredictFunctions
+  - MaterialBunker
+  - SaveManager
   layers:
   - Default
   - TransparentFX
