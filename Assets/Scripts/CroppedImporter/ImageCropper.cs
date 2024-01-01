@@ -1,9 +1,10 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CropImage : MonoBehaviour
+// 画像をクロップするクラス
+public class ImageCropper : MonoBehaviour
 {
+    private bool _isActive = false;
     private Image _imageToCrop;
     private Vector2 _cropOffset = Vector2.zero;
     private Vector2 _croppedSize;
@@ -17,9 +18,9 @@ public class CropImage : MonoBehaviour
     private Texture2D _croppedTexture;
     public Texture2D CroppedTexture => _croppedTexture;
 
-
     public void DoCropImage(GameObject cropFlame)
     {
+        _isActive = true;
         _imageToCrop = cropFlame.GetComponent<Image>();
 
         // 画像を読み込んでテクスチャとして取得する
@@ -29,13 +30,22 @@ public class CropImage : MonoBehaviour
         int minDimension = Mathf.Min(_originalTexture.width, _originalTexture.height);
         _croppedSize = new Vector2(minDimension, minDimension);
 
-        DoCrop(_originalTexture, _cropOffset, _croppedSize);
+        ChangeTexture(_originalTexture, _cropOffset, _croppedSize);
     }
 
-    public void CropInput(bool active)
+    public void FinishCrop()
     {
-        if (!active) return;
+        _isActive = false;
+    }
 
+    void Update()
+    {
+        if (!_isActive) return;
+        CropInput();
+    }
+
+    public void CropInput()
+    {
         Vector2 prevCropOffset = _cropOffset;
         Vector2 prevCroppedSize = _croppedSize;
         bool keyInput = false;
@@ -45,7 +55,7 @@ public class CropImage : MonoBehaviour
         float speedAdjusted = _moveSpeed * speedFactor;
         float scaleSpeedAdjusted = _scaleSpeed * speedFactor;
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
             if (Input.GetKey(KeyCode.LeftArrow)) {
                 _cropOffset.x -= speedAdjusted * Time.deltaTime;
                 keyInput = true;
@@ -83,7 +93,7 @@ public class CropImage : MonoBehaviour
                 _croppedSize.y = newHeight;
             }
 
-        #elif UNITY_IOS
+#elif UNITY_IOS
 
             if (Input.touchCount > 0)
             {
@@ -120,7 +130,7 @@ public class CropImage : MonoBehaviour
                 keyInput = true;
             }
 
-        #endif
+#endif
 
         _croppedSize.x = Mathf.Clamp(_croppedSize.x, 1, _originalTexture.width);
         _croppedSize.y = Mathf.Clamp(_croppedSize.y, 1, _originalTexture.height);
@@ -128,11 +138,11 @@ public class CropImage : MonoBehaviour
         _cropOffset.y = Mathf.Clamp(_cropOffset.y, 0, _originalTexture.height - _croppedSize.y);
 
         if (keyInput && (prevCropOffset != _cropOffset || prevCroppedSize != _croppedSize)) {
-            DoCrop(_originalTexture, _cropOffset, _croppedSize);
+            ChangeTexture(_originalTexture, _cropOffset, _croppedSize);
         }
     }
 
-    void DoCrop(Texture2D sourceTexture, Vector2 cropLange, Vector2 croppedSize)
+    void ChangeTexture(Texture2D sourceTexture, Vector2 cropLange, Vector2 croppedSize)
     {
         // クロップ範囲を設定する
         int startX = Mathf.Clamp((int)_cropOffset.x, 0, sourceTexture.width - (int)croppedSize.x);
@@ -180,7 +190,7 @@ public class CropImage : MonoBehaviour
         // テクスチャの変更を適用
         _originalTexture.Apply();
 
-        DoCrop(_originalTexture, _cropOffset, _croppedSize);
+        ChangeTexture(_originalTexture, _cropOffset, _croppedSize);
     }
 
     // 反時計回り90度回転
@@ -213,8 +223,6 @@ public class CropImage : MonoBehaviour
         // テクスチャの変更を適用
         _originalTexture.Apply();
 
-        DoCrop(_originalTexture, _cropOffset, _croppedSize);
+        ChangeTexture(_originalTexture, _cropOffset, _croppedSize);
     }
-
-
 }

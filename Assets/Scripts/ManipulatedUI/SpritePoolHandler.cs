@@ -48,9 +48,7 @@ public class SpritePoolHandler : MonoBehaviour
     {
         foreach (var obj in poolObjects)
         {
-            if (obj.activeInHierarchy)
-                obj.SetActive(false);
-
+            obj.SetActive(false);
             _imagePool.Enqueue(obj);
         }
     }

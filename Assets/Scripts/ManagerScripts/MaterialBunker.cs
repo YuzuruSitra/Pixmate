@@ -74,15 +74,11 @@ public class MaterialBunker : MonoBehaviour
     }
 
     // スプライトの追加
-    public void AddSprites(Sprite setSprite)
+    public void AddDictionarySprites(string key, Sprite setSprite)
     {
-        string tmpKey = KeyName;
         MatCount += 1;
-        string tmp = tmpKey + MatCount;
-        CroppedImages.Add(tmp, setSprite);
-        ImageNames.Add(tmp, tmp);
-        // Spriteのセーブ
-        _saveManager.DoSaveSprite(MatCount,setSprite,tmp,tmp);
+        CroppedImages.Add(key, setSprite);
+        ImageNames.Add(key, key);
         SpritesAssignMat();
     }
 

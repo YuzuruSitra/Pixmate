@@ -50,8 +50,7 @@ public class ItemPoolHandler : MonoBehaviour
     {
         foreach (var obj in itemObjects)
         {
-            bool isActive = obj.activeInHierarchy;
-            if (isActive) obj.SetActive(false);
+            obj.SetActive(false);
             _itemPool.Enqueue(obj);
         }
     }

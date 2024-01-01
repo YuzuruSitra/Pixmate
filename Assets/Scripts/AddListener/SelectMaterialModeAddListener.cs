@@ -85,7 +85,6 @@ public class SelectMaterialModeAddListener : MonoBehaviour
 
     void GoImportMode()
     {
-        Debug.Log("PushImport");
         _stateManager.ChangeState(StateManager.GameState.ImportMaterialMode);
     }
 

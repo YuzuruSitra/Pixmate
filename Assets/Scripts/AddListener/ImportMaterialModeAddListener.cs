@@ -8,11 +8,9 @@ public class ImportMaterialModeAddListener : MonoBehaviour
     private StateManager _stateManager;
     [SerializeField]
     private ImportImageFromGallery _importImageFromGallery;
-
+    private CroppedImageSaver _croppedImageSaver;
     [SerializeField] 
-    private SaveCroppedImage _saveCroppedImage;
-    [SerializeField] 
-    private CropImage _cropImage;
+    private ImageCropper _imageCropper;
 
     // クロップ対象
     [SerializeField]
@@ -27,26 +25,18 @@ public class ImportMaterialModeAddListener : MonoBehaviour
     [SerializeField]
     private Button _rotateButton;
 
-    private bool _activeImportMode = false;
-    public bool ActiveImportMode => _activeImportMode;
-
     void Start()
     {
+        _croppedImageSaver = new CroppedImageSaver();
         _stateManager.OnStateChanged += OpenImageImport;
 
         // リスナー登録
         _cancelButton.onClick.AddListener(CancelImport);
         _importButton.onClick.AddListener(DoneImport);
-        _reverseButton.onClick.AddListener(_cropImage.ReverseTexture2D);
-        _rotateButton.onClick.AddListener(_cropImage.RotateTexture2D);
+        _reverseButton.onClick.AddListener(_imageCropper.ReverseTexture2D);
+        _rotateButton.onClick.AddListener(_imageCropper.RotateTexture2D);
 
-    _importImageFromGallery.IsImportedSuccess += SucceseImported;
-    }
-
-    void Update()
-    {
-        // クロップ画像の入力処理
-        _cropImage.CropInput(_activeImportMode);
+        _importImageFromGallery.IsImportedSuccess += SucceseImported;
     }
 
     void OnDestroy()
@@ -61,27 +51,24 @@ public class ImportMaterialModeAddListener : MonoBehaviour
 
         // インポート
         _importImageFromGallery.ImportImage(_imageImportFlame);
-
     }
 
     void SucceseImported(bool isSuccess)
     {
-        _activeImportMode = isSuccess;
         if(!isSuccess) return;
-        _cropImage.DoCropImage(_imageImportFlame);
+        _imageCropper.DoCropImage(_imageImportFlame);
     }
 
     private void CancelImport()
     {
-        _activeImportMode = false;
+        _imageCropper.FinishCrop();
         _stateManager.ChangeState(StateManager.GameState.SelectMaterialMode);
     }
 
-    // ボタンで実行
     private void DoneImport()
     {
-        // クロップのSpriteを保存
-        _saveCroppedImage.AddCroppedSprite(_cropImage.CroppedTexture);
+        _imageCropper.FinishCrop();
+        _croppedImageSaver.ResizeToSaveSprite(_imageCropper.CroppedTexture);
         _stateManager.ChangeState(StateManager.GameState.SelectMaterialMode);
     }
 
