@@ -4,6 +4,7 @@ using UnityEngine.UI;
 // クリエイトモードのリスナー登録
 public class CreateModeAddListener : MonoBehaviour
 {
+    private ObjInstantiater _objInstantiater;
     [SerializeField] 
     private StateManager _stateManager;
 
@@ -19,11 +20,10 @@ public class CreateModeAddListener : MonoBehaviour
     private Button _createButton1;
     [SerializeField]
     private Button _createButton2;
-    [SerializeField]
-    private ObjInstantiater _objInstantiater;
 
     void Start()
     {
+        _objInstantiater = new ObjInstantiater();
         _stateManager.OnStateChanged += OpenCreate;
         _homeButton.onClick.AddListener(GoDefaultMode);
         _itemButton.onClick.AddListener(GoItemMode);

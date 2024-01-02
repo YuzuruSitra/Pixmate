@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PredictionVisualizer : MonoBehaviour
@@ -10,11 +8,11 @@ public class PredictionVisualizer : MonoBehaviour
     private PredictionAdjuster _predictionAdjuster;
     [SerializeField]
     private RotateObject _rotateObject;
-    private bool _currentAdjVisible;
+    private bool _useAdjVisible;
     private bool _isAdjVisible;
     [SerializeField]
     private GameObject _predictAdjCube;
-    private bool _currentSameVisible;
+    private bool _useSameVisible;
     private bool _isSameVisible;
     [SerializeField]
     private GameObject _predictSameCube;
@@ -88,16 +86,15 @@ public class PredictionVisualizer : MonoBehaviour
 
     private void CtrlPredictObj()
     {
+        _useAdjVisible = _isAdjVisible;
+        _useSameVisible = _isSameVisible;
         if (!_predictionAdjuster.InLange || _rotateObject.IsRotate)
         {
-            _isAdjVisible = false;
-            _isSameVisible = false;
+            _useAdjVisible = false;
+            _useSameVisible = false;
         }
-        if (_currentAdjVisible == _isAdjVisible && _currentSameVisible == _isSameVisible) return;
-        _predictAdjCube.SetActive(_isAdjVisible);
-        _predictSameCube.SetActive(_isSameVisible);
-        _currentAdjVisible = _isAdjVisible;
-        _currentSameVisible = _isSameVisible;
+        _predictAdjCube.SetActive(_useAdjVisible);
+        _predictSameCube.SetActive(_useSameVisible);
     }
 
 }

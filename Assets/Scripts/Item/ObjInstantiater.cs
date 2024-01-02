@@ -1,29 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjInstantiater : MonoBehaviour
+// CreateModeのボタン押下処理
+public class ObjInstantiater
 {   
     // ワールドマネージャー
-    WorldManager _worldManager;
+    private WorldManager _worldManager;
+    private ItemBunker _itemBunker;
     // 各種アイテムのクラス
-    [SerializeField]
     private ObjectManipulator _objectManipulator;
-    [SerializeField]
     private PixmateGenerate _pixmateGenerate;
-    [SerializeField]
-    PredictionAdjuster _predictionAdjuster;
+    private PredictionAdjuster _predictionAdjuster;
 
-    void Start()
+    public ObjInstantiater()
     {
-        _worldManager = WorldManager.InstanceWorldManager;
+        _worldManager = GameObject.FindWithTag("Manager").GetComponent<WorldManager>();
+        _itemBunker = GameObject.FindWithTag("Manager").GetComponent<ItemBunker>();
+        _objectManipulator = GameObject.FindWithTag("PredictFunctions").GetComponent<ObjectManipulator>();
+        _pixmateGenerate = GameObject.FindWithTag("PredictFunctions").GetComponent<PixmateGenerate>();
+        _predictionAdjuster = GameObject.FindWithTag("PredictFunctions").GetComponent<PredictionAdjuster>();
     }
-
+    
     // オブジェクトの生成-ボタン1
     public void Generate1()
     {
         // 必要なデータのインスタンス化
-        ItemBunker _itemBunker = ItemBunker.InstanceItemBunker;
         GameObject targetObj = _itemBunker.NowHaveItemObject;
         GameObject rayHitObj = _predictionAdjuster.NowHaveCube;
         bool targetInLange = _predictionAdjuster.InLange;
@@ -71,7 +71,6 @@ public class ObjInstantiater : MonoBehaviour
     public void Generate2()
     {
         // 必要なデータのインスタンス化
-        ItemBunker _itemBunker = ItemBunker.InstanceItemBunker;
         GameObject targetObj = _itemBunker.NowHaveItemObject;
         GameObject rayHitObj = _predictionAdjuster.NowHaveCube;
         bool targetInLange = _predictionAdjuster.InLange;

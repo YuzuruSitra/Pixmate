@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// アイテムの名前と説明のオブジェクト
 [CreateAssetMenu]
 public class ItemInformation : ScriptableObject
 {

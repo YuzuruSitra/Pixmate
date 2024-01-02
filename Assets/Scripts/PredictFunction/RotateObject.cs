@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
+// オブジェクトの回転を制御するクラス
 public class RotateObject : MonoBehaviour
 {
     private bool _isRotate;

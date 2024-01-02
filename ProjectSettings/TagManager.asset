@@ -13,6 +13,7 @@ TagManager:
   - PredictFunctions
   - MaterialBunker
   - SaveManager
+  - Manager
   layers:
   - Default
   - TransparentFX
