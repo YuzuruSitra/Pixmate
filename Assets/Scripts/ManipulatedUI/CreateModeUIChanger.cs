@@ -4,6 +4,8 @@ using UnityEngine.UI;
 // CreateModeのUI管理クラス
 public class CreateModeUIChanger : MonoBehaviour
 {
+    [SerializeField]
+    private ItemBunker _itemBunker;
     [SerializeField] 
     private StateManager _stateManager;
     
@@ -40,7 +42,7 @@ public class CreateModeUIChanger : MonoBehaviour
     void OpenCreatePanel()
     {
         _createPanel.SetActive(true);
-        string setItem = ItemBunker.InstanceItemBunker.SelectItem;
+        string setItem = _itemBunker.SelectItem;
 
         // アイテム毎にボタン画像の切り替え
         switch(setItem)

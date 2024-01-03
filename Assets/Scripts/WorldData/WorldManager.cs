@@ -1,9 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class WorldManager : MonoBehaviour
 {
+    [SerializeField]
+    private MaterialBunker _materialBunker;
+    [SerializeField]
+    private ItemBunker _itemBunker;
     private bool _isInitialization;
     public static WorldManager InstanceWorldManager;
     SaveManager _saveManager;
@@ -71,7 +74,7 @@ public class WorldManager : MonoBehaviour
             }
         }
 
-        ItemBunker itemBunker = ItemBunker.InstanceItemBunker;
+        
 
         for (int i = 0; i < _worldObjCount; i++)
         {
@@ -84,7 +87,7 @@ public class WorldManager : MonoBehaviour
                 continue;
             }
 
-            GameObject insObj = Instantiate(itemBunker.ItemObject[insKind], _objPosList[i], _objRotList[i], _mapParent);
+            GameObject insObj = Instantiate(_itemBunker.ItemObject[insKind], _objPosList[i], _objRotList[i], _mapParent);
 
             // マテリアルの選定
             Material assignMat = GetAssignedMaterial(_objMatList[i]);
@@ -135,21 +138,19 @@ public class WorldManager : MonoBehaviour
     }
 
     Material GetAssignedMaterial(int targetNum)
-    {
-        MaterialBunker materialBunker = MaterialBunker.InstanceMatBunker;
-        
+    {        
         int keyNum = targetNum + 1;
         if (keyNum < MaterialBunker.MATERIAL_AMOUNT)
         {
-            string tmpKey = materialBunker.KeyName + keyNum;
-            return materialBunker.ImageMaterials.ContainsKey(tmpKey) ? materialBunker.ImageMaterials[tmpKey] : null;
+            string tmpKey = MaterialBunker.KEY_NAME + keyNum;
+            return _materialBunker.ImageMaterials.ContainsKey(tmpKey) ? _materialBunker.ImageMaterials[tmpKey] : null;
         }
         else
         {
             int defaultMat = targetNum - MaterialBunker.MATERIAL_AMOUNT;
-            if (defaultMat >= 0 && defaultMat < materialBunker.DefaultMat.Length)
+            if (defaultMat >= 0 && defaultMat < _materialBunker.DefaultMat.Length)
             {
-                return materialBunker.DefaultMat[defaultMat];
+                return _materialBunker.DefaultMat[defaultMat];
             }
             return null;
         }

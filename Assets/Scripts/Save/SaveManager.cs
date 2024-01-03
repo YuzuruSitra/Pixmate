@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using CI.QuickSave;
 using System; 
@@ -7,6 +5,9 @@ using System;
 // ゲームデータのセーブ管理
 public class SaveManager : MonoBehaviour
 {
+    [SerializeField]
+    private MaterialBunker _materialBunker;
+
     // 他スクリプトでも呼べるようにインスタンス化
     public static SaveManager InstanceSaveManager;
 
@@ -349,8 +350,7 @@ public class SaveManager : MonoBehaviour
     {
         // 初期データ
         _writer.Write("matCount", 0);
-        MaterialBunker materialBunker = MaterialBunker.InstanceMatBunker;
-        materialBunker.CroppedImages.Clear();
+        _materialBunker.CroppedImages.Clear();
 
         // データを書き込む
         _writer.Commit();
@@ -360,8 +360,7 @@ public class SaveManager : MonoBehaviour
     {
         // 初期データ
         _writer.Write("matCount", 0);
-        MaterialBunker materialBunker = MaterialBunker.InstanceMatBunker;
-        materialBunker.CroppedImages.Clear();
+        _materialBunker.CroppedImages.Clear();
 
         // データを書き込む
         _writer.Commit();

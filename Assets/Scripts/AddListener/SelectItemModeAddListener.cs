@@ -6,6 +6,8 @@ using UnityEngine.EventSystems;
 // アイテム選択モードのリスナー登録
 public class SelectItemModeAddListener : MonoBehaviour
 {
+    [SerializeField]
+    private ItemBunker _itemBunker;
     [SerializeField] 
     private StateManager _stateManager;
     [SerializeField] 
@@ -24,7 +26,7 @@ public class SelectItemModeAddListener : MonoBehaviour
     [SerializeField]
     private Transform _PoolParentObj;
     // アクティブなプールオブジェクトを保持
-    private int _havingItemCount => ItemBunker.InstanceItemBunker.HavingItemCount;
+    private int _havingItemCount => _itemBunker.HavingItemCount;
     private GameObject[] _poolObj;
     
     // ItemListでの説明用UI
@@ -70,8 +72,7 @@ public class SelectItemModeAddListener : MonoBehaviour
         // 描画処理
         _itemPoolHandler.ShowItems(_poolObj);
         // オブジェクトの描画
-        ItemBunker itemBunker = ItemBunker.InstanceItemBunker;
-        _setItemFlame.sprite = itemBunker.NowHaveItemSprite;
+        _setItemFlame.sprite = _itemBunker.NowHaveItemSprite;
         UpdateItemUIs();
     }
 
@@ -93,12 +94,11 @@ public class SelectItemModeAddListener : MonoBehaviour
     // 特定のスプライトをピック
     void SelectFlame()
     {
-        ItemBunker itemBunker = ItemBunker.InstanceItemBunker;
         string getKey = PushFlame();
         // 選択しているアイテムによってCreateModeの行動が変わる
-        itemBunker.ChangeItem(getKey);
+        _itemBunker.ChangeItem(getKey);
         // 選択中の画像表示
-        _setItemFlame.sprite = itemBunker.NowHaveItemSprite;
+        _setItemFlame.sprite = _itemBunker.NowHaveItemSprite;
         UpdateItemUIs();
     }
 
@@ -120,8 +120,7 @@ public class SelectItemModeAddListener : MonoBehaviour
     // アイテムの名前と説明の更新
     private void UpdateItemUIs()
     {
-        ItemBunker itemBunker = ItemBunker.InstanceItemBunker;
-        string nowHaveItem = itemBunker.SelectItem;
+        string nowHaveItem = _itemBunker.SelectItem;
         string itemName = "";
         string itemExp = "";
 

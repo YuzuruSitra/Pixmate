@@ -1,16 +1,12 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// テクスチャとマテリアルの管理
+// テクスチャとマテリアルのデータ保持
 public class MaterialBunker : MonoBehaviour
 {
-    // 他スクリプトでも呼べるようにインスタンス化
-    public static MaterialBunker InstanceMatBunker;
     SaveManager _saveManager;
 
     public const string KEY_NAME = "MaterialNo.";
-    public string KeyName => KEY_NAME;
     public int MatCount = 0;
     public const int MATERIAL_AMOUNT = 500;
     public Material[] Materials = new Material[MATERIAL_AMOUNT];
@@ -22,7 +18,8 @@ public class MaterialBunker : MonoBehaviour
     public Material[] DefaultMat = new Material[5];
 
     // 今所有しているもの
-    public string NowHavePhoto = "MaterialNo.1";
+    private string _nowHavePhoto = "MaterialNo.1";
+    public string NowHavePhoto => _nowHavePhoto;
     public Sprite NowHavePhotoSprite
     {
         get { return MatCount != 0 && NowHavePhoto != null ? CroppedImages[NowHavePhoto] : null; }
@@ -34,15 +31,6 @@ public class MaterialBunker : MonoBehaviour
     public string NowHavePhotoNames
     {
         get { return MatCount != 0 && NowHavePhoto != null ? ImageNames[NowHavePhoto] : null; }
-    }
-
-
-    void Awake()
-    {
-        if (InstanceMatBunker == null)
-        {
-            InstanceMatBunker = this;
-        }
     }
 
     void Start()
@@ -97,7 +85,7 @@ public class MaterialBunker : MonoBehaviour
         while (i < MatCount)
         {
             int nameCount = i + 1;
-            string tmpKey = KeyName;
+            string tmpKey = KEY_NAME;
             tmpKey += nameCount;
 
             // スプライトからテクスチャを作成
@@ -113,13 +101,18 @@ public class MaterialBunker : MonoBehaviour
 
     /*--------------------------------*/
 
+    public void SetNowHavePhoto(string newPhoto)
+    {
+        _nowHavePhoto = newPhoto;
+    }
+
     // マテリアルを辞書にセット
     void SetMaterials()
     {
         for(int i = 0; i < MATERIAL_AMOUNT; i++)
         {
             int nameCount = i + 1;
-            string tmpKey = KeyName;
+            string tmpKey = KEY_NAME;
             tmpKey += nameCount;
             ImageMaterials.Add(tmpKey, Materials[i]);
         }
@@ -160,7 +153,7 @@ public class MaterialBunker : MonoBehaviour
         }
         
         // 選択中の画像を変更
-        NowHavePhoto = "MaterialNo.1";
+        _nowHavePhoto = "MaterialNo.1";
 
         // 保存する処理
         _saveManager.DoSaveMaterialCount(MatCount);

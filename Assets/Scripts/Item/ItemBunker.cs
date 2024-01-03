@@ -2,10 +2,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+// アイテムを保持するクラス
 public class ItemBunker : MonoBehaviour
 {
-    // 他スクリプトでも呼べるようにインスタンス化
-    public static ItemBunker InstanceItemBunker;
     // 今保有しているアイテムの数
     private int _havingItemCount = 5;
     public int HavingItemCount => _havingItemCount;
@@ -37,11 +36,6 @@ public class ItemBunker : MonoBehaviour
     public event Action<String> OnItemChanged;
     void Awake()
     {
-        if (InstanceItemBunker == null)
-        {
-            InstanceItemBunker = this;
-        }
-
         for(int i = 0; i < _havingItemCount; i++)
         {
             _itemSpriteDictionary.Add(_itemName[i], _itemSprite[i]);

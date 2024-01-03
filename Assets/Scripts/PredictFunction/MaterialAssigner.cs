@@ -7,11 +7,11 @@ public class MaterialAssigner
     PredictionAdjuster _predictionAdjuster;
     MaterialBunker _materialBunker;
     
-    public MaterialAssigner(ObjectManipulator objectManipulator, PredictionAdjuster predictionAdjuster)
+    public MaterialAssigner(ObjectManipulator objectManipulator, PredictionAdjuster predictionAdjuster, MaterialBunker materialBunker)
     {
         _objectManipulator = objectManipulator;
         _predictionAdjuster = predictionAdjuster;
-        _materialBunker = MaterialBunker.InstanceMatBunker;
+        _materialBunker = materialBunker;
     }
 
     public GameObject DoAssignMat()

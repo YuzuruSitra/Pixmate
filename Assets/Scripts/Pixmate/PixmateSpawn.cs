@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 public class PixmateSpawn : MonoBehaviour
 {
     private PixmatesManager _pixmateManager;
+    [SerializeField]
     private MaterialBunker _materialBunker;
     private SkinnedMeshRenderer _skinnedMeshRenderer;
     [SerializeField]
@@ -30,7 +31,6 @@ public class PixmateSpawn : MonoBehaviour
         gameObject.SetActive(false);
 
         _pixmateManager = PixmatesManager.InstancePixmatesManager;
-        _materialBunker = MaterialBunker.InstanceMatBunker;
         _skinnedMeshRenderer = GetComponent<SkinnedMeshRenderer>();
     }
 

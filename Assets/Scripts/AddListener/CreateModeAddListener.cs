@@ -4,6 +4,8 @@ using UnityEngine.UI;
 // クリエイトモードのリスナー登録
 public class CreateModeAddListener : MonoBehaviour
 {
+    [SerializeField]
+    private ItemBunker _itemBunker;
     private ObjInstantiater _objInstantiater;
     [SerializeField] 
     private StateManager _stateManager;
@@ -40,8 +42,7 @@ public class CreateModeAddListener : MonoBehaviour
     void OpenCreate(StateManager.GameState newState)
     {
         if(newState != StateManager.GameState.CreateMode) return;
-        ItemBunker itemBunker = ItemBunker.InstanceItemBunker;
-        _havingItemImage.sprite = itemBunker.NowHaveItemSprite;
+        _havingItemImage.sprite = _itemBunker.NowHaveItemSprite;
     }
 
     void GoSettingsMode()

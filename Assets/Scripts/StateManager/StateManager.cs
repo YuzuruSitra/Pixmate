@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+// ゲームのステートを保持するクラス
 public class StateManager : MonoBehaviour
 {
     public enum GameState

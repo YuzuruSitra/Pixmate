@@ -4,9 +4,10 @@ using UnityEngine.UI;
 // 編集モードのリスナー登録
 public class EditModeAddListener : MonoBehaviour
 {
-    // ワールドデータの保存
     [SerializeField]
-    WorldManager _worldManager;
+    private MaterialBunker _materialBunker;
+    [SerializeField]
+    private WorldManager _worldManager;
     [SerializeField]
     private ObjectManipulator _objectManipulator;
     [SerializeField]
@@ -43,7 +44,7 @@ public class EditModeAddListener : MonoBehaviour
 
     void Start()
     {
-        _materialAssigner = new MaterialAssigner(_objectManipulator, _predictionAdjuster);
+        _materialAssigner = new MaterialAssigner(_objectManipulator, _predictionAdjuster, _materialBunker);
         // ボタンのリスナーに登録
         _settingsButton.onClick.AddListener(GoSettingsMode);
         _homeButton.onClick.AddListener(GoDefaultMode);
@@ -62,9 +63,7 @@ public class EditModeAddListener : MonoBehaviour
     void OpenEdit(StateManager.GameState newState)
     {
         if(newState != StateManager.GameState.EditMode) return;
-        
-        MaterialBunker instanceMatBunker = MaterialBunker.InstanceMatBunker;
-        _assignMatImage.sprite = instanceMatBunker.NowHavePhotoSprite;
+        _assignMatImage.sprite = _materialBunker.NowHavePhotoSprite;
     }
 
     void GoSettingsMode()

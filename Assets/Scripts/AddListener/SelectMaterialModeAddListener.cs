@@ -5,7 +5,8 @@ using UnityEngine.EventSystems;
 // エディットマットモードのリスナー登録
 public class SelectMaterialModeAddListener : MonoBehaviour
 {
-    MaterialBunker _materialBunker;
+    [SerializeField]
+    private MaterialBunker _materialBunker;
     [SerializeField]
     private ImportImageFromGallery _importImageFromGallery;
 
@@ -41,9 +42,6 @@ public class SelectMaterialModeAddListener : MonoBehaviour
 
     void Start()
     {
-        // マテリアル管理のインスタンス
-        _materialBunker = MaterialBunker.InstanceMatBunker;
-
         // プールオブジェクトの配列を初期化
         _poolObj = new GameObject[_materialAmount];
 
@@ -114,7 +112,7 @@ public class SelectMaterialModeAddListener : MonoBehaviour
     // 特定のスプライトをピック
     void SelectFlame()
     {
-        _materialBunker.NowHavePhoto = PushFlame();
+        _materialBunker.SetNowHavePhoto(PushFlame());
         _spritePoolHandler.ShowSelectedItem(_setItemFlame, _itemNameText, _materialBunker.NowHavePhotoSprite, _materialBunker.NowHavePhotoNames);
     }
 

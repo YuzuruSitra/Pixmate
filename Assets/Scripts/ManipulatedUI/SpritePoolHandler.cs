@@ -5,16 +5,16 @@ using UnityEngine.UI;
 // 写真一覧のプール管理クラス
 public class SpritePoolHandler : MonoBehaviour
 {
+    [SerializeField]
+    private MaterialBunker _materialBunker;
     private Queue<GameObject> _imagePool = new Queue<GameObject>();
 
     public void ShowSprites(GameObject[] poolObjects)
     {
-        MaterialBunker materialBunker = MaterialBunker.InstanceMatBunker;
-
-        for (int i = 0; i < materialBunker.MatCount; i++)
+        for (int i = 0; i < _materialBunker.MatCount; i++)
         {
             int nameCount = i + 1;
-            string tmpKey = materialBunker.KeyName + nameCount;
+            string tmpKey = MaterialBunker.KEY_NAME + nameCount;
 
             poolObjects[i] = GetPooledImage();
 
@@ -23,7 +23,7 @@ public class SpritePoolHandler : MonoBehaviour
             poolObjects[i].name = tmpKey;
 
             Image pooledImage = poolObjects[i].GetComponent<Image>();
-            if (materialBunker.CroppedImages.TryGetValue(tmpKey, out Sprite tmpSprite))
+            if (_materialBunker.CroppedImages.TryGetValue(tmpKey, out Sprite tmpSprite))
                 pooledImage.sprite = tmpSprite;
         }
     }

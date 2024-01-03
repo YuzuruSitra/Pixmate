@@ -5,15 +5,16 @@ using UnityEngine.UI;
 // アイテム一覧のプール管理クラス
 public class ItemPoolHandler : MonoBehaviour
 {
+    [SerializeField]
+    private ItemBunker _itemBunker;
     private Queue<GameObject> _itemPool = new Queue<GameObject>();
 
     public void ShowItems(GameObject[] itemObjects)
     {
-        ItemBunker itemBunker = ItemBunker.InstanceItemBunker;
 
-        for (int i = 0; i < itemBunker.HavingItemCount; i++)
+        for (int i = 0; i < _itemBunker.HavingItemCount; i++)
         {
-            string itemName = itemBunker.ItemName[i];
+            string itemName = _itemBunker.ItemName[i];
 
             itemObjects[i] = GetPooledItem();
 
@@ -22,7 +23,7 @@ public class ItemPoolHandler : MonoBehaviour
             itemObjects[i].name = itemName;
 
             Image itemImage = itemObjects[i].transform.GetChild(0).GetComponent<Image>();
-            if (itemBunker.ItemSpriteDictionary.TryGetValue(itemName, out Sprite itemSprite))
+            if (_itemBunker.ItemSpriteDictionary.TryGetValue(itemName, out Sprite itemSprite))
                 itemImage.sprite = itemSprite;
         }
     }

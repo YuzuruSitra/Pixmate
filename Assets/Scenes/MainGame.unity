@@ -1490,6 +1490,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fadc2bfd958184eb7b64874289058add, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _materialBunker: {fileID: 0}
 --- !u!4 &113498192
 Transform:
   m_ObjectHideFlags: 0
@@ -1540,7 +1541,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1226248202}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &117213829
 MonoBehaviour:
@@ -3329,7 +3330,6 @@ Transform:
   - {fileID: 1079979877}
   - {fileID: 113498192}
   - {fileID: 201916549}
-  - {fileID: 1339386319}
   - {fileID: 959494790}
   - {fileID: 1235493599}
   m_Father: {fileID: 1226248202}
@@ -8015,7 +8015,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1226248202}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &723612387
 MonoBehaviour:
@@ -8065,6 +8065,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9600cde7543384fcfb57b7620e1ea966, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _materialBunker: {fileID: 0}
   _worldManager: {fileID: 959494791}
   _objectManipulator: {fileID: 117213833}
   _predictionAdjuster: {fileID: 117213831}
@@ -8089,6 +8090,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e48298968c4d4c29817a17f32b10ef5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _materialBunker: {fileID: 0}
   _importImageFromGallery: {fileID: 2076616537}
   _stateManager: {fileID: 201916548}
   _spritePoolHandler: {fileID: 1127278026}
@@ -8111,6 +8113,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aae5fbf89deb847e9a461c84784d8d52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _itemBunker: {fileID: 0}
   _stateManager: {fileID: 201916548}
   _itemPoolHandler: {fileID: 1127278024}
   _flamePrefab: {fileID: 3156452484474250153, guid: c96fae557fa6646588a39eeff9e27d0e, type: 3}
@@ -8132,6 +8135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4526cb935d39341749953b0a2751235b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _itemBunker: {fileID: 0}
   _stateManager: {fileID: 201916548}
   _havingItemImage: {fileID: 1921514472}
   _homeButton: {fileID: 31755877}
@@ -10756,7 +10760,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 271056174}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &959494791
 MonoBehaviour:
@@ -10770,6 +10774,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e5473cbbf56a4eb6b1b6b8ce6afb50f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _materialBunker: {fileID: 0}
+  _itemBunker: {fileID: 0}
   _mapParent: {fileID: 79959079}
   _defaultWorldData: {fileID: 11400000, guid: 763a79e5ffcd84a8580c79002cab3d7a, type: 2}
   _objPosList: []
@@ -12552,7 +12558,6 @@ MonoBehaviour:
   - {fileID: 2100000, guid: a867db4e43b7b4522ac115e22f7482b8, type: 2}
   - {fileID: 2100000, guid: 351dbd30157794cf9b73d74c04bacd7b, type: 2}
   - {fileID: 2100000, guid: d39f8ff54a669413cb94de652ae9ff45, type: 2}
-  NowHavePhoto: MaterialNo.1
 --- !u!4 &1079979877
 Transform:
   m_ObjectHideFlags: 0
@@ -13054,7 +13059,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1226248202}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1127278024
 MonoBehaviour:
@@ -13068,6 +13073,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8844c52fdba77473da596a35aeac8511, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _itemBunker: {fileID: 0}
 --- !u!114 &1127278025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13094,6 +13100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 632df22a50f764a08a8264edbc817566, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _materialBunker: {fileID: 0}
 --- !u!114 &1127278027
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13176,6 +13183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dcda1496b14e419ab07821f277dd1e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _itemBunker: {fileID: 0}
   _stateManager: {fileID: 201916548}
   _createPanel: {fileID: 1367638810}
   _createPanelButton:
@@ -13901,6 +13909,7 @@ Transform:
   m_Children:
   - {fileID: 271056174}
   - {fileID: 705652215}
+  - {fileID: 1339386319}
   - {fileID: 117213828}
   - {fileID: 723612386}
   - {fileID: 1127278023}
@@ -13938,7 +13947,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 271056174}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1235493600
 MonoBehaviour:
@@ -15426,7 +15435,7 @@ GameObject:
   - component: {fileID: 1339386319}
   - component: {fileID: 1339386320}
   m_Layer: 0
-  m_Name: ItemBunker
+  m_Name: Item
   m_TagString: Manager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15444,8 +15453,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 271056174}
-  m_RootOrder: 3
+  m_Father: {fileID: 1226248202}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1339386320
 MonoBehaviour:
@@ -20542,6 +20551,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bee5f0346840b0b44b60ca63d47eb5d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _materialBunker: {fileID: 0}
   _material: {fileID: 2100000, guid: 47b3af7be15d9ba45a1ad9dccbc077bc, type: 2}
 --- !u!1 &1723495922
 GameObject:
@@ -24369,7 +24379,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1226248202}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2076616539
 MonoBehaviour:

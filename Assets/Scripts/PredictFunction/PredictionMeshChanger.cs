@@ -37,7 +37,6 @@ public class PredictionMeshChanger : MonoBehaviour
         Mesh flameMesh = _predictAdjCube.GetComponent<MeshFilter>().mesh;
         if(flameMesh == null) return;
 
-        ItemBunker itemBunker = ItemBunker.InstanceItemBunker;
         switch(currentItem)
         {
             case "Cube":
