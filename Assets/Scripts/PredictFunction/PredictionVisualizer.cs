@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// 予測線の表示を担当するクラス
 public class PredictionVisualizer : MonoBehaviour
 {
     [SerializeField]

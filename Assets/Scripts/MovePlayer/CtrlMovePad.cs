@@ -1,9 +1,8 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+// MovePad関連のUI描画を担当しているクラス
 public class CtrlMovePad : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     [SerializeField]

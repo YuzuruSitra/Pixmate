@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// カメラの操作を担当しているクラス
 public class CtrlMainCam : MonoBehaviour
 {
     [Header("回転範囲の上限値")]
@@ -10,7 +11,6 @@ public class CtrlMainCam : MonoBehaviour
     [SerializeField]
     private float minLimit = -45.0f;
     
-    // 設計見直し
     public void CtrlRotCamera(float rotY)
     {
         // 視野角度の制限

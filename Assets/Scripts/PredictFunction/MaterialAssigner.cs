@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// ブロックのマテリアル変更を担当するクラス
 public class MaterialAssigner
 {
     ObjectManipulator _objectManipulator;

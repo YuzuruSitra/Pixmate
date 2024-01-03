@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// 予測線の形を担当するクラス
 public class PredictionMeshChanger : MonoBehaviour
 {
     [SerializeField]

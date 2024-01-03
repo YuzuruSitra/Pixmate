@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// 海をプレイヤーへ追従させるクラス
 public class SeaFollowPlayer : MonoBehaviour
 {
     [SerializeField]

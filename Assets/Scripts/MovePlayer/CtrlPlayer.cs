@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+// 視点操作と移動を担当するクラス
 public class CtrlPlayer : MonoBehaviour
 {
     [SerializeField]

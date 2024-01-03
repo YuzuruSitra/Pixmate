@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// 予測線の位置を担当するクラス
 public class PredictionAdjuster : MonoBehaviour
 {
     private GameObject _nowHaveCube;

@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// 移動に関連するクラスを統合するクラス
 public class OrderMoveFunctions : MonoBehaviour
 {
     // プレイヤー制御

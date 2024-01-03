@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// EditModeのUI管理クラス
 public class EditModeUIChanger : MonoBehaviour
 {
     [SerializeField] 

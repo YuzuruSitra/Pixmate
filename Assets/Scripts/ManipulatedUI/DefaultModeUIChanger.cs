@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// DefaultModeのパネル制御
+// DefaultModeのUI管理クラス
 public class DefaultModeUIChanger : MonoBehaviour
 {
     [SerializeField] 

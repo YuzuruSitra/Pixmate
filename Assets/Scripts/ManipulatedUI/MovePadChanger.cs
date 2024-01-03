@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// MovePadの表示切り替え管理クラス
 public class MovePadChanger : MonoBehaviour
 {
     [SerializeField] 

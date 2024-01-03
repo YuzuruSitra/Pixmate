@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+// パッドの入力受付を担当するクラス
 public class CtrlSightPad : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     private bool _isViewPad;

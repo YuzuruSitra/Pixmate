@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// SelectMaterialModeのUI管理クラス
 public class SelectMaterialModeUIChanger : MonoBehaviour
 {
     [SerializeField] 

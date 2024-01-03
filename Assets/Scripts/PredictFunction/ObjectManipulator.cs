@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// ブロックの生成、回収を担当するクラス
 public class ObjectManipulator : MonoBehaviour
 {
     // 対象を生成
@@ -13,11 +14,5 @@ public class ObjectManipulator : MonoBehaviour
     public void InventCube(GameObject targetObj)
     {
         Destroy(targetObj);
-    }
-
-    // 対象のマテリアルを変更
-    public void AssignMaterial(GameObject target, Material mat)
-    {
-        target.GetComponent<MeshRenderer>().material = mat;
     }
 }

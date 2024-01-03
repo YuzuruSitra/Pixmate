@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+// CreateModeのUI管理クラス
 public class CreateModeUIChanger : MonoBehaviour
 {
     [SerializeField] 

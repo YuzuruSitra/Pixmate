@@ -1,8 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// 写真一覧のプール管理クラス
 public class SpritePoolHandler : MonoBehaviour
 {
     private Queue<GameObject> _imagePool = new Queue<GameObject>();

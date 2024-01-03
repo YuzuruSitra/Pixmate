@@ -1,8 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// アイテム一覧のプール管理クラス
 public class ItemPoolHandler : MonoBehaviour
 {
     private Queue<GameObject> _itemPool = new Queue<GameObject>();

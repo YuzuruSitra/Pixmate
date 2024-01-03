@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// SettingsModeのUI管理クラス
 public class SettingsModeUIChanger : MonoBehaviour
 {
     [SerializeField] 
