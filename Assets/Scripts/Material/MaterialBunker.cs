@@ -6,6 +6,8 @@ public class MaterialBunker : MonoBehaviour
 {
     [SerializeField]
     private MaterialIO _materialIO;
+    [SerializeField]
+    private WorldManager _worldManager;
 
     public const string KEY_NAME = "MaterialNo.";
     public int MatCount = 0;
@@ -34,7 +36,7 @@ public class MaterialBunker : MonoBehaviour
         get { return MatCount != 0 && NowHavePhoto != null ? ImageNames[NowHavePhoto] : null; }
     }
 
-    void Start()
+    public void Load()
     {
         // ロード処理
         MatCount = _materialIO.LoadCountMat();
@@ -54,10 +56,6 @@ public class MaterialBunker : MonoBehaviour
 
         SetMaterials();
         SpritesAssignMat();
-
-        // ワールドのロード処理
-        WorldManager worldManager = WorldManager.InstanceWorldManager; 
-        worldManager.WorldLoad();
     }
 
     // スプライトの追加
@@ -72,9 +70,9 @@ public class MaterialBunker : MonoBehaviour
     // 写真の名前を変更
     public void ChangePhotoName(string tmpName)
     {
-        ImageNames[NowHavePhoto] = tmpName;
+        ImageNames[_nowHavePhoto] = tmpName;
         // SpriteNameのセーブ
-        _materialIO.DoSaveSprite(MatCount,CroppedImages[NowHavePhoto],ImageNames[NowHavePhoto],NowHavePhoto);
+        _materialIO.DoSaveSprite(MatCount,CroppedImages[_nowHavePhoto],ImageNames[_nowHavePhoto],_nowHavePhoto);
     }
 
     // マテリアルにスプライトをセット
@@ -120,9 +118,9 @@ public class MaterialBunker : MonoBehaviour
     // 特定スプライトの削除時の辞書要素並び替えとセーブ処理
     public void DeleteSortDictionary()
     {
-        if(NowHavePhoto == null) return;
+        if(_nowHavePhoto == null) return;
         // 削除したい画像のKeyを取得
-        string tmp = System.Text.RegularExpressions.Regex.Replace(NowHavePhoto, @"[^0-9]", "");
+        string tmp = System.Text.RegularExpressions.Regex.Replace(_nowHavePhoto, @"[^0-9]", "");
         int tmpInt = int.Parse(tmp);
 
         // 画像を格納している辞書を削除したい画像から繰り上げる。
@@ -153,8 +151,6 @@ public class MaterialBunker : MonoBehaviour
         
         // 選択中の画像を変更
         _nowHavePhoto = "MaterialNo.1";
-
-        // 保存する処理
     
         // PhotoSpriteとPhotoNameの書き込み
         for(int i = 0; i < MatCount; i++)

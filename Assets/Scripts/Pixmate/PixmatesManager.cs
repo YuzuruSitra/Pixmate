@@ -48,7 +48,7 @@ public class PixmatesManager : MonoBehaviour
         }
     }
 
-    private void Start()
+    public void Load()
     {
         // 成長速度の計算
         _foxGrowSpeed = (MAX_SIZE_FOX - INITIAL_SCALE_FOX) / (GROWTH_TIME * 60);

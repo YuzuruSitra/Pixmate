@@ -9,7 +9,7 @@ public class ImageResizeSaver
 
     public ImageResizeSaver()
     {
-        _materialBunker = GameObject.FindWithTag("MaterialBunker").GetComponent<MaterialBunker>();
+        _materialBunker = GameObject.FindWithTag("Material").GetComponent<MaterialBunker>();
         _materialIO = GameObject.FindWithTag("Save").GetComponent<MaterialIO>();
     }
 

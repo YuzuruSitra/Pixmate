@@ -8,7 +8,6 @@ public class WorldManager : MonoBehaviour
     [SerializeField]
     private ItemBunker _itemBunker;
     private bool _isInitialization;
-    public static WorldManager InstanceWorldManager;
     [SerializeField]
     private WorldIO _worldIO;
     public const string WORLD_OBJ_KEY = "WorldObj";
@@ -29,19 +28,9 @@ public class WorldManager : MonoBehaviour
     [SerializeField]
     private int _worldObjCount;
 
-    void Awake()
-    {
-        if (InstanceWorldManager == null)
-        {
-            InstanceWorldManager = this;
-        }
-    }
-
-    /*------------------------------------------------------------------------*/
-
     // ワールドのロード処理（仮）
     
-    public void WorldLoad()
+    public void Load()
     {
         _isInitialization = _worldIO.LoadWorldInitialization();
         //_isInitialization = true;
@@ -60,7 +49,7 @@ public class WorldManager : MonoBehaviour
             if(_worldObjCount == 0) 
             {
                 _worldIO.DoSaveWorldInitialization(true);
-                WorldLoad();
+                Load();
                 return;
             }
 
@@ -72,9 +61,7 @@ public class WorldManager : MonoBehaviour
                 _objShapeList.Add(_worldIO.LoadWorldObjShape(key));
                 _objMatList.Add(_worldIO.LoadWorldObjMat(key));
             }
-        }
-
-        
+        }  
 
         for (int i = 0; i < _worldObjCount; i++)
         {

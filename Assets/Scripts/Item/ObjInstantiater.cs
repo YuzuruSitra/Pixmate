@@ -13,9 +13,8 @@ public class ObjInstantiater
 
     public ObjInstantiater()
     {
-        _worldManager = GameObject.FindWithTag("Manager").GetComponent<WorldManager>();
+        _worldManager = GameObject.FindWithTag("WorldManager").GetComponent<WorldManager>();
         _itemBunker = GameObject.FindWithTag("Item").GetComponent<ItemBunker>();
-        if(_itemBunker == null) Debug.Log("aaa");
         _objectManipulator = GameObject.FindWithTag("PredictFunctions").GetComponent<ObjectManipulator>();
         _pixmateGenerate = GameObject.FindWithTag("PredictFunctions").GetComponent<PixmateGenerate>();
         _predictionAdjuster = GameObject.FindWithTag("PredictFunctions").GetComponent<PredictionAdjuster>();
