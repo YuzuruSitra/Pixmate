@@ -4,7 +4,8 @@ using UnityEngine;
 // テクスチャとマテリアルのデータ保持
 public class MaterialBunker : MonoBehaviour
 {
-    SaveManager _saveManager;
+    [SerializeField]
+    private MaterialIO _materialIO;
 
     public const string KEY_NAME = "MaterialNo.";
     public int MatCount = 0;
@@ -35,21 +36,19 @@ public class MaterialBunker : MonoBehaviour
 
     void Start()
     {
-        _saveManager = SaveManager.InstanceSaveManager;
-
         // ロード処理
-        MatCount = _saveManager.LoadCountMat();
+        MatCount = _materialIO.LoadCountMat();
         for(int i = 0; i < MatCount; i++)
         {
             int nameCount = i + 1;
             string addTmpKey = KEY_NAME + nameCount;
 
             // CroppedImagesに追加。
-            Sprite tmpPhotoSpriteValue = _saveManager.LoadMaterialSprite(addTmpKey);
+            Sprite tmpPhotoSpriteValue = _materialIO.LoadMaterialSprite(addTmpKey);
             if(tmpPhotoSpriteValue != null) CroppedImages.Add(addTmpKey, tmpPhotoSpriteValue);
 
             // ImageNamesに追加。
-            string tmpPhotoNamesValue = _saveManager.LoadMaterialSpriteName(addTmpKey);
+            string tmpPhotoNamesValue = _materialIO.LoadMaterialSpriteName(addTmpKey);
             if(tmpPhotoNamesValue != null) ImageNames.Add(addTmpKey, tmpPhotoNamesValue);
         }
 
@@ -75,7 +74,7 @@ public class MaterialBunker : MonoBehaviour
     {
         ImageNames[NowHavePhoto] = tmpName;
         // SpriteNameのセーブ
-        _saveManager.DoSaveSprite(MatCount,CroppedImages[NowHavePhoto],ImageNames[NowHavePhoto],NowHavePhoto);
+        _materialIO.DoSaveSprite(MatCount,CroppedImages[NowHavePhoto],ImageNames[NowHavePhoto],NowHavePhoto);
     }
 
     // マテリアルにスプライトをセット
@@ -156,7 +155,6 @@ public class MaterialBunker : MonoBehaviour
         _nowHavePhoto = "MaterialNo.1";
 
         // 保存する処理
-        _saveManager.DoSaveMaterialCount(MatCount);
     
         // PhotoSpriteとPhotoNameの書き込み
         for(int i = 0; i < MatCount; i++)
@@ -165,7 +163,7 @@ public class MaterialBunker : MonoBehaviour
             string pullTmpKey = KEY_NAME + nameCount;
             Sprite tmpPhotoSpriteValue = CroppedImages[pullTmpKey];
             string tmpPhotoNamesValue = ImageNames[pullTmpKey];
-            _saveManager.DoSaveMaterial(tmpPhotoSpriteValue,tmpPhotoNamesValue,pullTmpKey);
+            _materialIO.DoSaveSprite(MatCount, tmpPhotoSpriteValue, tmpPhotoNamesValue, pullTmpKey);
         }
     }
 }

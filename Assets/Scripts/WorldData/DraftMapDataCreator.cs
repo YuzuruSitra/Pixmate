@@ -8,6 +8,9 @@ public class DraftMapDataCreator : MonoBehaviour
 {
     [SerializeField] 
     private DefaultWorldData _defaultWorldData;
+    [SerializeField]
+    private WorldIO _worldIO;
+
     
 #if UNITY_EDITOR
     void Start()
@@ -27,8 +30,6 @@ public class DraftMapDataCreator : MonoBehaviour
         GameObject[] allTaggedObjects = taggedObjects1.Concat(taggedObjects2).Concat(taggedObjects3).Concat(taggedObjects4).ToArray();
         
         int worldObjCount = allTaggedObjects.Length;
-
-        SaveManager saveManager = SaveManager.InstanceSaveManager;
 
         List<Vector3> objPosList = new List<Vector3>();
         List<Quaternion> objRotList = new List<Quaternion>();
@@ -81,7 +82,7 @@ public class DraftMapDataCreator : MonoBehaviour
             objShapeList.Add(tag);
             objMatList.Add(targetNum);
 
-            saveManager.DoSaveWorld(key, pos, rot, tag, targetNum);
+            _worldIO.DoSaveWorld(key, pos, rot, tag, targetNum);
         }
         
         _defaultWorldData.ObjPositions = objPosList;

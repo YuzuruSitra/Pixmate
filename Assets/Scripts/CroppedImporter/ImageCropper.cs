@@ -16,7 +16,6 @@ public class ImageCropper : MonoBehaviour
 
     private Texture2D _originalTexture;
     private Texture2D _croppedTexture;
-    public Texture2D CroppedTexture => _croppedTexture;
 
     public void DoCropImage(GameObject cropFlame)
     {
@@ -33,9 +32,10 @@ public class ImageCropper : MonoBehaviour
         ChangeTexture(_originalTexture, _cropOffset, _croppedSize);
     }
 
-    public void FinishCrop()
+    public Texture2D FinishCrop()
     {
         _isActive = false;
+        return _croppedTexture;
     }
 
     void Update()

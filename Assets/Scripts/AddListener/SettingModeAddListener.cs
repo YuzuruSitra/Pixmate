@@ -10,8 +10,13 @@ public class SettingModeAddListener : MonoBehaviour
     private Button _returnButton;
     [SerializeField]
     private Button _deletePixmateButton;
+
     [SerializeField]
-    private SaveManager _saveManager;
+    private MaterialIO _materialIO;
+    [SerializeField]
+    private PixmateIO _pixmateIO;
+    [SerializeField]
+    private WorldIO _worldIO;
 
     void Start()
     {
@@ -26,7 +31,9 @@ public class SettingModeAddListener : MonoBehaviour
 
     void DeletePixmate()
     {
-        _saveManager.DoResetPixmates();
+        //_materialIO.DeleteDate();
+        _pixmateIO.DeleteData();
+        //_worldIO.DeleteData();
     }
 
 }

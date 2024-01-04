@@ -1,16 +1,16 @@
 using UnityEngine;
 
 // クロップした画像を整えて保存するクラス
-public class CroppedImageSaver
+public class ImageResizeSaver
 {
     const int CROP_SIZE = 512;
     private MaterialBunker _materialBunker;
-    private SaveManager _saveManager;
+    private MaterialIO _materialIO;
 
-    public CroppedImageSaver()
+    public ImageResizeSaver()
     {
         _materialBunker = GameObject.FindWithTag("MaterialBunker").GetComponent<MaterialBunker>();
-        _saveManager = GameObject.FindWithTag("SaveManager").GetComponent<SaveManager>();
+        _materialIO = GameObject.FindWithTag("Save").GetComponent<MaterialIO>();
     }
 
     public void ResizeToSaveSprite(Texture2D croppedTexture)
@@ -48,17 +48,14 @@ public class CroppedImageSaver
 
     // スプライトの追加
     void SaveNewSprites(Sprite setSprite)
-    {
-        if (_materialBunker == null) return;
-        if (_saveManager == null) return;
-        
+    {        
         // キーの発行
         string tmpKey = MaterialBunker.KEY_NAME;
         string key = tmpKey + _materialBunker.MatCount;
         _materialBunker.AddDictionarySprites(key, setSprite);
         
         // Spriteのセーブ
-        _saveManager.DoSaveSprite(_materialBunker.MatCount, setSprite, key, key);
+        _materialIO.DoSaveSprite(_materialBunker.MatCount, setSprite, key, key);
     }
 
 }

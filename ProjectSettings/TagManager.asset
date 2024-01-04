@@ -14,6 +14,8 @@ TagManager:
   - MaterialBunker
   - SaveManager
   - Manager
+  - Save
+  - Item
   layers:
   - Default
   - TransparentFX

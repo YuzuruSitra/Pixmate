@@ -8,7 +8,7 @@ public class ImportMaterialModeAddListener : MonoBehaviour
     private StateManager _stateManager;
     [SerializeField]
     private ImportImageFromGallery _importImageFromGallery;
-    private CroppedImageSaver _croppedImageSaver;
+    private ImageResizeSaver _imageResizeSaver;
     [SerializeField] 
     private ImageCropper _imageCropper;
 
@@ -27,7 +27,7 @@ public class ImportMaterialModeAddListener : MonoBehaviour
 
     void Start()
     {
-        _croppedImageSaver = new CroppedImageSaver();
+        _imageResizeSaver = new ImageResizeSaver();
         _stateManager.OnStateChanged += OpenImageImport;
 
         // リスナー登録
@@ -67,8 +67,8 @@ public class ImportMaterialModeAddListener : MonoBehaviour
 
     private void DoneImport()
     {
-        _imageCropper.FinishCrop();
-        _croppedImageSaver.ResizeToSaveSprite(_imageCropper.CroppedTexture);
+        Texture2D outTexture = _imageCropper.FinishCrop();
+        _imageResizeSaver.ResizeToSaveSprite(outTexture);
         _stateManager.ChangeState(StateManager.GameState.SelectMaterialMode);
     }
 

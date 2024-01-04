@@ -26,6 +26,7 @@ public class CreateModeAddListener : MonoBehaviour
     void Start()
     {
         _objInstantiater = new ObjInstantiater();
+        
         _stateManager.OnStateChanged += OpenCreate;
         _homeButton.onClick.AddListener(GoDefaultMode);
         _itemButton.onClick.AddListener(GoItemMode);

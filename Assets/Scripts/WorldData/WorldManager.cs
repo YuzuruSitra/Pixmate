@@ -9,7 +9,8 @@ public class WorldManager : MonoBehaviour
     private ItemBunker _itemBunker;
     private bool _isInitialization;
     public static WorldManager InstanceWorldManager;
-    SaveManager _saveManager;
+    [SerializeField]
+    private WorldIO _worldIO;
     public const string WORLD_OBJ_KEY = "WorldObj";
     [SerializeField] 
     private Transform _mapParent;
@@ -42,8 +43,7 @@ public class WorldManager : MonoBehaviour
     
     public void WorldLoad()
     {
-        _saveManager = SaveManager.InstanceSaveManager;
-        _isInitialization = _saveManager.LoadWorldInitialization();
+        _isInitialization = _worldIO.LoadWorldInitialization();
         //_isInitialization = true;
         if(_isInitialization)
         {
@@ -55,11 +55,11 @@ public class WorldManager : MonoBehaviour
         }
         else
         {
-            _worldObjCount = _saveManager.LoadWorldSize();
+            _worldObjCount = _worldIO.LoadWorldSize();
             // 例外が起きた場合初期マップをロード
             if(_worldObjCount == 0) 
             {
-                _saveManager.DoSaveWorldInitialization(true);
+                _worldIO.DoSaveWorldInitialization(true);
                 WorldLoad();
                 return;
             }
@@ -67,10 +67,10 @@ public class WorldManager : MonoBehaviour
             for(int i = 0; i < _worldObjCount; i++)
             {
                 string key = WORLD_OBJ_KEY + i;
-                _objPosList.Add(_saveManager.LoadWorldObjPos(key));
-                _objRotList.Add(_saveManager.LoadWorldObjRot(key));
-                _objShapeList.Add(_saveManager.LoadWorldObjShape(key));
-                _objMatList.Add(_saveManager.LoadWorldObjMat(key));
+                _objPosList.Add(_worldIO.LoadWorldObjPos(key));
+                _objRotList.Add(_worldIO.LoadWorldObjRot(key));
+                _objShapeList.Add(_worldIO.LoadWorldObjShape(key));
+                _objMatList.Add(_worldIO.LoadWorldObjMat(key));
             }
         }
 
@@ -113,9 +113,9 @@ public class WorldManager : MonoBehaviour
         for(int i = 0; i < _worldObjCount; i++)
         {
             string key = WORLD_OBJ_KEY + i;
-            _saveManager.DoSaveWorld(key, _objPosList[i], _objRotList[i], _objShapeList[i], _objMatList[i]);
+            _worldIO.DoSaveWorld(key, _objPosList[i], _objRotList[i], _objShapeList[i], _objMatList[i]);
         }
-        _saveManager.DoSaveWorldSize(_worldObjCount);
+        _worldIO.DoSaveWorldSize(_worldObjCount);
 
     }
     
@@ -215,8 +215,8 @@ public class WorldManager : MonoBehaviour
         _worldObjCount  = _objPosList.Count;
         
         // saving.
-        _saveManager.DoSaveWorld(key, pos, rot, tag, targetNum);
-        _saveManager.DoSaveWorldSize(_worldObjCount);
+        _worldIO.DoSaveWorld(key, pos, rot, tag, targetNum);
+        _worldIO.DoSaveWorldSize(_worldObjCount);
 
         SettingInitial();
     }
@@ -276,8 +276,8 @@ public class WorldManager : MonoBehaviour
         _objMatList[targetID] = targetNum;
 
         // saving.
-        _saveManager.DoSaveWorld(key, pos, rot, tag, targetNum);
-        _saveManager.DoSaveWorldSize(_worldObjCount);
+        _worldIO.DoSaveWorld(key, pos, rot, tag, targetNum);
+        _worldIO.DoSaveWorldSize(_worldObjCount);
 
         SettingInitial();
     }
@@ -308,10 +308,10 @@ public class WorldManager : MonoBehaviour
         {
             string key = WORLD_OBJ_KEY + i;
             // saving.
-            _saveManager.DoSaveWorld(key, _objPosList[i], _objRotList[i], _objShapeList[i], _objMatList[i]);
+            _worldIO.DoSaveWorld(key, _objPosList[i], _objRotList[i], _objShapeList[i], _objMatList[i]);
         }
         // saving.
-        _saveManager.DoSaveWorldSize(_worldObjCount);
+        _worldIO.DoSaveWorldSize(_worldObjCount);
         SettingInitial();
     }
 
@@ -319,7 +319,7 @@ public class WorldManager : MonoBehaviour
     {
         if(!_isInitialization) return;
         _isInitialization = false;
-        _saveManager.DoSaveWorldInitialization(_isInitialization);
+        _worldIO.DoSaveWorldInitialization(_isInitialization);
     } 
     
 }

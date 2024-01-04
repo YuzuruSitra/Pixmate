@@ -1,12 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using UnityEngine.UIElements;
-using UnityEngine.UI;
 
 public class PixmatesManager : MonoBehaviour
 {
@@ -18,7 +14,8 @@ public class PixmatesManager : MonoBehaviour
     // Pixmateの成長時間
     private float _foxGrowSpeed = 0f;
     public static PixmatesManager InstancePixmatesManager;
-    SaveManager _saveManager;
+    [SerializeField]
+    private PixmateIO _pixmateIO;
 
     public const string PIXMATE_KEY = "PixmateNo.";
     public string PixmateKey => PIXMATE_KEY;
@@ -53,20 +50,19 @@ public class PixmatesManager : MonoBehaviour
 
     private void Start()
     {
-        _saveManager = SaveManager.InstanceSaveManager;
         // 成長速度の計算
         _foxGrowSpeed = (MAX_SIZE_FOX - INITIAL_SCALE_FOX) / (GROWTH_TIME * 60);
         // 成長速度の受け渡し
         _prefabFox.GetComponent<FoxEcology>().GrowSpeed = _foxGrowSpeed;
         
         // ロード処理
-        _pixmatesCount = _saveManager.LoadPixmateCount();
+        _pixmatesCount = _pixmateIO.LoadPixmateCount();
         for(int i = 0; i < _pixmatesCount; i++)
         {
             // CroppedImagesに追加。
             int nameCount = i + 1;
             string addTmpKey = PIXMATE_KEY + nameCount;
-            Sprite sprite = _saveManager.LoadPixmateSprite(addTmpKey);
+            Sprite sprite = _pixmateIO.LoadPixmateSprite(addTmpKey);
             if(sprite != null) _textureImages.Add(addTmpKey, sprite);
         }
 
@@ -88,13 +84,13 @@ public class PixmatesManager : MonoBehaviour
                 continue;
             }
 
-            Vector3 insPosition = _saveManager.LoadPixmatePosition(key);
-            float scale = _saveManager.LoadPixmateScale(key, INITIAL_SCALE_FOX);
+            Vector3 insPosition = _pixmateIO.LoadPixmatePosition(key);
+            float scale = _pixmateIO.LoadPixmateScale(key, INITIAL_SCALE_FOX);
             insScale.x = scale;
             insScale.y = scale;
             insScale.z = scale;
-            Quaternion rot = _saveManager.LoadPixmateRot(key);
-            int ForM = _saveManager.LoadPixmateForM(key);
+            Quaternion rot = _pixmateIO.LoadPixmateRot(key);
+            int ForM = _pixmateIO.LoadPixmateForM(key);
             Array.Resize(ref _pixmateFoxes, _pixmateFoxes.Length + 1);
             _pixmateFoxes[_pixmateFoxes.Length - 1] = InstantiatePixmate(insPosition, rot, insScale, matTexture ,ForM);
             FoxEcology pixmateEcology = _pixmateFoxes[i];
@@ -130,7 +126,7 @@ public class PixmatesManager : MonoBehaviour
         string key = PIXMATE_KEY + _pixmatesCount;
         _textureImages.Add(key, pixmateSprite);
         // セーブ処理
-        _saveManager.DoSavePixmates(_pixmatesCount, pixmateSprite, ForM, key);
+        _pixmateIO.DoSavePixmates(_pixmatesCount, pixmateSprite, ForM, key);
     }
 
     public FoxEcology InstantiatePixmate(Vector3 insPos, Quaternion insRot, Vector3 scale, Texture2D texture, int ForM)
@@ -179,9 +175,9 @@ public class PixmatesManager : MonoBehaviour
                         break;
                     }
                     string key = PIXMATE_KEY + (i + 1);
-                    _saveManager.DoSavePixmatePos(_savePos[i], key);
-                    _saveManager.DoSavePixmateScale(_saveScale[i], key);
-                    _saveManager.DoSavePixmateRot(_saveRot[i], key);
+                    _pixmateIO.DoSavePixmatePos(_savePos[i], key);
+                    _pixmateIO.DoSavePixmateScale(_saveScale[i], key);
+                    _pixmateIO.DoSavePixmateRot(_saveRot[i], key);
                 }
             });
             Debug.Log("Fin:" + Time.time);
