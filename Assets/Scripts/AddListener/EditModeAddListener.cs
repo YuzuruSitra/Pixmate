@@ -7,7 +7,7 @@ public class EditModeAddListener : MonoBehaviour
     [SerializeField]
     private MaterialBunker _materialBunker;
     [SerializeField]
-    private WorldManager _worldManager;
+    private WorldDataBunker _worldDataBunker;
     [SerializeField]
     private ObjectManipulator _objectManipulator;
     [SerializeField]
@@ -90,6 +90,6 @@ public class EditModeAddListener : MonoBehaviour
     {
         GameObject changeObj = _materialAssigner.DoAssignMat();
         if (changeObj == null) return;
-        _worldManager.ChangeObjSaving(changeObj);
+        _worldDataBunker.ChangeObjSaving(changeObj);
     }
 }

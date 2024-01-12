@@ -5,7 +5,7 @@ using UnityEngine;
 public class RotateObject : MonoBehaviour
 {
     [SerializeField]
-    private WorldManager _worldManager;
+    private WorldDataBunker _worldDataBunker;
     private bool _isRotate;
     public bool IsRotate => _isRotate;
     [SerializeField]
@@ -47,7 +47,7 @@ public class RotateObject : MonoBehaviour
     {
         _spinCoroutine = StartCoroutine(DoRotation(startRotation, targetRotation, targetTransform));
         // ワールドデータの保存
-        _worldManager.ChangeObjSaving(targetTransform.gameObject);
+        _worldDataBunker.ChangeObjSaving(targetTransform.gameObject);
     }
 
     IEnumerator DoRotation(Quaternion startRotation, Quaternion targetRotation, Transform targetTransform)

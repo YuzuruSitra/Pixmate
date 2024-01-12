@@ -7,7 +7,9 @@ public class GameLauncher : MonoBehaviour
     private MaterialBunker _materialBunker;
 
     [SerializeField]
-    private WorldManager _worldManager;
+    private WorldDataBunker _worldDataBunker;
+    [SerializeField]
+    private WorldGenerater _worldGenerater;
 
     [SerializeField]
     private PixmatesManager _pixmatesManager;
@@ -15,7 +17,8 @@ public class GameLauncher : MonoBehaviour
     void Start()
     {
         _materialBunker.Load();
-        _worldManager.Load();
+        _worldDataBunker.LoadWorldData();
+        _worldGenerater.WorldGenerate();
         _pixmatesManager.Load();
     }
 }

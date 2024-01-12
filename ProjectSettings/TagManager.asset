@@ -16,6 +16,8 @@ TagManager:
   - Save
   - Item
   - Material
+  - GameManager
+  - WorldManager
   layers:
   - Default
   - TransparentFX

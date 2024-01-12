@@ -4,7 +4,7 @@ using UnityEngine;
 public class ObjInstantiater
 {   
     // ワールドマネージャー
-    private WorldManager _worldManager;
+    private WorldDataBunker _worldDataBunker;
     private ItemBunker _itemBunker;
     // 各種アイテムのクラス
     private ObjectManipulator _objectManipulator;
@@ -13,7 +13,7 @@ public class ObjInstantiater
 
     public ObjInstantiater()
     {
-        _worldManager = GameObject.FindWithTag("WorldManager").GetComponent<WorldManager>();
+        _worldDataBunker = GameObject.FindWithTag("WorldManager").GetComponent<WorldDataBunker>();
         _itemBunker = GameObject.FindWithTag("Item").GetComponent<ItemBunker>();
         _objectManipulator = GameObject.FindWithTag("PredictFunctions").GetComponent<ObjectManipulator>();
         _pixmateGenerate = GameObject.FindWithTag("PredictFunctions").GetComponent<PixmateGenerate>();
@@ -39,27 +39,27 @@ public class ObjInstantiater
             case "Cube":
                 rootPos = _predictionAdjuster.AdjCubePos;
                 insObj = _objectManipulator.GenerateCube(rootPos,targetObj);
-                _worldManager.InsObjSaving(insObj);
+                _worldDataBunker.InsObjSaving(insObj);
                 break;
             case "HalfCube":
                 rootPos = _predictionAdjuster.AdjCubePos;
                 insObj = _objectManipulator.GenerateCube(rootPos,targetObj);
-                _worldManager.InsObjSaving(insObj);
+                _worldDataBunker.InsObjSaving(insObj);
                 break;
             case "Step":
                 rootPos = _predictionAdjuster.AdjCubePos;
                 insObj = _objectManipulator.GenerateCube(rootPos,targetObj);
-                _worldManager.InsObjSaving(insObj);
+                _worldDataBunker.InsObjSaving(insObj);
                 break;
             case "SmallCube":
                 rootPos = _predictionAdjuster.AdjCubePos;
                 insObj = _objectManipulator.GenerateCube(rootPos,targetObj);
-                _worldManager.InsObjSaving(insObj);
+                _worldDataBunker.InsObjSaving(insObj);
                 break;
             case "Gene":
                 rootPos = _predictionAdjuster.SameCubePos;
                 _pixmateGenerate.GenerateMate(rootPos,targetObj,rayHitObj);
-                _worldManager.DeleteObjSaving(rayHitObj);
+                _worldDataBunker.DeleteObjSaving(rayHitObj);
                 break;
             default:
                 break;
@@ -82,19 +82,19 @@ public class ObjInstantiater
         switch(currentItem)
         {
             case "Cube":
-                _worldManager.DeleteObjSaving(rayHitObj);
+                _worldDataBunker.DeleteObjSaving(rayHitObj);
                 _objectManipulator.InventCube(rayHitObj);
                 break;
             case "HalfCube":
-                _worldManager.DeleteObjSaving(rayHitObj);
+                _worldDataBunker.DeleteObjSaving(rayHitObj);
                 _objectManipulator.InventCube(rayHitObj);
                 break;
             case "Step":
-                _worldManager.DeleteObjSaving(rayHitObj);
+                _worldDataBunker.DeleteObjSaving(rayHitObj);
                 _objectManipulator.InventCube(rayHitObj);
                 break;
             case "SmallCube":
-                _worldManager.DeleteObjSaving(rayHitObj);
+                _worldDataBunker.DeleteObjSaving(rayHitObj);
                 _objectManipulator.InventCube(rayHitObj);
                 break;
             case "Gene":

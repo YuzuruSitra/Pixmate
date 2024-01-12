@@ -6,8 +6,6 @@ public class MaterialBunker : MonoBehaviour
 {
     [SerializeField]
     private MaterialIO _materialIO;
-    [SerializeField]
-    private WorldManager _worldManager;
 
     public const string KEY_NAME = "MaterialNo.";
     public int MatCount = 0;

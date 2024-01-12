@@ -38,7 +38,7 @@ public class DraftMapDataCreator : MonoBehaviour
 
         for(int i = 0; i < worldObjCount; i++)
         {
-            string key = WorldManager.WORLD_OBJ_KEY + i;
+            string key = WorldDataBunker.WORLD_OBJ_KEY + i;
             // オブジェクトの位置を整数に変換し格納
             Vector3 tmpPos = allTaggedObjects[i].transform.position;
             int x = Mathf.RoundToInt(tmpPos.x);
